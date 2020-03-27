@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "998673808566",
+    "firebase_url": "https://demap-a4fdf.firebaseio.com",
+    "project_id": "demap-a4fdf",
+    "storage_bucket": "demap-a4fdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998673808566:android:da8b6cdfd804b56c88ba17",
+        "android_client_info": {
+          "package_name": "kr.ac.hansung.demap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998673808566-q099ljncri0spdg661anh6ocq6n660hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8YiIiMAormxSofgxaK5mhTeOml6a-OTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998673808566-q099ljncri0spdg661anh6ocq6n660hd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
