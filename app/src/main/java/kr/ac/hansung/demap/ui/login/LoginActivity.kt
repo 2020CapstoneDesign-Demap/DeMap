@@ -68,9 +68,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     override fun goToMainPage() {
         Intent(this, MainActivity::class.java).also{
-            startActivityForResult(it,  GOOGLE_LOGIN_CODE)
+            startActivity(it)
         }
-        finish()
     }
 
     override fun goToSignup() {

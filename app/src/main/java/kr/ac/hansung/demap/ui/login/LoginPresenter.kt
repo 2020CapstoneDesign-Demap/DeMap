@@ -38,7 +38,7 @@ class LoginPresenter(
             .subscribe({
                 checkNickName()
             }, {
-                view.showToastMessage("이메일 로그인에 실패하였습니다. 이유: ${it}")
+                view.showToastMessage("이메일 로그인에 실패하였습니다. 이유: ${it.toString()}")
             }) )
     }
 
@@ -55,7 +55,7 @@ class LoginPresenter(
             .subscribe({
                 checkNickName()
             },{
-                view.showToastMessage("구글 로그인에 실패하였습니다. 이유: ${it}")
+                view.showToastMessage("구글 로그인에 실패하였습니다. 이유: ${it.toString()}")
             })
         )
     }
@@ -70,15 +70,18 @@ class LoginPresenter(
             .doAfterTerminate {
                 view.hideProgress()
             }
-            .subscribe{ boolean ->
+            .subscribe({ boolean ->
                 if(boolean) {
                     view.goToMainPage()
                     view.finishView()
                 }
                 else {
                     view.goToNickName()
+                    view.finishView()
                 }
-            })
+            }, {
+                view.showToastMessage("에러 발생. 이유: ${it}")
+        }))
     }
 
     override fun clearDisposable() {
