@@ -14,6 +14,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kr.ac.hansung.demap.R
 import kr.ac.hansung.demap.databinding.ActivityLoginBinding
 import kr.ac.hansung.demap.ui.main.MainActivity
+import kr.ac.hansung.demap.ui.nickname.NickNameActivity
+import kr.ac.hansung.demap.ui.signup.SignupActivity
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
