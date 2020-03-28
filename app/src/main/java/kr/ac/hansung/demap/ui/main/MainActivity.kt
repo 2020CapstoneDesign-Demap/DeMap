@@ -1,7 +1,8 @@
-package kr.ac.hansung.demap
+package kr.ac.hansung.demap.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kr.ac.hansung.demap.R
 
 class MainActivity : AppCompatActivity() {
 
