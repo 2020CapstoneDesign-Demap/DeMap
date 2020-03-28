@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap.ui.login
 
+import android.util.Log
 import com.google.firebase.auth.AuthCredential
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -39,6 +40,7 @@ class LoginPresenter(
                 checkNickName()
             }, {
                 view.showToastMessage("이메일 로그인에 실패하였습니다. 이유: ${it.toString()}")
+                Log.d("error", it.toString())
             }) )
     }
 

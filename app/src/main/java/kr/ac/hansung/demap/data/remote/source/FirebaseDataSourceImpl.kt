@@ -16,9 +16,11 @@ class FirebaseDatasourceImpl : FirebaseDataSource {
 
     override fun emailLogin(email: String, password: String): Completable =
         Completable.create { emitter ->
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     emitter.onComplete()
+                } else {
+                    emitter.onError(Throwable(task.exception))
                 }
             }
         }
@@ -30,6 +32,8 @@ class FirebaseDatasourceImpl : FirebaseDataSource {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful) {
                 emitter.onComplete()
+            } else {
+                emitter.onError(Throwable(task.exception))
             }
         }
     }
@@ -39,6 +43,8 @@ class FirebaseDatasourceImpl : FirebaseDataSource {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if(task.isSuccessful) {
                 emitter.onComplete()
+            } else {
+                emitter.onError(Throwable(task.exception))
             }
         }
     }
@@ -49,6 +55,8 @@ class FirebaseDatasourceImpl : FirebaseDataSource {
                 if (task.isSuccessful) {
                     emitter.onSuccess(task.result!!.get("nickname") != null)
                     Log.d("task", task.result!!.get("nickname").toString())
+                } else {
+                    emitter.onError(Throwable(task.exception))
                 }
             }
     }
@@ -58,6 +66,8 @@ class FirebaseDatasourceImpl : FirebaseDataSource {
         firestore.collection("NickNames").document(firebaseAuth.currentUser?.uid!!).set(data).addOnCompleteListener {task->
             if(task.isSuccessful) {
                 emitter.onComplete()
+            } else {
+                emitter.onError(Throwable(task.exception))
             }
         }
     }
