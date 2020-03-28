@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
 
-class FirebaseDatasourceImpl : FirebaseDataSource {
+class FirebaseDataSourceImpl : FirebaseDataSource {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
