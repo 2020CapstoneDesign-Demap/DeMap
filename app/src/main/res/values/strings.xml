@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">DeMap</string>
+
+
+    <!--login-->
+    <string name="signin_google">구글 로그인</string>
+    <string name="signin_email">이메일 로그인</string>
+    <string name="go_signup_email">회원가입 하러가기</string>
+    <string name="signup_email">가입하기</string>
+    <string name="hint_email">hansungin@naver.com</string>
+    <string name="nickname_text">닉네임</string>
+    <string name="confirm_text">확인</string>
+    <string name="cancel_text">취소</string>
+
 </resources>
