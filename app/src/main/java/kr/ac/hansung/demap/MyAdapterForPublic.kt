@@ -29,7 +29,6 @@ class MyAdapterForPublic(context: Context, resource: Int, item_pub: Array<String
             viewHolder.textView.text = mItem_desc[position]
             viewHolder.checkedTextView.id = position
 
-
             return view
         }else{
             viewHolder = view.tag as ViewHolder

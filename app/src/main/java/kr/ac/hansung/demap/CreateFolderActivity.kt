@@ -20,7 +20,7 @@ class CreateFolderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // ActionBar에 타이틀 변경
-        getSupportActionBar()?.setTitle("TEST");
+        getSupportActionBar()?.setTitle("새 폴더 추가");
         // ActionBar의 배경색 변경
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
 
@@ -38,6 +38,8 @@ class CreateFolderActivity : AppCompatActivity() {
         val item_folder_tag1 = arrayOf<String>("맛집", "카페", "스포츠") //왼쪽 데이터
         val item_folder_tag2 = arrayOf<String>("관광지", "뷰티", "기타") //오른쪽 데이터
 
+        val item_folder_icon = arrayOf<String>("1", "2", "3", "4", "5")
+
         //ArrayAdapter로 생성
         listView_public.adapter =
             MyAdapterForPublic(this, R.layout.folder_public_list, item_pub, item_desc)
@@ -45,6 +47,8 @@ class CreateFolderActivity : AppCompatActivity() {
             MyAdapterForEditAuth(this, R.layout.folder_public_list, item_edit_auth, item_edit_desc)
         listView_folder_tag.adapter =
             MyAdapterForFolderTag(this, R.layout.folder_tag_list, item_folder_tag1, item_folder_tag2)
+        listView_folder_icon.adapter =
+            MyAdapterForFolderIcon(this, R.layout.folder_icon_list, item_folder_icon)
     }
 
 
