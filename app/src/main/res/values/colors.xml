@@ -3,15 +3,19 @@
     <color name="colorPrimary">#868E</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+<<<<<<< HEAD
 
+=======
+>>>>>>> aec34c5c3589b06c1157c7e9c1534ba6907a5274
     <color name="colorLineGray7">#495057</color>
     <color name="colorLineGray6">#868E96</color>
     <color name="colorLineGray4">#CED4DA</color>
-=======
     <color name="colorWhite">#FFFFFF</color>
-
 
     <color name="colorGoogleSignIn">#d34836</color>
     <color name="colorEmailBtn">#D5EAF3</color>
+<<<<<<< HEAD
 
+=======
+>>>>>>> aec34c5c3589b06c1157c7e9c1534ba6907a5274
 </resources>
