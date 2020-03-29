@@ -45,11 +45,18 @@
                 android:text="공개 범위"
                 android:textSize="18sp" />
 
-            <ListView
-                android:id="@+id/listView_public"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:divider="#000000"></ListView>
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/listView_public"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="#000000"></ListView>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -69,11 +76,18 @@
                 android:text="수정 권한"
                 android:textSize="18sp" />
 
-            <ListView
-                android:id="@+id/listView_edit_auth"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="255dp"
-                android:divider="#000000"></ListView>
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/listView_edit_auth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="#000000"></ListView>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -93,11 +107,20 @@
                 android:text="태그 선택"
                 android:textSize="18sp" />
 
-            <ListView
-                android:id="@+id/listView_folder_tag"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="#000000"></ListView>
+                android:layout_height="210dp"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/listView_folder_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="#000000"></ListView>
+
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"

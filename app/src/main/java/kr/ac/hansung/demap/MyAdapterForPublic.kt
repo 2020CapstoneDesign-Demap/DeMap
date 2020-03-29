@@ -4,10 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CheckedTextView
-import android.widget.RadioButton
-import android.widget.TextView
+import android.widget.*
 import java.util.*
 
 class MyAdapterForPublic(context: Context, resource: Int, item_pub: Array<String>, item_desc: Array<String>) : BaseAdapter() {
@@ -31,6 +28,7 @@ class MyAdapterForPublic(context: Context, resource: Int, item_pub: Array<String
             viewHolder.checkedTextView.text = mItem_pub[position]
             viewHolder.textView.text = mItem_desc[position]
             viewHolder.checkedTextView.id = position
+
 
             return view
         }else{
