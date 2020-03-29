@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "52529469672",
+    "firebase_url": "https://capstone-project-demap.firebaseio.com",
+    "project_id": "capstone-project-demap",
+    "storage_bucket": "capstone-project-demap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52529469672:android:bbe65425b0a8f3db45515d",
+        "android_client_info": {
+          "package_name": "kr.ac.hansung.demap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52529469672-s4auiq3j0mtbbaqmvadfaghkv9o510qq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.ac.hansung.demap",
+            "certificate_hash": "c5623ed2fba9bf17c6b62cb466d2a851bb9a1c41"
+          }
+        },
+        {
+          "client_id": "52529469672-0qs85qu2lguq1jgmulrc5ri6ersottfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBot9qXhVkcQatvx1QE4-2iOc4CTbV9meA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52529469672-0qs85qu2lguq1jgmulrc5ri6ersottfd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
