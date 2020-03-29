@@ -8,10 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> aec34c5c3589b06c1157c7e9c1534ba6907a5274
     <style name="AppTheme.MainTheme">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
@@ -35,8 +31,4 @@
         <item name="android:textColor">#B4F3F1</item>
     </style>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> aec34c5c3589b06c1157c7e9c1534ba6907a5274
 </resources>
