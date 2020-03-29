@@ -13,15 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
-        <activity android:name=".CreateFolderActivity"></activity>
-        <activity android:name=".MainActivity">
-=======
+        <activity android:name=".CreateFolderActivity">
+
+        </activity>
         <activity android:name=".ui.login.LoginActivity">
->>>>>>> f4c76bfccccdb450f187bd7a91dd9d22a5e2efda
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

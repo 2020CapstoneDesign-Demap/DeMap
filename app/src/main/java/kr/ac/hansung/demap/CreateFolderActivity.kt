@@ -6,6 +6,12 @@ import kotlinx.android.synthetic.main.activity_create_folder.*
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.ArrayAdapter
+import android.widget.CheckedTextView
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.activity_create_folder.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.folder_public_list.*
 
 class CreateFolderActivity : AppCompatActivity() {
 

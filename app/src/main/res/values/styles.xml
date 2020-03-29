@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-<<<<<<< HEAD
     <style name="AppTheme.MainTheme">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
@@ -19,7 +18,6 @@
     <style name="ActionBarTextColor" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorLineGray6</item>
     </style>
-=======
 
     <style name="Regular_gray">
         <item name="android:textSize">14sp</item>
@@ -33,5 +31,4 @@
         <item name="android:textColor">#B4F3F1</item>
     </style>
 
->>>>>>> f4c76bfccccdb450f187bd7a91dd9d22a5e2efda
 </resources>

@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">DeMap</string>
-<<<<<<< HEAD
     <string name="create_folder">새 폴더 추가</string>
     <string name="folder_name">폴더 이름</string>
-=======
 
 
     <!--login-->
@@ -16,5 +14,4 @@
     <string name="confirm_text">확인</string>
     <string name="cancel_text">취소</string>
 
->>>>>>> f4c76bfccccdb450f187bd7a91dd9d22a5e2efda
 </resources>
