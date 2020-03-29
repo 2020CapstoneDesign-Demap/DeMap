@@ -1,14 +1,15 @@
 package kr.ac.hansung.demap
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.*
 import kotlinx.android.synthetic.main.activity_create_folder.*
-import android.view.Menu;
-import android.view.MenuItem;
 
 import android.widget.ArrayAdapter
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_create_folder.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.folder_public_list.*
@@ -44,9 +45,6 @@ class CreateFolderActivity : AppCompatActivity() {
             MyAdapterForEditAuth(this, R.layout.folder_public_list, item_edit_auth, item_edit_desc)
         listView_folder_tag.adapter =
             MyAdapterForFolderTag(this, R.layout.folder_tag_list, item_folder_tag1, item_folder_tag2)
-
-
-
     }
 
 
