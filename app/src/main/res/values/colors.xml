@@ -3,7 +3,7 @@
     <color name="colorPrimary">#868E</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-<<<<<<< HEAD
+
     <color name="colorLineGray7">#495057</color>
     <color name="colorLineGray6">#868E96</color>
     <color name="colorLineGray4">#CED4DA</color>
@@ -13,5 +13,5 @@
 
     <color name="colorGoogleSignIn">#d34836</color>
     <color name="colorEmailBtn">#D5EAF3</color>
->>>>>>> f4c76bfccccdb450f187bd7a91dd9d22a5e2efda
+
 </resources>
