@@ -5,28 +5,15 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
         <ImageView
             android:id="@+id/folder_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/ic_folder_blue_24dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="17dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"></ImageView>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/folder_icon_btn"
@@ -38,7 +25,5 @@
             android:layout_marginTop="7dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="17dp"/>
-
-    </LinearLayout>
 
 </LinearLayout>
