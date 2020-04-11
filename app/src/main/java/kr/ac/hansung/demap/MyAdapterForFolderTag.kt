@@ -6,19 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.folder_tag_list.view.*
 
-class MyAdapterForFolderTag(private var item_list: Array<String>) :
+class MyAdapterForFolderTag(private var item_list: Array<String>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForFolderTag.MyViewHolder>() {
 
     private var mSelectedItem = -1
+//    private var mSelectedItem : ArrayList<Int>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflateView =
             LayoutInflater.from(parent.context).inflate(R.layout.folder_tag_list, parent, false)
         return MyViewHolder(inflateView)
-    }
-
-    fun getSelectedItem(): Int {
-        return mSelectedItem
     }
 
     override fun getItemCount(): Int {
@@ -39,8 +36,18 @@ class MyAdapterForFolderTag(private var item_list: Array<String>) :
             else
                 itemView.checkedtextview1.setChecked(false)
 
+//            if (selectedPosition?.contains(position) == true)
+//                itemView.checkedtextview1.setChecked(true)
+//            else
+//                itemView.checkedtextview1.setChecked(false)
+
             itemView.checkedtextview1.setOnClickListener {
+//                if (mSelectedItem?.contains(adapterPosition) == false)
+//                    mSelectedItem?.add(adapterPosition)
+//                else
+//                    mSelectedItem?.remove(adapterPosition)
                 mSelectedItem = getAdapterPosition()
+                listOnclickInterface.onCheckbox(2, adapterPosition)
                 notifyDataSetChanged()
             }
         }
