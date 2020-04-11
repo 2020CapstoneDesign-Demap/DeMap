@@ -26,4 +26,12 @@
         android:textSize="28sp"
         />
 
+    <Button
+        android:id="@+id/btn_view_folder_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="생성된 폴더 보기"
+        android:textSize="28sp"
+        />
+
 </LinearLayout>
