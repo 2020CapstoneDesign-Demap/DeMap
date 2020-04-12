@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.folder_public_list.view.*
 
-class MyAdapterForPublic(private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
-    RecyclerView.Adapter<MyAdapterForPublic.MyViewHolder>() {
+class MyAdapterForFolderEdit(private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
+    RecyclerView.Adapter<MyAdapterForFolderEdit.MyViewHolder>() {
 
     private var mSelectedItem = -1
 
@@ -25,7 +25,7 @@ class MyAdapterForPublic(private var item_list: Array<String>, private var item_
         return item_list.size
     }
 
-    override fun onBindViewHolder(holder: MyAdapterForPublic.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyAdapterForFolderEdit.MyViewHolder, position: Int) {
         holder.bind(item_list[position], position, mSelectedItem)
     }
 
@@ -37,23 +37,22 @@ class MyAdapterForPublic(private var item_list: Array<String>, private var item_
 
             if ((selectedPosition == -1 && position == 0)) {
                 itemView.checkedtextview.setChecked(true)
-                listOnclickInterface.onCheckbox(0, 0)
+                listOnclickInterface.onCheckbox(1, 0)
             }
-            else {
+            else
                 if (selectedPosition == position)
                     itemView.checkedtextview.setChecked(true)
                 else
                     itemView.checkedtextview.setChecked(false)
-            }
 
             itemView.checkedtextview.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(0, adapterPosition)
+                listOnclickInterface.onCheckbox(1, adapterPosition)
                 notifyDataSetChanged()
             }
             itemView.textview_desc.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(0, adapterPosition)
+                listOnclickInterface.onCheckbox(1, adapterPosition)
                 notifyDataSetChanged()
             }
         }

@@ -27,6 +27,7 @@
         </activity>
         <activity android:name=".ui.nickname.NickNameActivity"/>
         <activity android:name=".ui.signup.SignupActivity"/>
+        <activity android:name=".FolderListActivity"/>
 
     </application>
 </manifest>
