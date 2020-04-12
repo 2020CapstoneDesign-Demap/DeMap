@@ -1,6 +1,5 @@
 package kr.ac.hansung.demap
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -13,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kr.ac.hansung.demap.model.FolderCountDTO
 import kr.ac.hansung.demap.model.FolderDTO
-import kr.ac.hansung.demap.model.UserDTO
+import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kotlin.collections.HashMap
 
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
@@ -26,7 +26,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private lateinit var folderCreateButton: Button
 
     var storage: FirebaseStorage? = null
-    var photoUri: Uri? = null
     var auth: FirebaseAuth? = null
     var firestore: FirebaseFirestore? = null
 
@@ -111,36 +110,48 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
     fun createFoler() {
 
-        //folder 데이터
-        var folderDTO = FolderDTO()
-        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장하는 방법을 아직 모름)
-        folderDTO.name = folder_name_edittext.text.toString()
-        folderDTO.timestamp = System.currentTimeMillis()
+        var doc1 = firestore?.collection("folderCount")?.document("createcount")
+        firestore?.runTransaction {
+            var folderCount = it.get(doc1!!).toObject(FolderCountDTO::class.java) //폴더 생성 시 사용할 도큐먼트 ID
+            folderCount!!.count = folderCount.count + 1 //생성할 때마다 + 1
 
-        firestore?.collection("folders")?.document()?.set(folderDTO) //여기서 도큐먼트 이름(UID)이 랜덤하게 들어가는데
+            //folder 데이터
+            var folderDTO = FolderDTO()
+            folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
+            folderDTO.name = folder_name_edittext.text.toString()
+            folderDTO.timestamp = System.currentTimeMillis()
+            firestore?.collection("folders")?.document(folderCount.count.toString())?.set(folderDTO) //원래는 여기서 도큐먼트 이름(UID)이 랜덤하게 들어감
 
-        //user 데이터
-        var userDTO = UserDTO()
-        userDTO.myfolders["documentUID"] = true //document의 UID를 어떻게 얻어서 넣을 것인지?
+            //내 폴더에 추가
+            var doc2 = firestore?.collection("users")?.document(auth?.currentUser?.uid!!)
+            firestore?.runTransaction {
+                var usermyfolderDTO = it.get(doc2!!).toObject(UserMyFolderDTO::class.java)
+                usermyfolderDTO!!.myfolders[folderCount.count.toString()] = true
+                it.set(doc2, usermyfolderDTO)
+            }
 
-        firestore?.collection("users")?.document(auth?.currentUser?.uid!!)?.set(userDTO)
+            //폴더 공개 범위 저장
+            var public: MutableMap<String, Object> = HashMap()
+            public.put("public", item_pub[position[0]!!] as Object) //어댑터에서 받아온 데이터 저장
+            firestore?.collection("folderPublic")?.document(folderCount.count.toString())?.set(public)
 
-        //폴더 공개 범위 저장
-        //어댑터에서 받아온 데이터 저장
-        //폴더 도큐먼트 UID를 알아내서 따로(새로운 컬렉션에) 저장해야하는데, 아직 방법을 모름
-        var public : MutableMap<String, Object> = HashMap()
-        public.put("public", item_pub[position[0]!!] as Object)
-        firestore?.collection("folderPublic")?.document()?.set(public)
+            //폴더 수정 권한 저장
+            var edit_auth: MutableMap<String, Object> = HashMap()
+            edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
+            firestore?.collection("folderEditors")?.document(folderCount.count.toString())?.set(edit_auth)
 
-        //폴더 수정 권한 저장
-        var edit_auth : MutableMap<String, Object> = HashMap()
-        edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
-        firestore?.collection("folderEditors")?.document()?.set(edit_auth)
+            //폴더 태그 저장
+            var folderTag: MutableMap<String, Object> = HashMap()
+            folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
+            firestore?.collection("folderTags")?.document(folderCount.count.toString())?.set(folderTag)
 
-        //폴더 태그 저장
-        var folderTag : MutableMap<String, Object> = HashMap()
-        folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
-        firestore?.collection("folderTags")?.document()?.set(folderTag)
+            //폴더 아이콘 저장
+            var folderIcon: MutableMap<String, Object> = HashMap()
+            folderIcon.put("folderIcon", item_folder_icon[position[3]!!] as Object)
+//        firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
+
+            it.set(doc1, folderCount)
+        }
 
         Toast.makeText(this, "폴더 생성 성공!", Toast.LENGTH_SHORT).show()
         finish()
