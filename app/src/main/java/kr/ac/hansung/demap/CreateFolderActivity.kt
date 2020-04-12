@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kr.ac.hansung.demap.model.FolderCountDTO
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kotlin.collections.HashMap
@@ -110,47 +109,50 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
     fun createFoler() {
 
-        var doc1 = firestore?.collection("folderCount")?.document("createcount")
-        firestore?.runTransaction {
-            var folderCount = it.get(doc1!!).toObject(FolderCountDTO::class.java) //폴더 생성 시 사용할 도큐먼트 ID
-            folderCount!!.count = folderCount.count + 1 //생성할 때마다 + 1
+        //folder 데이터
+        var folderDTO = FolderDTO()
+        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
+        folderDTO.name = folder_name_edittext.text.toString()
+        folderDTO.timestamp = System.currentTimeMillis()
+        firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
 
-            //folder 데이터
-            var folderDTO = FolderDTO()
-            folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
-            folderDTO.name = folder_name_edittext.text.toString()
-            folderDTO.timestamp = System.currentTimeMillis()
-            firestore?.collection("folders")?.document(folderCount.count.toString())?.set(folderDTO) //원래는 여기서 도큐먼트 이름(UID)이 랜덤하게 들어감
+            var folderID = it.id //도큐먼트 ID 가져옴
 
-            //내 폴더에 추가
-            var doc2 = firestore?.collection("users")?.document(auth?.currentUser?.uid!!)
+            // 내 폴더에 추가
+            var doc = firestore?.collection("usersMyFolder")?.document(auth?.currentUser?.uid!!)
             firestore?.runTransaction {
-                var usermyfolderDTO = it.get(doc2!!).toObject(UserMyFolderDTO::class.java)
-                usermyfolderDTO!!.myfolders[folderCount.count.toString()] = true
-                it.set(doc2, usermyfolderDTO)
+                var usermyfolderDTO = UserMyFolderDTO()
+                if (it.get(doc!!).toObject(UserMyFolderDTO::class.java) == null) { //리스트에 처음 들어갈 경우
+                    usermyfolderDTO.myfolders[folderID] = true
+                }
+                else {
+                    usermyfolderDTO = it.get(doc!!).toObject(UserMyFolderDTO::class.java)!!
+                    usermyfolderDTO!!.myfolders[folderID] = true
+                }
+                it.set(doc, usermyfolderDTO)
             }
 
             //폴더 공개 범위 저장
             var public: MutableMap<String, Object> = HashMap()
             public.put("public", item_pub[position[0]!!] as Object) //어댑터에서 받아온 데이터 저장
-            firestore?.collection("folderPublic")?.document(folderCount.count.toString())?.set(public)
+            firestore?.collection("folderPublic")?.document(folderID)?.set(public)
 
             //폴더 수정 권한 저장
             var edit_auth: MutableMap<String, Object> = HashMap()
             edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
-            firestore?.collection("folderEditors")?.document(folderCount.count.toString())?.set(edit_auth)
+            firestore?.collection("folderEditors")?.document(folderID)
+                ?.set(edit_auth)
 
             //폴더 태그 저장
             var folderTag: MutableMap<String, Object> = HashMap()
             folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
-            firestore?.collection("folderTags")?.document(folderCount.count.toString())?.set(folderTag)
+            firestore?.collection("folderTags")?.document(folderID)
+                ?.set(folderTag)
 
             //폴더 아이콘 저장
             var folderIcon: MutableMap<String, Object> = HashMap()
-            folderIcon.put("folderIcon", item_folder_icon[position[3]!!] as Object)
-//        firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
-
-            it.set(doc1, folderCount)
+            folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
+//          firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
         }
 
         Toast.makeText(this, "폴더 생성 성공!", Toast.LENGTH_SHORT).show()
