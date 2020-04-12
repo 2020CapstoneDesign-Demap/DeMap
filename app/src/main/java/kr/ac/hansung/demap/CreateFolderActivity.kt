@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.model.Document
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserDTO
@@ -52,7 +54,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         //Initiate
         storage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        firestore = FirebaseFirestore.getInstance() // 데이터베이스 연결
 
         // ActionBar에 타이틀 변경
         getSupportActionBar()?.setTitle("새 폴더 추가");
@@ -122,7 +124,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //folder 데이터
         var folderDTO = FolderDTO()
-        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장하는 방법을 아직 모름)
+        folderDTO.uid = auth!!.currentUser!!.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장하는 방법을 아직 모름)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
 
@@ -132,7 +134,11 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         var userDTO = UserDTO()
         userDTO.myfolders["documentUID"] = true //document의 UID를 어떻게 얻어서 넣을 것인지?
 
+        var  docRef : DocumentReference? = firestore?.collection("folders")!!.document(folderDTO.uid!!)
+        System.out.println("도큐멘트 uid는 " + docRef)
+
         firestore?.collection("users")?.document(auth?.currentUser?.uid!!)?.set(userDTO)
+
 
         //폴더 공개 범위 저장
         //어댑터에서 받아온 데이터 저장
