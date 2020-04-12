@@ -29,9 +29,12 @@ class MyAdapterForFolderList() : RecyclerView.Adapter<MyAdapterForFolderList.MyV
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: String, position: Int, selectedPosition: Int) {
+
+            //클릭리스너
             itemView.folder_subscribe_btn.setOnClickListener {
 
             }
+
         }
     }
 }

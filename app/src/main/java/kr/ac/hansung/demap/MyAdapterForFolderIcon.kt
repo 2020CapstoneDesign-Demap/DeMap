@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.folder_icon_list.view.*
 class MyAdapterForFolderIcon(private var item_folder_icon: Array<Int>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForFolderIcon.MyViewHolder>() {
 
-    private var mSelectedItem = -1
+    private var mSelectedItem = -1 //선택된 아이템 위치(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflateView =
@@ -34,9 +34,9 @@ class MyAdapterForFolderIcon(private var item_folder_icon: Array<Int>, private v
         fun bind(item: Int, position: Int, selectedPosition: Int) {
             itemView.folder_icon.setBackgroundResource(item_folder_icon[position])
 
-            if ((selectedPosition == -1 && position == 0)) {
+            if ((selectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
                 itemView.folder_icon_btn.setChecked(true)
-                listOnclickInterface.onCheckbox(3, 0)
+                listOnclickInterface.onCheckbox(3, 0) //선택된 데이터 넘겨줌
             }
             else
                 if (selectedPosition == position)
@@ -44,14 +44,15 @@ class MyAdapterForFolderIcon(private var item_folder_icon: Array<Int>, private v
                 else
                     itemView.folder_icon_btn.setChecked(false)
 
+            //클릭리스너
             itemView.folder_icon.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(3, adapterPosition)
+                listOnclickInterface.onCheckbox(3, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
             itemView.folder_icon_btn.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(3, adapterPosition)
+                listOnclickInterface.onCheckbox(3, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
         }

@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.folder_public_list.view.*
 class MyAdapterForFolderEdit(private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForFolderEdit.MyViewHolder>() {
 
-    private var mSelectedItem = -1
+    private var mSelectedItem = -1 //선택된 아이템 위치(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflateView =
@@ -35,9 +35,9 @@ class MyAdapterForFolderEdit(private var item_list: Array<String>, private var i
             itemView.checkedtextview.text = item_list[position]
             itemView.textview_desc.text = item_desc[position]
 
-            if ((selectedPosition == -1 && position == 0)) {
+            if ((selectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
                 itemView.checkedtextview.setChecked(true)
-                listOnclickInterface.onCheckbox(1, 0)
+                listOnclickInterface.onCheckbox(1, 0) //선택된 데이터 넘겨줌
             }
             else
                 if (selectedPosition == position)
@@ -45,14 +45,15 @@ class MyAdapterForFolderEdit(private var item_list: Array<String>, private var i
                 else
                     itemView.checkedtextview.setChecked(false)
 
+            //클릭리스너
             itemView.checkedtextview.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(1, adapterPosition)
+                listOnclickInterface.onCheckbox(1, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
             itemView.textview_desc.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(1, adapterPosition)
+                listOnclickInterface.onCheckbox(1, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
         }

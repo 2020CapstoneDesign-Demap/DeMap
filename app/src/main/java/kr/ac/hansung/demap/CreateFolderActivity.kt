@@ -30,6 +30,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     var auth: FirebaseAuth? = null
     var firestore: FirebaseFirestore? = null
 
+    //어댑터에서 넘겨받은 아이템 리스트 위치 저장하는 변수
     var position = arrayOfNulls<Int>(4) //0:공개 1:수정권한 2:태그 3:폴더아이콘
 
     //리스트에 들어갈 아이템
@@ -63,16 +64,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_create_folder)
-
-        //ArrayAdapter로 생성
-//        listView_public.adapter =
-//            MyAdapterForPublic(this, R.layout.folder_public_list, item_pub, item_desc)
-//        listView_edit_auth.adapter =
-//            MyAdapterForEditAuth(this, R.layout.folder_public_list, item_edit_auth, item_edit_desc)
-//        listView_folder_tag.adapter =
-//            MyAdapterForFolderTag(this, R.layout.folder_tag_list, item_folder_tag1, item_folder_tag2)
-//        listView_folder_icon.adapter =
-//            MyAdapterForFolderIcon(this, R.layout.folder_icon_list, item_folder_icon)
 
         //공개 범위
         viewManager = LinearLayoutManager(this)
@@ -156,6 +147,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
     }
 
+    //어댑터에서 체크한 데이터 위치 넘겨받음
     override fun onCheckbox(index: Int, p: Int) {
         position[index] = p
     }
