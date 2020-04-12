@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
+import kr.ac.hansung.demap.ui.createfolder.*
 import kotlin.collections.HashMap
 
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
@@ -65,7 +66,11 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //공개 범위
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapterForPublic(item_pub, item_desc, this)
+        viewAdapter = MyAdapterForPublic(
+            item_pub,
+            item_desc,
+            this
+        )
         recyclerView = findViewById<RecyclerView>(R.id.listView_public).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -74,7 +79,11 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //수정 권한
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapterForFolderEdit(item_edit_auth, item_edit_desc, this)
+        viewAdapter = MyAdapterForFolderEdit(
+            item_edit_auth,
+            item_edit_desc,
+            this
+        )
         recyclerView = findViewById<RecyclerView>(R.id.listView_edit_auth).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -83,7 +92,10 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //폴더 태그
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapterForFolderTag(item_folder_tag, this)
+        viewAdapter = MyAdapterForFolderTag(
+            item_folder_tag,
+            this
+        )
         recyclerView = findViewById<RecyclerView>(R.id.listView_folder_tag).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -92,7 +104,10 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //폴더 아이콘
         viewManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        viewAdapter = MyAdapterForFolderIcon(item_folder_icon, this)
+        viewAdapter = MyAdapterForFolderIcon(
+            item_folder_icon,
+            this
+        )
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView_folder_icon).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

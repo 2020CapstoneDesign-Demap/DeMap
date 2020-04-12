@@ -1,10 +1,11 @@
-package kr.ac.hansung.demap
+package kr.ac.hansung.demap.ui.createfolder
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.folder_icon_list.view.*
+import kr.ac.hansung.demap.R
 
 class MyAdapterForFolderIcon(private var item_folder_icon: Array<Int>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForFolderIcon.MyViewHolder>() {
@@ -25,7 +26,7 @@ class MyAdapterForFolderIcon(private var item_folder_icon: Array<Int>, private v
         return item_folder_icon.size
     }
 
-    override fun onBindViewHolder(holder: MyAdapterForFolderIcon.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(item_folder_icon[position], position, mSelectedItem)
     }
 

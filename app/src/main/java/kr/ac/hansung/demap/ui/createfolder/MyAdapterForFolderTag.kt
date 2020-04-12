@@ -1,11 +1,11 @@
-package kr.ac.hansung.demap
+package kr.ac.hansung.demap.ui.createfolder
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.folder_public_list.view.*
 import kotlinx.android.synthetic.main.folder_tag_list.view.*
+import kr.ac.hansung.demap.R
 
 class MyAdapterForFolderTag(private var item_list: Array<String>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForFolderTag.MyViewHolder>() {
@@ -23,7 +23,7 @@ class MyAdapterForFolderTag(private var item_list: Array<String>, private var li
         return item_list.size
     }
 
-    override fun onBindViewHolder(holder: MyAdapterForFolderTag.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(item_list[position], position, mSelectedItem)
     }
 
