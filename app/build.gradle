@@ -80,13 +80,13 @@ dependencies {
 
     //gldie
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    
+
+
 // Koin AndroidX Scope feature
     implementation "org.koin:koin-androidx-scope:$koin_version"
-
 // Koin AndroidX ViewModel feature
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
 // Koin for Unit tests
     testImplementation "org.koin:koin-test:$koin_version"
+
 }
