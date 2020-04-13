@@ -90,9 +90,5 @@ dependencies {
     // Koin for Unit tests
     testImplementation "org.koin:koin-test:$koin_version"
 
-    // Jsoup
-//    implementation 'com.github.bumptech.glide:glide:4.9.0'
-//    implementation 'com.github.siyamed:android-shape-imageview:0.9.3'
-//    implementation 'org.jsoup:jsoup:1.12.1'
-//    implementation files('libs/jsoup-1.13.1.jar')
+
 }

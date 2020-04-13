@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
+import kr.ac.hansung.demap.model.User
 
 class FirebaseDataSourceImpl : FirebaseDataSource {
 
@@ -50,11 +51,10 @@ class FirebaseDataSourceImpl : FirebaseDataSource {
     }
 
     override fun checkNickName(): Single<Boolean> = Single.create { emitter ->
-        firestore.collection("NickNames").document(firebaseAuth.currentUser?.uid!!).get()
+        firestore.collection(USERS_COLLECTION).document(firebaseAuth.currentUser?.uid!!).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    emitter.onSuccess(task.result!!.get("nickname") != null)
-                    Log.d("task", task.result!!.get("nickname").toString())
+                    emitter.onSuccess(task.result!!.get("nickName") != null)
                 } else {
                     emitter.onError(Throwable(task.exception))
                 }
@@ -62,8 +62,9 @@ class FirebaseDataSourceImpl : FirebaseDataSource {
     }
 
     override fun setNickName(nickname: String): Completable = Completable.create { emitter ->
-        var data = hashMapOf("nickname" to nickname)
-        firestore.collection("NickNames").document(firebaseAuth.currentUser?.uid!!).set(data).addOnCompleteListener {task->
+        var user = User(nickname, firebaseAuth.currentUser?.email)
+
+        firestore.collection(USERS_COLLECTION).document(firebaseAuth.currentUser?.uid!!).set(user).addOnCompleteListener { task->
             if(task.isSuccessful) {
                 emitter.onComplete()
             } else {
@@ -72,4 +73,7 @@ class FirebaseDataSourceImpl : FirebaseDataSource {
         }
     }
 
+    companion object{
+        const val USERS_COLLECTION = "users"
+    }
 }
