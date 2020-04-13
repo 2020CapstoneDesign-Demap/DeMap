@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "52529469672-7r2teu4an3lu7f7paf0hph35ekl5i13d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.ac.hansung.demap",
+            "certificate_hash": "6181ae37a0ea6091dfe46365e57c90242101c7d2"
+          }
+        },
+        {
           "client_id": "52529469672-s4auiq3j0mtbbaqmvadfaghkv9o510qq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

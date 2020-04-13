@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/folder_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_folder_blue_24dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="7dp"></ImageView>
+
+        <RadioButton
+            android:id="@+id/folder_icon_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:enabled="true"
+            android:checked="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="17dp"/>
+
+</LinearLayout>
