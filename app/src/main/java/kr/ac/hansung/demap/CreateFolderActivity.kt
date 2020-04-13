@@ -10,13 +10,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.model.Document
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kr.ac.hansung.demap.ui.createfolder.*
+import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderTag
 import kotlin.collections.HashMap
 
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
@@ -54,7 +53,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         //Initiate
         storage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance() // 데이터베이스 연결
+        firestore = FirebaseFirestore.getInstance()
 
         // ActionBar에 타이틀 변경
         getSupportActionBar()?.setTitle("새 폴더 추가");
@@ -69,6 +68,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         //공개 범위
         viewManager = LinearLayoutManager(this)
         viewAdapter = MyAdapterForPublic(
+            0,
             item_pub,
             item_desc,
             this
@@ -81,7 +81,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //수정 권한
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapterForFolderEdit(
+        viewAdapter = MyAdapterForPublic(
+            1,
             item_edit_auth,
             item_edit_desc,
             this
@@ -128,38 +129,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //folder 데이터
         var folderDTO = FolderDTO()
-        folderDTO.uid = auth!!.currentUser!!.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장하는 방법을 아직 모름)
-        folderDTO.name = folder_name_edittext.text.toString()
-        folderDTO.timestamp = System.currentTimeMillis()
-
-        firestore?.collection("folders")?.document()?.set(folderDTO) //여기서 도큐먼트 이름(UID)이 랜덤하게 들어가는데
-
-        //user 데이터
-        var userDTO = UserDTO()
-        userDTO.myfolders["documentUID"] = true //document의 UID를 어떻게 얻어서 넣을 것인지?
-
-        var  docRef : DocumentReference? = firestore?.collection("folders")!!.document(folderDTO.uid!!)
-        System.out.println("도큐멘트 uid는 " + docRef)
-
-        firestore?.collection("users")?.document(auth?.currentUser?.uid!!)?.set(userDTO)
-
-
-        //폴더 공개 범위 저장
-        //어댑터에서 받아온 데이터 저장
-        //폴더 도큐먼트 UID를 알아내서 따로(새로운 컬렉션에) 저장해야하는데, 아직 방법을 모름
-        var public : MutableMap<String, Object> = HashMap()
-        public.put("public", item_pub[position[0]!!] as Object)
-        firestore?.collection("folderPublic")?.document()?.set(public)
-
-        //폴더 수정 권한 저장
-        var edit_auth : MutableMap<String, Object> = HashMap()
-        edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
-        firestore?.collection("folderEditors")?.document()?.set(edit_auth)
-
-        //폴더 태그 저장
-        var folderTag : MutableMap<String, Object> = HashMap()
-        folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
-        firestore?.collection("folderTags")?.document()?.set(folderTag)
         folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()

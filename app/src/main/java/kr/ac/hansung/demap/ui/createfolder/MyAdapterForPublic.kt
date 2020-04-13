@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.folder_public_list.view.*
 import kr.ac.hansung.demap.R
 
-class MyAdapterForPublic(private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
+class MyAdapterForPublic(private var flag: Int, private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForPublic.MyViewHolder>() {
 
     private var mSelectedItem = -1 //선택된 아이템 위치(position)
@@ -37,7 +37,7 @@ class MyAdapterForPublic(private var item_list: Array<String>, private var item_
 
             if ((selectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
                 itemView.checkedtextview.setChecked(true)
-                listOnclickInterface.onCheckbox(0, 0) //선택된 데이터 넘겨줌
+                listOnclickInterface.onCheckbox(flag, 0) //선택된 데이터 넘겨줌
             }
             else {
                 if (selectedPosition == position)
@@ -49,12 +49,12 @@ class MyAdapterForPublic(private var item_list: Array<String>, private var item_
             //클릭리스너
             itemView.checkedtextview.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(0, adapterPosition) //선택된 데이터 넘겨줌
+                listOnclickInterface.onCheckbox(flag, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
             itemView.textview_desc.setOnClickListener {
                 mSelectedItem = getAdapterPosition()
-                listOnclickInterface.onCheckbox(0, adapterPosition) //선택된 데이터 넘겨줌
+                listOnclickInterface.onCheckbox(flag, adapterPosition) //선택된 데이터 넘겨줌
                 notifyDataSetChanged()
             }
         }
