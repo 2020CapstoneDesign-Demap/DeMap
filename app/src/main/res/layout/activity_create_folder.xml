@@ -89,12 +89,6 @@
                 android:layout_height="255dp"
                 android:orientation="vertical">
 
-<!--                <ListView-->
-<!--                    android:id="@+id/listView_edit_auth"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:divider="#000000"-->
-<!--                    android:scrollbars="none"></ListView>-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView_edit_auth"
                     android:layout_width="match_parent"
@@ -127,12 +121,6 @@
                 android:layout_height="350dp"
                 android:orientation="vertical">
 
-<!--                <ListView-->
-<!--                    android:id="@+id/listView_folder_tag"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:divider="#000000"-->
-<!--                    android:scrollbars="none"></ListView>-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView_folder_tag"
                     android:layout_width="match_parent"

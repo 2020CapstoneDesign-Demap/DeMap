@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:hint="@string/folder_search"
@@ -23,9 +23,8 @@
         android:layout_height="1dp"
         android:layout_centerInParent="true"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="15dp"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="1dp"
         android:background="@color/colorLineGray4" />
 
 
