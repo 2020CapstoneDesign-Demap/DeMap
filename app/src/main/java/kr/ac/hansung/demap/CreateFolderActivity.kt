@@ -129,7 +129,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //folder 데이터
         var folderDTO = FolderDTO()
-//        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
         firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
@@ -137,48 +136,48 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             var folderID = it.id //도큐먼트 ID 가져옴
 
             //폴더 생성자 정보 저장
-            var owner: MutableMap<String, Object> = HashMap()
-            owner.put("owner", auth?.currentUser?.uid as Object)
+            var owner: MutableMap<String, Any> = HashMap()
+            owner.put("owner", auth?.currentUser?.uid as Any)
             firestore?.collection("folderOwner")?.document(folderID)?.set(owner)
 
             //폴더 구독자 정보 저장
-            var subscriber: MutableMap<String, Object> = HashMap()
-            var subscribers : MutableMap<String, Object> = HashMap()
-            subscriber.put("subscribers", subscribers as Object)
+            var subscriber: MutableMap<String, Any> = HashMap()
+            var subscribers : MutableMap<String, Any> = HashMap()
+            subscriber.put("subscribers", subscribers)
             firestore?.collection("folderSubscribers")?.document(folderID)?.set(subscriber)
 
             // 내 폴더에 추가
             var doc = firestore?.collection("usersMyFolder")?.document(auth?.currentUser?.uid!!)
             firestore?.runTransaction {
-                var usermyfolderDTO = UserMyFolderDTO()
+                var userMyfolderDTO = UserMyFolderDTO()
                 if (it.get(doc!!).toObject(UserMyFolderDTO::class.java) == null) { //리스트에 처음 들어갈 경우
-                    usermyfolderDTO.myfolders[folderID] = true
+                    userMyfolderDTO.myfolders[folderID] = true
                 }
                 else {
-                    usermyfolderDTO = it.get(doc!!).toObject(UserMyFolderDTO::class.java)!!
-                    usermyfolderDTO!!.myfolders[folderID] = true
+                    userMyfolderDTO = it.get(doc).toObject(UserMyFolderDTO::class.java)!!
+                    userMyfolderDTO.myfolders[folderID] = true
                 }
-                it.set(doc, usermyfolderDTO)
+                it.set(doc, userMyfolderDTO)
             }
 
             //폴더 공개 범위 저장
-            var public: MutableMap<String, Object> = HashMap()
-            public.put("public", item_pub[position[0]!!] as Object) //어댑터에서 받아온 데이터 저장
+            var public: MutableMap<String, Any> = HashMap()
+            public.put("public", item_pub[position[0]!!]) //어댑터에서 받아온 데이터 저장
             firestore?.collection("folderPublic")?.document(folderID)?.set(public)
 
             //폴더 수정 권한 저장
-            var edit_auth: MutableMap<String, Object> = HashMap()
-            edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
+            var edit_auth: MutableMap<String, Any> = HashMap()
+            edit_auth.put("edit_auth", item_edit_auth[position[1]!!])
             firestore?.collection("folderEditors")?.document(folderID)?.set(edit_auth)
 
             //폴더 태그 저장
-            var folderTag: MutableMap<String, Object> = HashMap()
-            folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
+            var folderTag: MutableMap<String, Any> = HashMap()
+            folderTag.put("folderTag", item_folder_tag[position[2]!!])
             firestore?.collection("folderTags")?.document(folderID)?.set(folderTag)
 
             //폴더 아이콘 저장
-            var folderIcon: MutableMap<String, Object> = HashMap()
-            folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
+            var folderIcon: MutableMap<String, Any> = HashMap()
+            folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString())
 //          firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
         }
 

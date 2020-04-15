@@ -4,3 +4,7 @@ data class User(
     var nickName: String? = null,
     var email: String? = null
 )
+
+data class UserMyFolderDTO(var myfolders: MutableMap<String, Boolean> = HashMap())
+
+data class UserSubsFolderDTO(var subscribefolders: MutableMap<String, Boolean> = HashMap())
