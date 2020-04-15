@@ -13,6 +13,7 @@ import kr.ac.hansung.demap.ui.main.MainActivity
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
+
 class NickNameActivity : AppCompatActivity(), NickNameContract.View {
 
     private val presenter: NickNameContract.Presenter by inject {

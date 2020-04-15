@@ -129,12 +129,23 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //folder 데이터
         var folderDTO = FolderDTO()
-        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
+//        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
         firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
 
             var folderID = it.id //도큐먼트 ID 가져옴
+
+            //폴더 생성자 정보 저장
+            var owner: MutableMap<String, Object> = HashMap()
+            owner.put("owner", auth?.currentUser?.uid as Object)
+            firestore?.collection("folderOwner")?.document(folderID)?.set(owner)
+
+            //폴더 구독자 정보 저장
+            var subscriber: MutableMap<String, Object> = HashMap()
+            var subscribers : MutableMap<String, Object> = HashMap()
+            subscriber.put("subscribers", subscribers as Object)
+            firestore?.collection("folderSubscribers")?.document(folderID)?.set(subscriber)
 
             // 내 폴더에 추가
             var doc = firestore?.collection("usersMyFolder")?.document(auth?.currentUser?.uid!!)
@@ -158,14 +169,12 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             //폴더 수정 권한 저장
             var edit_auth: MutableMap<String, Object> = HashMap()
             edit_auth.put("edit_auth", item_edit_auth[position[1]!!] as Object)
-            firestore?.collection("folderEditors")?.document(folderID)
-                ?.set(edit_auth)
+            firestore?.collection("folderEditors")?.document(folderID)?.set(edit_auth)
 
             //폴더 태그 저장
             var folderTag: MutableMap<String, Object> = HashMap()
             folderTag.put("folderTag", item_folder_tag[position[2]!!] as Object)
-            firestore?.collection("folderTags")?.document(folderID)
-                ?.set(folderTag)
+            firestore?.collection("folderTags")?.document(folderID)?.set(folderTag)
 
             //폴더 아이콘 저장
             var folderIcon: MutableMap<String, Object> = HashMap()
