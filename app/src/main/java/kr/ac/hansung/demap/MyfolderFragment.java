@@ -34,7 +34,7 @@ public class MyfolderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.myfolder_tab_fragment, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.myfolder_tab_fragment, container, false); // SubsFolderFragment와 이 부분만 다름
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);

@@ -16,15 +16,13 @@ import kr.ac.hansung.demap.model.FolderDTO;
 
 public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderViewRecyclerAdapter.MyViewHolder> {
 
-    private Context context;
-
-    // adapter에 들어갈 folder list
     private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
 
     @Override
     public void onBindViewHolder(@NonNull MyFolderViewRecyclerAdapter.MyViewHolder holder, int position) {
         holder.onBind(folderDTOS.get(position));
     }
+
     @NonNull
     @Override
     public MyFolderViewRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,7 +33,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     @Override
     public int getItemCount() {
-        // RecyclerView의 총 개수 입니다.
         return folderDTOS.size();
     }
 
@@ -43,8 +40,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
         folderDTOS = folderDTO;
     }
 
-    // RecyclerView의 핵심인 ViewHolder 입니다.
-    // 여기서 subView를 setting 해줍니다.
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textview_folderview_name;
         public TextView textview_folderview_info;
