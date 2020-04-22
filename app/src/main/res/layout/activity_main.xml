@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerlayout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity"
-    android:orientation="vertical"
-    android:layout_gravity="center"
-    android:gravity="center">
+    android:fitsSystemWindows="true"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome DeMap"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        layout="@layout/activity_main_content"/>
 
-    <Button
-        android:id="@+id/btn_create_folder"
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/main_nav"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="폴더 생성"
-        android:textSize="28sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/drawer"
         />
 
-    <Button
-        android:id="@+id/btn_view_folder_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="생성된 폴더 보기"
-        android:textSize="28sp"
-        />
-
-</LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

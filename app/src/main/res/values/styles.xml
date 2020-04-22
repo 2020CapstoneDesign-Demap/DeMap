@@ -31,4 +31,9 @@
         <item name="android:textColor">#B4F3F1</item>
     </style>
 
+    <!-- main에서 toolbar 쓰려고 actionbar 없애기 -->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
 </resources>
