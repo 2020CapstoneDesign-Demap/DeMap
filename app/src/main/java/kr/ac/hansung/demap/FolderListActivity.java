@@ -23,12 +23,19 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
 
 import java.lang.ref.Reference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.FolderSubsDTO;
+import kr.ac.hansung.demap.model.UserMyFolderDTO;
+import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
 
 public class FolderListActivity extends AppCompatActivity {
@@ -50,6 +57,7 @@ public class FolderListActivity extends AppCompatActivity {
     private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
     private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
     private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
+    private FolderSubsDTO folderSubsDTO = null;
 
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
@@ -187,9 +195,10 @@ public class FolderListActivity extends AppCompatActivity {
                     folderObjs.set(folderObjs.indexOf(fObj), fObj);
                     // 공개된 폴더를 구독가능폴더리스트에 저장
                     subableFolderObjs.add(fObj);
-
+                    subscribeFolder(subFolderIds.indexOf(subId));
                     //System.out.println("아니 이게 왜 안되냐고");
                 }
+
             }
 
             System.out.println("구독 가능 여부 : " + fObj.getId() + fObj.getName() + fObj.getIspublic());
@@ -252,72 +261,51 @@ public class FolderListActivity extends AppCompatActivity {
     }
 */
 
-/*
-    fun requestFollow() {
-        currentUserUid = auth.getCurrentUser().getUid();//currentUser.uid; // 현재 유저 아이디 받아옴
 
-        //DocumentReference tsDocFollowing = firestore.collection("users").document(currentUserUid);
+// 폴더 구독 메서드
+    public void subscribeFolder(int index) {
 
-        firestore.runTransaction { transaction ->
+        //폴더 구독자 정보 저장
+        Map<String, Object> subscriber  = new HashMap();
+        Map<String, Object> subscribers  = new HashMap();
+        subscribers.put(auth.getUid().toString(), true);
+        subscriber.put("subscribers", subscribers);
+        // 내 구독 폴더 목록 저장
+        Map<String, Boolean> subscribefolders  = new HashMap();
+        Map<String, Object> subscribefolder  = new HashMap();
 
-                var followDTO = transaction.get(tsDocFollowing).toObject(FollowDTO::class.java)
-            if (followDTO == null) {
 
-                followDTO = FollowDTO()
-                followDTO.followingCount = 1
-                followDTO.followings[uid!!] = true
+        //DocumentReference subsDoc = firestore.collection("folderSubscribers").document(auth?.currentUser?.uid!!);
 
-                transaction.set(tsDocFollowing, followDTO)
-                return@runTransaction
+        //firestore.collection("folderSubscribers").document(subFolderIds.get(index)).set(subscriber);
 
+        // 내 구독 폴더에 추가
+        DocumentReference doc = firestore.collection("usersSubsFolder").document(auth.getUid());
+
+        //firestore.runTransaction();
+            UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
+            subscribefolders.put(subFolderIds.get(index), true);
+
+/* 자바에서 런트랜잭션을 어캐 쓸지 몰라서 못함
+            if (userSubsFolderDTO.get(doc).toObject(UserSubsFolderDTO.class) == null) { //리스트에 처음 들어갈 경우
+                userSubsFolderDTO.setSubscribefolders(subscribefolders);
             }
-            // Unstar the post and remove self from stars
-            if (followDTO?.followings?.containsKey(uid)!!) {
-
-                followDTO?.followingCount = followDTO?.followingCount - 1
-                followDTO?.followings.remove(uid)
-            } else {
-
-                followDTO?.followingCount = followDTO?.followingCount + 1
-                followDTO?.followings[uid!!] = true
-                followerAlarm(uid!!)
+            else {
+                userSubsFolderDTO = it.get(doc).toObject(UserSubsFolderDTO.class);
+                userSubsFolderDTO.setSubscribefolders(subscribefolders);
             }
-            transaction.set(tsDocFollowing, followDTO)
-            return@runTransaction
-        }
-
-        private CollectionReference tsDocFollower = firestore.collection("users").document(uid);
-        firestore?.runTransaction { transaction ->
-
-                var followDTO = transaction.get(tsDocFollower).toObject(FollowDTO::class.java)
-            if (followDTO == null) {
-
-                followDTO = FollowDTO()
-                followDTO!!.followerCount = 1
-                followDTO!!.followers[currentUserUid!!] = true
+            it.set(doc, usermyfolderDTO);*/
+        // 구독 폴더 리스트 삽입 SetOptions.merge()쓰면 갱신해주는 옵션이래서 일단 이걸로 썼음
+        subscribefolder.put("subscribefolders", subscribefolders);
+        doc.set(subscribefolder,SetOptions.merge());
 
 
-                transaction.set(tsDocFollower, followDTO!!)
-                return@runTransaction
-            }
 
-            if (followDTO?.followers?.containsKey(currentUserUid!!)!!) {
+    }
+
+            //folderSubsDTO.setSubscribers("su");
 
 
-                followDTO!!.followerCount = followDTO!!.followerCount - 1
-                followDTO!!.followers.remove(currentUserUid!!)
-            } else {
-
-                followDTO!!.followerCount = followDTO!!.followerCount + 1
-                followDTO!!.followers[currentUserUid!!] = true
-
-            }// Star the post and add self to stars
-
-            transaction.set(tsDocFollower, followDTO!!)
-            return@runTransaction
-        }
-
-    }*/
 
 
     @Override

@@ -1,8 +1,13 @@
 package kr.ac.hansung.demap.ui.main
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PointF
+import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,10 +15,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -24,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
+import kr.ac.hansung.demap.MyfolderViewActivity
 import kr.ac.hansung.demap.R
 
 
@@ -65,6 +73,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         startActivity(intent)
     }
 
+    fun viewMyFolderList() {
+        var intent = Intent(this, MyfolderViewActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home->{
@@ -77,8 +90,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.search_folder_menu-> Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
-            R.id.my_folder_menu-> Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
+            R.id.search_folder_menu-> viewFolderList()//Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
+            R.id.my_folder_menu-> viewMyFolderList()//Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
             R.id.hotplace_menu-> Toast.makeText(this,"핫플 clicked",Toast.LENGTH_SHORT).show()
             R.id.history_menu-> Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show()
             R.id.setting_menu-> Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show()
@@ -126,7 +139,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-
     // 지도 사용하는 거 다 여기에 쓰면 되는거가타요
     override fun onMapReady(naverMap: NaverMap) {
         val infoWindow = InfoWindow().apply {
@@ -141,13 +153,40 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
 
+
+        //latitude = now_latitude;
+        //altitude = now_altitude;
+        //-=longitude = now_longitude;
+
+
+
+        // 현재위치를 추적 뭐시기라는데 아직 뭔지 모르겠음
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = naverMap
+
+
         // 지도 아무데나 눌렀을 때
         naverMap.setOnMapClickListener { _, coord ->
             Toast.makeText(this, "${coord}", Toast.LENGTH_LONG).show()
+
             // 현재 마커 무한 생성..^^
-            Marker().apply {
-                position = coord
-                map = naverMap
+            var now : LatLng? = coord
+
+            if(now != marker.position) {
+
+                marker.map = null
+
+                marker.position = coord
+                marker.map = naverMap
+                //var now : LatLng = coord
+
+                //Marker().apply {
+                //    position = coord
+                //    map = naverMap
+                //}
             }
             /*
             infoWindow.position = coord

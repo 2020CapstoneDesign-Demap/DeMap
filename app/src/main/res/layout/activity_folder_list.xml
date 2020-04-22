@@ -39,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="#EEEEEE"
-            tools:listitem="@layout/folder_list"></androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/folder_list">
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 

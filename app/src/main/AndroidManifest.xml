@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.ac.hansung.demap">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -33,7 +34,9 @@
         <activity android:name=".ui.nickname.NickNameActivity"/>
         <activity android:name=".ui.signup.SignupActivity"/>
         <activity android:name=".FolderListActivity"/>
-        <activity android:name=".MyfolderViewActivity"/>
+        <activity android:name=".MyfolderViewActivity">
+
+        </activity>
 
         <!-- 네이버 api -->
         <meta-data
