@@ -33,6 +33,7 @@
         <activity android:name=".ui.nickname.NickNameActivity"/>
         <activity android:name=".ui.signup.SignupActivity"/>
         <activity android:name=".FolderListActivity"/>
+        <activity android:name=".MyfolderViewActivity"/>
 
         <!-- 네이버 api -->
         <meta-data

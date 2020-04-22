@@ -41,13 +41,13 @@
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="3dp"
                 android:background="@drawable/background_et_round"
                 android:hint="@string/hint_email"
-                android:paddingStart="2dp"
+                android:paddingStart="10dp"
                 android:text="@={presenter._email}" />
 
             <TextView
@@ -61,14 +61,14 @@
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/background_et_round"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:paddingStart="2dp"
+                android:paddingStart="10dp"
                 android:text="@={presenter._password}" />
 
             <Button
