@@ -34,4 +34,12 @@
         android:textSize="28sp"
         />
 
+    <Button
+        android:id="@+id/btn_view_myfolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="마이폴더"
+        android:textSize="28sp"
+        />
+
 </LinearLayout>

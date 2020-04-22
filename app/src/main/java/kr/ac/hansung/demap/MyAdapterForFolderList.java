@@ -9,24 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 
-public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFolderList.MyViewHolder> /*FirestoreRecyclerAdapter<FolderDTO, MyAdapterForFolderList.MyViewHolder>*/ {
+public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFolderList.MyViewHolder> {
 
     // adapter에 들어갈 folder list
     private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
-
-
-    //public MyAdapterForFolderList(ArrayList<FolderDTO> folderDTOS) {
-    //    super();
-    //    this.folderDTOS = folderDTOS;
-    //}
-
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
@@ -74,43 +64,4 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
-    //@Override
-    //public int getItemCount() {
-    //    return 0;
-    //}
-
 }
-
-//class MyAdapterForFolderList() : RecyclerView.Adapter<MyAdapterForFolderList.MyViewHolder>() {
-//    private ArrayList<FolderDTO> folderDTOs;
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-//        val inflateView = LayoutInflater.from(parent.context).inflate(R.layout.folder_public_list, parent, false)
-//        return MyViewHolder(inflateView)
-//    }
-//
-//    fun getSelectedItem(): Int {
-//        return 0
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return 0
-//    }
-//
-//    override fun onBindViewHolder(holder: MyAdapterForFolderList.MyViewHolder, position: Int) {
-//
-//    }
-//
-//    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//
-//        fun bind(item: String, position: Int, selectedPosition: Int) {
-//
-//            //클릭리스너
-//            itemView.folder_subscribe_btn.setOnClickListener {
-//
-//            }
-//
-//        }
-//    }
-//}
