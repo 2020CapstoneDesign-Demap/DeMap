@@ -16,4 +16,22 @@
     <string name="confirm_text">확인</string>
     <string name="cancel_text">취소</string>
 
+
+
+    <!-- Naver -->
+    <string name="name_marker">Marker</string>
+    <string name="description_marker">마커</string>
+    <string name="marker_caption_1">☀캡션이 있는 마커🎉</string>
+    <string name="marker_caption_2">서브 캡션이 있는 마커</string>
+    <string name="marker_sub_caption_2">🇰🇷서브 캡션👩🏿‍🍳</string>
+
+    <string name="name_info_window">Info Window</string>
+    <string name="description_info_window">정보 창</string>
+    <string name="format_info_window_on_marker">마커: %s</string>
+    <string name="format_info_window_on_map">좌표: (%1$.5f, %2$.5f)</string>
+
+    <string name="name_custom_info_window">Custom Info Window</string>
+    <string name="description_custom_info_window">커스텀 어댑터를 사용하는 정보 창</string>
+    <string name="content_description_icon">아이콘</string>
+    <string name="format_coord">(%1$.5f, %2$.5f)</string>
 </resources>
