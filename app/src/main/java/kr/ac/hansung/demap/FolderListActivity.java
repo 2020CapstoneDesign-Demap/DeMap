@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,25 +17,43 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 
 
 public class FolderListActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
-    private CollectionReference folderRef = firestore.collection("folders"); // firestore에서 folder 내역 가져오기
+    //private CollectionReference folderRef = firestore.collection("folders"); // firestore에서 folder 내역 가져오기
+    //private CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
+    //private CollectionReference subableFolderRef = firestore.collection("folders"); // firestore에서 folders 내역 가져오기
+
+
+    //private String destinationUid;
+    //private String uid = auth.currentUser.uid;
+    //private String currentUserUid = null;
 
     private MyAdapterForFolderList adapter; // FolderList 어댑터
 
     private ArrayList<FolderDTO> folderDTOs = new ArrayList<FolderDTO>(); // 폴더 리스트를 저장 할 FolderDTO ArrayList 생성
+    private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
+    private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
+    private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
+
+    // 구독 리스너 -> 사용할지 안할지 모르겠음
+    //private ListenerRegistration followListenerRegistration = null;
+    //private ListenerRegistration followingListenerRegistration = null;
 
 
     @Override
@@ -50,6 +70,26 @@ public class FolderListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_folder_list);
 
+        createFolderInfoList();
+
+
+       // for ( FolderObj temp : subableFolderObjs )
+        //    System.out.println("구독 가능 폴더 : " + temp.getId() + temp.getName() + temp.getIspublic());
+
+
+
+        RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyAdapterForFolderList();
+        recyclerView.setAdapter(adapter);
+
+
+
+    }
+
+    public void createFolderInfoList() {
+        CollectionReference folderRef = firestore.collection("folders");
         // folders의 모든 도큐먼트 가져오기
         folderRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -59,11 +99,19 @@ public class FolderListActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 System.out.println(document.getId() + " => " + document.getData());
+                                // 가져온 도큐먼트를 folderDTO객체로 저장
                                 FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                                // 가져온 도큐먼트를 folderObj객체로 저장
+                                FolderObj folderObj = document.toObject(FolderObj.class);
+                                folderObj.setId(document.getId()); // 폴더객체에 폴더도큐먼트id 삽입
                                 folderDTOs.add(folderDTO);
-                                System.out.println(folderDTO.getName());
+                                folderObjs.add(folderObj);
+                                System.out.println("폴더디티오 : " + folderDTO.getName());
+                                System.out.println("폴더오비제 : " + folderObj.getId());
                                 adapter.addItem(folderDTO);
                             }
+
+                            setSubableIDList();
                             adapter.notifyDataSetChanged();
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -73,41 +121,204 @@ public class FolderListActivity extends AppCompatActivity {
                     }
                 });
 
+        // 구독 가능한 폴더 id 가져와 id리스트 설정
+        //setSubableIDList();
+
+
+        // 구독 가능한 폴더 리스트 설정
+        //setSubableFolderList();
 
 
 
-        //Query query = folderRef.orderBy("timestamp", Query.Direction.ASCENDING);
-        //FirestoreRecyclerOptions<FolderDTO> options = new FirestoreRecyclerOptions.Builder<FolderDTO>()
-        //        .setQuery(query, FolderDTO.class)
-        //        .build();
+        //System.out.println("아니 이게 왜 안되냐고");
 
-
-        RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapterForFolderList();
-        recyclerView.setAdapter(adapter);
-/*
-        firestore.collection("folders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
-                        folderDTOs.add(folderDTO);
-
-                        Log.d("TAG", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d("TAG", "Error getting documents: ", task.getException());
-                }
-
-            }
-        });
-
- */
 
     }
+
+
+    public void setSubableIDList() {
+        CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
+        // folders에서 구독 가능한 foler 도큐먼트 가져오기
+        folderPublicRef.whereEqualTo("public", "공개").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                System.out.println(document.getId() + " => " + document.getData());
+                                String subId = document.getId();
+                                subFolderIds.add(subId);
+                            }
+
+                            setSubableFolderList();
+
+                        } else {
+                            //Log.d(TAG, "Error getting documents: ", task.getException());
+                            System.out.println("Error getting documents: " + task.getException());
+
+                        }
+                    }
+                });
+
+        //for(String id : subFolderIds) {
+        //    System.out.println("아이디만 저장이 되긴했냐 : " + id);
+        //}
+
+
+    }
+
+    public void setSubableFolderList( ) {
+
+        //private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
+        //private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
+        //private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
+
+        // 전체 folder 리스트를 for문 돌려 구독 가능 폴더 id와 비교
+        for ( FolderObj fObj : folderObjs ) {
+            int index = folderObjs.indexOf(fObj);
+            System.out.println("folderObjs index : " + index);
+
+            for ( String subId : subFolderIds ) {
+                if (fObj.getId().equals(subId)){ // 전체 폴더 중 구독 가능 폴더 id 리스트에 존재하는 폴더 id라면
+                    //FolderDTO publicfolderDTO = documentSub.toObject(FolderDTO.class);
+                    // 폴더 공개 여부를 "공개"로 설정 후 변경 사항 배열리스트에 set 시키기
+                    fObj.setIspublic("공개");
+                    folderObjs.set(folderObjs.indexOf(fObj), fObj);
+                    // 공개된 폴더를 구독가능폴더리스트에 저장
+                    subableFolderObjs.add(fObj);
+
+                    //System.out.println("아니 이게 왜 안되냐고");
+                }
+            }
+
+            System.out.println("구독 가능 여부 : " + fObj.getId() + fObj.getName() + fObj.getIspublic());
+
+        }
+
+
+    }
+
+/*
+    public void getAllFolderList() {
+        Thread allFolderListThread = new Thread(new AllFolderListThread(folderRef, folderDTOs, folderObjs));
+        try {
+            allFolderListThread.start();
+            allFolderListThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (FolderDTO folderDTO : folderDTOs) {
+            adapter.addItem(folderDTO);
+            adapter.notifyDataSetChanged();
+        }
+
+
+    }
+*/
+    /*
+    fun getFollowing() {
+        followingListenerRegistration = firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                val followDTO = documentSnapshot?.toObject(FollowDTO::class.java)
+            if (followDTO == null) return@addSnapshotListener
+                    fragmentView!!.account_tv_following_count.text = followDTO?.followingCount.toString()
+        }
+    }*/
+
+/*
+    fun getFollower() {
+
+        followListenerRegistration = firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                val followDTO = documentSnapshot?.toObject(FollowDTO::class.java)
+            if (followDTO == null) return@addSnapshotListener
+                    fragmentView?.account_tv_follower_count?.text = followDTO?.followerCount.toString()
+            if (followDTO?.followers?.containsKey(currentUserUid)!!) {
+
+                fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
+                fragmentView?.account_btn_follow_signout
+                        ?.background
+                        ?.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
+            } else {
+
+                if (uid != currentUserUid) {
+
+                    fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
+                    fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
+                }
+            }
+
+        }
+
+    }
+*/
+
+/*
+    fun requestFollow() {
+        currentUserUid = auth.getCurrentUser().getUid();//currentUser.uid; // 현재 유저 아이디 받아옴
+
+        //DocumentReference tsDocFollowing = firestore.collection("users").document(currentUserUid);
+
+        firestore.runTransaction { transaction ->
+
+                var followDTO = transaction.get(tsDocFollowing).toObject(FollowDTO::class.java)
+            if (followDTO == null) {
+
+                followDTO = FollowDTO()
+                followDTO.followingCount = 1
+                followDTO.followings[uid!!] = true
+
+                transaction.set(tsDocFollowing, followDTO)
+                return@runTransaction
+
+            }
+            // Unstar the post and remove self from stars
+            if (followDTO?.followings?.containsKey(uid)!!) {
+
+                followDTO?.followingCount = followDTO?.followingCount - 1
+                followDTO?.followings.remove(uid)
+            } else {
+
+                followDTO?.followingCount = followDTO?.followingCount + 1
+                followDTO?.followings[uid!!] = true
+                followerAlarm(uid!!)
+            }
+            transaction.set(tsDocFollowing, followDTO)
+            return@runTransaction
+        }
+
+        private CollectionReference tsDocFollower = firestore.collection("users").document(uid);
+        firestore?.runTransaction { transaction ->
+
+                var followDTO = transaction.get(tsDocFollower).toObject(FollowDTO::class.java)
+            if (followDTO == null) {
+
+                followDTO = FollowDTO()
+                followDTO!!.followerCount = 1
+                followDTO!!.followers[currentUserUid!!] = true
+
+
+                transaction.set(tsDocFollower, followDTO!!)
+                return@runTransaction
+            }
+
+            if (followDTO?.followers?.containsKey(currentUserUid!!)!!) {
+
+
+                followDTO!!.followerCount = followDTO!!.followerCount - 1
+                followDTO!!.followers.remove(currentUserUid!!)
+            } else {
+
+                followDTO!!.followerCount = followDTO!!.followerCount + 1
+                followDTO!!.followers[currentUserUid!!] = true
+
+            }// Star the post and add self to stars
+
+            transaction.set(tsDocFollower, followDTO!!)
+            return@runTransaction
+        }
+
+    }*/
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
