@@ -1,12 +1,11 @@
 package kr.ac.hansung.demap
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.*
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -14,9 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
-import kr.ac.hansung.demap.ui.createfolder.*
+import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
+import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderTag
-import kotlin.collections.HashMap
+import kr.ac.hansung.demap.ui.createfolder.MyAdapterForPublic
 
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private lateinit var recyclerView: RecyclerView
@@ -56,9 +56,12 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         firestore = FirebaseFirestore.getInstance()
 
         // ActionBar에 타이틀 변경
-        getSupportActionBar()?.setTitle("새 폴더 추가");
+        supportActionBar?.setTitle("새 폴더 추가");
         // ActionBar의 배경색 변경
+        supportActionBar?.setBackgroundDrawable(getDrawable(R.color.colorWhite))
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+
+        window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
 
         // 홈 아이콘 표시
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);

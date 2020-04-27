@@ -29,6 +29,12 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.hide()
+
+        window.statusBarColor = resources.getColor(R.color.colorTheme, theme) // api 23 이상
+
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.activity = this
         binding.presenter = presenter as LoginPresenter

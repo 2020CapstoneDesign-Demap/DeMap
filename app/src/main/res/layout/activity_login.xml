@@ -14,103 +14,172 @@
             type="kr.ac.hansung.demap.ui.login.LoginPresenter" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
+    <LinearLayout
+        android:gravity="center"
+        android:background="@color/colorTheme"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.login.LoginActivity">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/demap_icon_1"
             app:layout_constraintBottom_toTopOf="@id/ll_login"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
             android:id="@+id/ll_login"
-            android:layout_width="match_parent"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="2dp"
-                android:fontFamily="sans-serif-light"
-                android:text="email" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginBottom="2dp"-->
+<!--                android:fontFamily="sans-serif-light"-->
+<!--                android:text="email" />-->
 
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
+                android:layout_height="55dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="3dp"
-                android:background="@drawable/background_et_round"
-                android:hint="@string/hint_email"
-                android:paddingStart="10dp"
+                android:layout_marginBottom="1dp"
+                android:textSize="15sp"
+                android:background="@drawable/background_et_round_login_email"
+                android:hint="이메일"
+                android:paddingStart="20dp"
                 android:text="@={presenter._email}" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="2dp"
-                android:fontFamily="sans-serif-light"
-                android:text="password" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginBottom="2dp"-->
+<!--                android:fontFamily="sans-serif-light"-->
+<!--                android:text="password" />-->
 
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
+                android:layout_height="55dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/background_et_round"
-                android:hint="Password"
+                android:background="@drawable/background_et_round_login_pw"
+                android:hint="비밀번호"
                 android:inputType="textPassword"
-                android:paddingStart="10dp"
-                android:text="@={presenter._password}" />
+                android:paddingStart="20dp"
+                android:text="@={presenter._password}"
+                android:textSize="15sp" />
+
 
             <Button
                 android:id="@+id/btn_email_login"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="63dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/background_btn_round"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTheme"
+                android:background="@drawable/background_btn_round_white"
                 android:onClick="@{() -> activity.emailLogin()}"
                 android:text="@string/signin_email" />
 
-            <Button
-                android:id="@+id/btn_email_signup"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/background_btn_round"
-                android:onClick="@{() -> activity.goToSignup()}"
-                android:text="@string/go_signup_email" />
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="right"
+                    android:text="비밀번호 찾기"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:gravity="center"
+                    android:text=" | "
+                    android:textColor="#DDDDDD"
+                    android:textSize="14sp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/btn_email_signup"
+                    android:text="회원가입"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp"
+                    android:onClick="@{() -> activity.goToSignup()}"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_email_signup"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:background="@drawable/background_btn_round_blue"-->
+<!--                android:onClick="@{() -> activity.goToSignup()}"-->
+<!--                android:text="@string/go_signup_email" />-->
 
 
-            <Button
+            <TextView
                 android:id="@+id/btn_google_login"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="80dp"
-                android:background="@drawable/background_btn_google"
-                android:onClick="@{()-> activity.googleLogin()}"
                 android:text="@string/signin_google"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:onClick="@{()-> activity.googleLogin()}"
+                android:layout_gravity="center"
+                android:layout_marginTop="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_gravity="center"
+                android:layout_width="116dp"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorWhite" />
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_google_login"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:layout_marginBottom="60dp"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:background="@drawable/background_btn_google"-->
+<!--                android:onClick="@{()-> activity.googleLogin()}"-->
+<!--                android:text="@string/signin_google" />-->
 
             <ProgressBar
                 android:id="@+id/pb_loading"
@@ -123,5 +192,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

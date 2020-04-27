@@ -1,9 +1,8 @@
 package kr.ac.hansung.demap;
 
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,14 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.Transaction;
 
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +64,10 @@ public class FolderListActivity extends AppCompatActivity {
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle("폴더 리스트");
         // ActionBar의 배경색 변경
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,7 +85,7 @@ public class FolderListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapterForFolderList();
+        adapter = new MyAdapterForFolderList(getApplicationContext());
         recyclerView.setAdapter(adapter);
 
 

@@ -23,6 +23,10 @@ class NickNameActivity : AppCompatActivity(), NickNameContract.View {
     private lateinit var binding: ActivityNicknameBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.hide()
+        window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_nickname)
 
         binding.btnConfirm.setOnClickListener {

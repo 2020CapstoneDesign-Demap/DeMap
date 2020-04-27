@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
         setSupportActionBar(toolbar_main) // 툴바를 액티비티의 앱바로 지정
         supportActionBar?.let {
+            it.setBackgroundDrawable(getDrawable(R.color.colorWhite))
             it.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
             it.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) // 홈버튼 이미지 변경
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
@@ -53,7 +54,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         main_nav.setNavigationItemSelectedListener(this) //navigationListener
         // bottom navigation
         bottom_nav.setOnNavigationItemSelectedListener(this)
-
 
         // naver map 객체 가져오기
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
