@@ -87,6 +87,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     // searchview
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        sv_searchPlace.onActionViewExpanded()
+
         sv_searchPlace.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // 검색어가 변경되었을 때 이벤트 처리
