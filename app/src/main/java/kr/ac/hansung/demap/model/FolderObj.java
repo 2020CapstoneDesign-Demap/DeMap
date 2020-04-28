@@ -7,9 +7,11 @@ public class FolderObj {
     private String id = null;
     private String name = null;
     private String ispublic = "비공개";
+    private String tag = null;
     private String  imageUrl = null;
     private Long timestamp = null;
     private int subscribeCount = 0;
+    private HashMap<String, Boolean> subscribers  = new HashMap();
     private HashMap<String, Boolean> places  = new HashMap();
 
     public String getId() {
@@ -34,6 +36,14 @@ public class FolderObj {
 
     public void setIspublic(String ispublic) {
         this.ispublic = ispublic;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getImageUrl() {
@@ -66,6 +76,14 @@ public class FolderObj {
 
     public void setPlaces(HashMap<String, Boolean> places) {
         this.places = places;
+    }
+
+    public HashMap<String, Boolean> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(HashMap<String, Boolean> subscribers) {
+        this.subscribers = subscribers;
     }
 
 }

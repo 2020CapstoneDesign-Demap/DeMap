@@ -35,6 +35,7 @@
 
         </activity>
         <activity android:name=".MyfolderViewActivity">
+
         </activity>
         <activity android:name=".FolderContentActivity">
 

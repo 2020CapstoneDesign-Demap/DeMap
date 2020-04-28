@@ -157,6 +157,7 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_gravity="center"
                     android:id="@+id/recyclerView_folder_icon"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
