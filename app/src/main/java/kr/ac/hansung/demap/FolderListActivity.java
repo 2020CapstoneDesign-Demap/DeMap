@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 import kr.ac.hansung.demap.ui.main.MainActivity;
 
 
-public class FolderListActivity extends AppCompatActivity {
+public class FolderListActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
@@ -58,6 +60,14 @@ public class FolderListActivity extends AppCompatActivity {
     private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
     private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
     private ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 폴더 리스트를 저장 할 FolderObj ArrayList 생성
+    private ArrayList<String> tagsForSearch = new ArrayList<String>(); // 서치할 태그 저장
+
+    // 체크박스
+    CheckBox restaurant;
+    CheckBox cafe;
+    CheckBox tour;
+    CheckBox sport;
+    CheckBox entertain;
 
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
@@ -106,8 +116,23 @@ public class FolderListActivity extends AppCompatActivity {
             }
         });
 
+        // 선택된 태그 가져오기
+        restaurant = (CheckBox) findViewById(R.id.restau_check);
+        cafe = (CheckBox)findViewById(R.id.cafe_check);
+        tour = (CheckBox)findViewById(R.id.tour_check);
+        sport = (CheckBox)findViewById(R.id.sport_check);
+        entertain = (CheckBox)findViewById(R.id.enter_check);
 
-       // for ( FolderObj temp : subableFolderObjs )
+        restaurant.setOnCheckedChangeListener(this);
+        cafe.setOnCheckedChangeListener(this);
+        tour.setOnCheckedChangeListener(this);
+        sport.setOnCheckedChangeListener(this);
+        entertain.setOnCheckedChangeListener(this);
+
+
+
+
+      // for ( FolderObj temp : subableFolderObjs )
         //    System.out.println("구독 가능 폴더 : " + temp.getId() + temp.getName() + temp.getIspublic());
 
 
@@ -146,6 +171,73 @@ public class FolderListActivity extends AppCompatActivity {
 
 
             }
+
+        }
+
+        adapter.addItems(searchFolderResult);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    // 체크 박스를 클릭해서 체크상태가 되면 호출되는 콜백 메서드
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        tagsForSearch.clear();
+        if(restaurant.isChecked()==true) {
+            tagsForSearch.add("맛집"); // 체크 활성화 됐으면 서치태그리스트에 추가
+            System.out.println("태그 클릭 : 맛집" );
+        } else {
+            tagsForSearch.remove("맛집"); // 체크 비활성화 되면 서치태그리스트에서 삭제
+        }
+        if(cafe.isChecked()==true) {
+            tagsForSearch.add("카페");
+            System.out.println("태그 클릭 : 카페" );
+        } else {
+            tagsForSearch.remove("카페");
+        }
+        if(tour.isChecked()==true)  {
+            tagsForSearch.add("관광지");
+            System.out.println("태그 클릭 : 관광지" );
+        } else {
+            tagsForSearch.remove("관광지");
+        }
+        if(sport.isChecked()==true)  {
+            tagsForSearch.add("스포츠");
+            System.out.println("태그 클릭 : 스포츠" );
+        } else {
+            tagsForSearch.remove("스포츠");
+        }
+        if(entertain.isChecked()==true)  {
+            tagsForSearch.add("공연/전시");
+            System.out.println("태그 클릭 : 공연/전시" );
+        } else {
+            tagsForSearch.remove("공연/전시");
+        }
+
+        //if(!tagsForSearch.isEmpty())
+            searchForFolderTag(/*tagsForSearch*/);
+    }
+
+    // 구독 가능한 폴더 리스트에서 태그로 검색
+    public void searchForFolderTag(/*ArrayList<String> tagsForSearch*/) {
+        // 검색 결과 리스트 초기화
+        searchFolderResult.clear();
+        for(FolderObj tempfolder : folderObjs) {
+            // 폴더들을 가져와서
+            // 그 폴더들의 태그에 넘어온 태그가 존재하면
+            // 검색결과 리스트에 넣는다
+            // 그리고 그걸 화면에 보여줌
+            //System.out.println("함수는 돌아감");
+            String str1 = tempfolder.getTag();
+            for(String tag : tagsForSearch) {
+                if(str1.equals(tag)) {
+                    System.out.println("태그 검색 성공");
+                    searchFolderResult.add(tempfolder);
+                    System.out.println(tempfolder.getName()+" : "+tempfolder.getId()+" , "+tempfolder.getTag());
+                }
+            }
+
+
 
         }
 
@@ -438,6 +530,8 @@ public class FolderListActivity extends AppCompatActivity {
         super.onStop();
         //adapter.stopListening();
     }
+
+
 }
 
 //class FolderListActivity : AppCompatActivity() {
