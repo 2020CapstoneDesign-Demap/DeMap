@@ -24,7 +24,12 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
 
+
 //    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
+
+
+    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
+
 
     public MyAdapterForFolderList(Context context) {
         this.context = context;

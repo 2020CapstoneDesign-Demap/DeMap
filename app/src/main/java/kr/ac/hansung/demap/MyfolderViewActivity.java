@@ -107,7 +107,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                         if (document.exists()) {
 //                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
-                                            folderObj.setId(document.getId());
                                             myfolderObjs.add(folderObj);
 
                                             pagerAdapter.setmyfolderItem(myfolderObjs);
@@ -149,7 +148,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                         if (document.exists()) {
 //                                            FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
-                                            folderObj.setId(document.getId());
                                             subsfolderObjs.add(folderObj);
 
                                             pagerAdapter.setsubsfolderItem(subsfolderObjs);

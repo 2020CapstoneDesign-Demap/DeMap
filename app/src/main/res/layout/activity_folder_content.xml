@@ -79,7 +79,7 @@
         <Button
             android:layout_gravity="center"
             android:id="@+id/btn_folder_content_subscribe"
-            android:text="구독하기"
+            android:text="@string/folder_subscribe"
             android:textColor="@color/colorWhite"
             android:textSize="15sp"
             android:background="@drawable/background_btn_round_blue"
