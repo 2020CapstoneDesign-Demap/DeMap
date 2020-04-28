@@ -149,8 +149,6 @@ public class FolderListActivity extends AppCompatActivity {
 
         }
 
-
-
         adapter.addItems(searchFolderResult);
         adapter.notifyDataSetChanged();
 
