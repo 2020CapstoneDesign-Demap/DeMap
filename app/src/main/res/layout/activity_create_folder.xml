@@ -52,12 +52,12 @@
                 android:layout_height="170dp"
                 android:orientation="vertical">
 
-<!--                <ListView-->
-<!--                    android:id="@+id/listView_public"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:divider="#000000"-->
-<!--                    android:scrollbars="none"></ListView>-->
+                <!--                <ListView-->
+                <!--                    android:id="@+id/listView_public"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:divider="#000000"-->
+                <!--                    android:scrollbars="none"></ListView>-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView_public"
                     android:layout_width="match_parent"

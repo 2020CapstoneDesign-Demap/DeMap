@@ -48,8 +48,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     //private CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
     //private CollectionReference subableFolderRef = firestore.collection("folders"); // firestore에서 folders 내역 가져오기
 
-    //
-
     //private String destinationUid;
     //private String uid = auth.currentUser.uid;
     //private String currentUserUid = null;

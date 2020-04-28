@@ -2,7 +2,6 @@ package kr.ac.hansung.demap;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 
 public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFolderList.MyViewHolder> {
@@ -24,12 +22,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
 
-
 //    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
-
-
-    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
-
 
     public MyAdapterForFolderList(Context context) {
         this.context = context;

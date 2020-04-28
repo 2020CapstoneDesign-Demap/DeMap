@@ -52,13 +52,13 @@
 
             <Button
                 android:layout_gravity="center_vertical"
-                android:layout_width="35dp"
-                android:layout_height="20dp"
-                android:layout_margin="7dp"
-                android:background="#EEEEEE"
+                android:layout_width="37dp"
+                android:layout_height="27dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/background_btn_round_gray_border"
                 android:text="편집"
-                android:textColor="#888888"
-                android:textSize="12.5sp" />
+                android:textColor="@color/colorLineGray6"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
