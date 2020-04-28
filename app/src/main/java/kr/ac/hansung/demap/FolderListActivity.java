@@ -123,7 +123,7 @@ public class FolderListActivity extends AppCompatActivity {
     public void searchForFolderName(String keyword) {
         // 검색 결과 리스트 초기화
         searchFolderResult.clear();
-        for(FolderObj tempfolder : subableFolderObjs) {
+        for(FolderObj tempfolder : folderObjs) {
             // 키워드가 들어간 폴더들을 긁어와서
             // 그 폴더들의 아이디가 구독가능폴더아이디 리스트에 있는거면
             // 검색결과 리스트에 넣는다
@@ -147,6 +147,9 @@ public class FolderListActivity extends AppCompatActivity {
             }
 
         }
+
+
+
         adapter.addItems(searchFolderResult);
         adapter.notifyDataSetChanged();
 
@@ -298,11 +301,11 @@ public class FolderListActivity extends AppCompatActivity {
                             folderObj.setTag(folderTag);
                             folderObjs.set(folderObjs.indexOf(folderObj), folderObj);
 
-                            adapter.setItem(folderObjs);
+//                            adapter.setItem(folderObjs);
                         }
 
 //                        adapter.addItem(folderObj);
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
 
                     } else {
                         System.out.println("Error getting documents: " + task.getException());
