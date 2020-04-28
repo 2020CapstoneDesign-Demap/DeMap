@@ -183,46 +183,51 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         tagsForSearch.clear();
-        if(restaurant.isChecked()==true) {
-            tagsForSearch.add("맛집"); // 체크 활성화 됐으면 서치태그리스트에 추가
-            System.out.println("태그 클릭 : 맛집" );
-        } else {
-            tagsForSearch.remove("맛집"); // 체크 비활성화 되면 서치태그리스트에서 삭제
-        }
-        if(cafe.isChecked()==true) {
-            tagsForSearch.add("카페");
-            System.out.println("태그 클릭 : 카페" );
-        } else {
-            tagsForSearch.remove("카페");
-        }
-        if(tour.isChecked()==true)  {
-            tagsForSearch.add("관광지");
-            System.out.println("태그 클릭 : 관광지" );
-        } else {
-            tagsForSearch.remove("관광지");
-        }
-        if(sport.isChecked()==true)  {
-            tagsForSearch.add("스포츠");
-            System.out.println("태그 클릭 : 스포츠" );
-        } else {
-            tagsForSearch.remove("스포츠");
-        }
-        if(entertain.isChecked()==true)  {
-            tagsForSearch.add("공연/전시");
-            System.out.println("태그 클릭 : 공연/전시" );
-        } else {
-            tagsForSearch.remove("공연/전시");
+        if(!searchFolderResult.isEmpty()) {
+            if (restaurant.isChecked() == true) {
+                tagsForSearch.add("맛집"); // 체크 활성화 됐으면 서치태그리스트에 추가
+                System.out.println("태그 클릭 : 맛집");
+            } else {
+                tagsForSearch.remove("맛집"); // 체크 비활성화 되면 서치태그리스트에서 삭제
+            }
+            if (cafe.isChecked() == true) {
+                tagsForSearch.add("카페");
+                System.out.println("태그 클릭 : 카페");
+            } else {
+                tagsForSearch.remove("카페");
+            }
+            if (tour.isChecked() == true) {
+                tagsForSearch.add("관광지");
+                System.out.println("태그 클릭 : 관광지");
+            } else {
+                tagsForSearch.remove("관광지");
+            }
+            if (sport.isChecked() == true) {
+                tagsForSearch.add("스포츠");
+                System.out.println("태그 클릭 : 스포츠");
+            } else {
+                tagsForSearch.remove("스포츠");
+            }
+            if (entertain.isChecked() == true) {
+                tagsForSearch.add("공연/전시");
+                System.out.println("태그 클릭 : 공연/전시");
+            } else {
+                tagsForSearch.remove("공연/전시");
+            }
+
+            searchForFolderTag(/*tagsForSearch*/);
         }
 
         //if(!tagsForSearch.isEmpty())
-            searchForFolderTag(/*tagsForSearch*/);
+
     }
 
     // 구독 가능한 폴더 리스트에서 태그로 검색
     public void searchForFolderTag(/*ArrayList<String> tagsForSearch*/) {
+        ArrayList<FolderObj> searchTagNameResult = new ArrayList<FolderObj>();
         // 검색 결과 리스트 초기화
-        searchFolderResult.clear();
-        for(FolderObj tempfolder : folderObjs) {
+        //searchFolderResult.clear();
+        for(FolderObj tempfolder : searchFolderResult) {
             // 폴더들을 가져와서
             // 그 폴더들의 태그에 넘어온 태그가 존재하면
             // 검색결과 리스트에 넣는다
@@ -232,7 +237,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             for(String tag : tagsForSearch) {
                 if(str1.equals(tag)) {
                     System.out.println("태그 검색 성공");
-                    searchFolderResult.add(tempfolder);
+                    searchTagNameResult.add(tempfolder);
                     System.out.println(tempfolder.getName()+" : "+tempfolder.getId()+" , "+tempfolder.getTag());
                 }
             }
@@ -241,7 +246,12 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
         }
 
-        adapter.addItems(searchFolderResult);
+        // 서치태그 리스트가 비었으면 태그검색을 취소한 것이므로 키워드 검색 결과만 보여줌 
+        if(tagsForSearch.isEmpty())
+            adapter.addItems(searchFolderResult);
+        else
+            adapter.addItems(searchTagNameResult);
+        //searchFolderResult.clear();
         adapter.notifyDataSetChanged();
 
     }
