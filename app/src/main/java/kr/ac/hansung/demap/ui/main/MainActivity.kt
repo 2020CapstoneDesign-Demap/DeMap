@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
+import kr.ac.hansung.demap.MyfolderViewActivity
 import kr.ac.hansung.demap.R
 
 
@@ -37,12 +38,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
         setSupportActionBar(toolbar_main) // 툴바를 액티비티의 앱바로 지정
         supportActionBar?.let {
+            it.setBackgroundDrawable(getDrawable(R.color.colorWhite))
             it.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
             it.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) // 홈버튼 이미지 변경
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
         }
 
-        main_nav.setNavigationItemSelectedListener(this) //navigationListener
+        window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
 
         //navigationListener
         main_nav.setNavigationItemSelectedListener(this)
@@ -65,6 +67,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     fun viewFolderList() {
         var intent = Intent(this, FolderListActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun viewMyFolderList() {
+        var intent = Intent(this, MyfolderViewActivity::class.java)
         startActivity(intent)
     }
 
@@ -99,8 +106,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.search_folder_menu-> Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
-            R.id.my_folder_menu-> Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
+            R.id.search_folder_menu-> viewFolderList() //Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
+            R.id.my_folder_menu-> viewMyFolderList() //Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
             R.id.hotplace_menu-> Toast.makeText(this,"핫플 clicked",Toast.LENGTH_SHORT).show()
             R.id.history_menu-> Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show()
             R.id.setting_menu-> Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show()
@@ -164,13 +171,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
 
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = naverMap
+
         // 지도 아무데나 눌렀을 때
         naverMap.setOnMapClickListener { _, coord ->
             Toast.makeText(this, "${coord}", Toast.LENGTH_LONG).show()
-            // 현재 마커 무한 생성..^^
-            Marker().apply {
-                position = coord
-                map = naverMap
+            var now : LatLng? = coord
+
+            if(now != marker.position) {
+
+                marker.map = null
+
+                marker.position = coord
+                marker.map = naverMap
+
             }
             /*
             infoWindow.position = coord
