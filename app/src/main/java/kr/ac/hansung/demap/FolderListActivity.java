@@ -84,6 +84,7 @@ public class FolderListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_folder_list);
 
+
         //구독 가능한 폴더 리스트
         setSubableIDList();
 
