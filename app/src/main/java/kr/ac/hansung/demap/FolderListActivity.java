@@ -48,6 +48,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     //private CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
     //private CollectionReference subableFolderRef = firestore.collection("folders"); // firestore에서 folders 내역 가져오기
 
+    //
 
     //private String destinationUid;
     //private String uid = auth.currentUser.uid;
@@ -72,10 +73,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
     //private ListenerRegistration followingListenerRegistration = null;
-
-
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
