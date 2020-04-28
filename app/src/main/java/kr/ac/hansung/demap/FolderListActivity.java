@@ -1,8 +1,12 @@
 package kr.ac.hansung.demap;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -29,6 +34,7 @@ import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
+import kr.ac.hansung.demap.ui.main.MainActivity;
 
 
 public class FolderListActivity extends AppCompatActivity {
@@ -50,11 +56,14 @@ public class FolderListActivity extends AppCompatActivity {
     private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
     private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
     private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
-    private FolderSubsDTO folderSubsDTO = null;
+    private ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 폴더 리스트를 저장 할 FolderObj ArrayList 생성
 
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
     //private ListenerRegistration followingListenerRegistration = null;
+
+
+
 
 
     @Override
@@ -74,7 +83,26 @@ public class FolderListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_folder_list);
 
+        // 전체 폴더 모든 정보 리스트 가져오기
         createFolderInfoList();
+
+        // 검색어 가져오기
+        SearchView searchView =  findViewById(R.id.folder_name_edittext);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String keyword) {
+                // 검색 버튼이 눌러졌을 때 이벤트 처리
+                System.out.println("검색 처리됨 : " + keyword);
+                searchForFolderName(keyword);
+
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // 검색어가 변경되었을 때 이벤트 처리
+                return false;
+            }
+        });
 
 
        // for ( FolderObj temp : subableFolderObjs )
@@ -92,6 +120,40 @@ public class FolderListActivity extends AppCompatActivity {
 
     }
 
+    // 구독 가능한 폴더 리스트에서 폴더명 키워드로 검색
+    public void searchForFolderName(String keyword) {
+        // 검색 결과 리스트 초기화
+        searchFolderResult.clear();
+        for(FolderObj tempfolder : subableFolderObjs) {
+            // 키워드가 들어간 폴더들을 긁어와서
+            // 그 폴더들의 아이디가 구독가능폴더아이디 리스트에 있는거면
+            // 검색결과 리스트에 넣는다
+            // 그리고 그걸 화면에 보여줌
+            //System.out.println("함수는 돌아감");
+            String str1 = tempfolder.getName();
+            boolean b = str1.toLowerCase().contains(keyword.toLowerCase());
+            //System.out.println("키워드 검사 논리 결과 : "+ b);
+            if(b) {
+                //System.out.println("키워드 여부 검사 성공");
+                searchFolderResult.add(tempfolder);
+                System.out.println(tempfolder.getName()+" : "+tempfolder.getId()+" , "+tempfolder.getIspublic());
+                /*
+                for(FolderObj result : searchFolderResult) {
+                    int flag=0;
+                    if(tempfolder.equals(result))
+                        flag++;
+                }*/
+
+
+            }
+
+        }
+        adapter.addItems(searchFolderResult);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    // 전체 폴더 리스트의 모든 정보를 리스트로 가져옴
     public void createFolderInfoList() {
         CollectionReference folderRef = firestore.collection("folders");
         // folders의 모든 도큐먼트 가져오기
@@ -112,11 +174,11 @@ public class FolderListActivity extends AppCompatActivity {
                                 folderObjs.add(folderObj);
                                 System.out.println("폴더디티오 : " + folderDTO.getName());
                                 System.out.println("폴더오비제 : " + folderObj.getId());
-                                adapter.addItem(folderDTO);
+                                //adapter.addItem(folderDTO);
                             }
 
                             setSubableIDList();
-                            adapter.notifyDataSetChanged();
+                            //adapter.notifyDataSetChanged();
                         } else {
                             //Log.d(TAG, "Error getting documents: ", task.getException());
                             System.out.println("Error getting documents: " + task.getException());
@@ -139,10 +201,10 @@ public class FolderListActivity extends AppCompatActivity {
 
     }
 
-
+    // 구독 가능한 폴더 id만 리스트로 저장
     public void setSubableIDList() {
         CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
-        // folders에서 구독 가능한 foler 도큐먼트 가져오기
+        // folders에서 구독 가능한 folder 도큐먼트 가져오기
         folderPublicRef.whereEqualTo("public", "공개").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -172,6 +234,7 @@ public class FolderListActivity extends AppCompatActivity {
 
     }
 
+    // 구독 가능한 폴더 전체 정보를 리스트로 저장
     public void setSubableFolderList( ) {
 
         //private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성

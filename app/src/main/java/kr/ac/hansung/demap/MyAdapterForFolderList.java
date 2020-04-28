@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 
 public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFolderList.MyViewHolder> {
 
     private Context context;
 
     // adapter에 들어갈 folder list
-    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
+    //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
+    private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
+
 
     public MyAdapterForFolderList(Context context) {
         this.context = context;
@@ -28,19 +31,21 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.onBind(folderDTOS.get(position));
-        Log.d("log", "우왕"+folderDTOS.get(position).getName());
+        holder.onBind(searchFolderResult.get(position));
+
+        Log.d("log", "우왕"+searchFolderResult.get(position).getName());
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
 
-                intent.putExtra("folder_name", folderDTOS.get(position).getName());
+                intent.putExtra("folder_name", searchFolderResult.get(position).getName());
 
                 context.startActivity(intent);
             }
         });
+
     }
 
     @NonNull
@@ -57,12 +62,13 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     @Override
     public int getItemCount() {
         // RecyclerView의 총 개수 입니다.
-        return folderDTOS.size();
+        return searchFolderResult.size();
     }
 
-    void addItem(FolderDTO folderDTO) {
+    void addItems(ArrayList<FolderObj> searchFolderParam) {
         // 외부에서 item을 추가시킬 함수입니다.
-        folderDTOS.add(folderDTO);
+        searchFolderResult.clear();
+        searchFolderResult.addAll(searchFolderParam);
     }
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
@@ -90,10 +96,11 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 //            });
         }
 
-        void onBind(FolderDTO folderDTO) {
-            textView_folder_name.setText(folderDTO.getName());
-            textView_folder_tag.setText(folderDTO.getTimestamp().toString());
-
+        void onBind(FolderObj folderObj) {
+            textView_folder_name.setText(folderObj.getName());
+            textView_folder_tag.setText(folderObj.getTimestamp().toString());
+            // 화면에 띄운 결과 폴더는 리스트에서 삭제함
+            //searchFolderResult.remove(folderObj);
         }
     }
 
