@@ -246,7 +246,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
         }
 
-        // 서치태그 리스트가 비었으면 태그검색을 취소한 것이므로 키워드 검색 결과만 보여줌 
+        // 서치태그 리스트가 비었으면 태그검색을 취소한 것이므로 키워드 검색 결과만 보여줌
         if(tagsForSearch.isEmpty())
             adapter.addItems(searchFolderResult);
         else
