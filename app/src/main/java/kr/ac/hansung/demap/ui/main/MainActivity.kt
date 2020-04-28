@@ -42,13 +42,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
         }
 
-<<<<<<< HEAD
         main_nav.setNavigationItemSelectedListener(this) //navigationListener
-=======
 
         //navigationListener
         main_nav.setNavigationItemSelectedListener(this)
->>>>>>> 0dd50c399c2474648167c6a123ce788026dbfd80
         // bottom navigation
         bottom_nav.setOnNavigationItemSelectedListener(this)
 
@@ -71,8 +68,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         startActivity(intent)
     }
 
-<<<<<<< HEAD
-=======
+/*
+
     // searchview
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         sv_searchPlace.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -89,7 +86,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         return true
     }
 
->>>>>>> 0dd50c399c2474648167c6a123ce788026dbfd80
+*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home->{
@@ -126,10 +123,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 0dd50c399c2474648167c6a123ce788026dbfd80
     // 좌표 눌렀을 때 커스텀 window adapter
     private class InfoWindowAdapter(private val context: Context) : InfoWindow.ViewAdapter() {
         private var rootView: View? = null
