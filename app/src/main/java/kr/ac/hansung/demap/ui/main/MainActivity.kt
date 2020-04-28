@@ -1,6 +1,5 @@
 package kr.ac.hansung.demap.ui.main
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.PointF
@@ -14,8 +13,6 @@ import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.naver.maps.geometry.LatLng
@@ -30,12 +27,6 @@ import kotlinx.android.synthetic.main.bottom_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
 import kr.ac.hansung.demap.R
-import kr.ac.hansung.demap.data.remote.source.NaverSearchRemoteDataSourceImpl
-import kr.ac.hansung.demap.databinding.ActivitySearchPlaceBinding
-import kr.ac.hansung.demap.model.SearchResponse
-import kr.ac.hansung.demap.ui.searchPlace.SearchPlaceAdapter
-import kr.ac.hansung.demap.ui.searchPlace.SearchPlaceContract
-import kr.ac.hansung.demap.ui.searchPlace.SearchPlacePresenter
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -53,12 +44,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
         }
 
-        /*
-        tv_searchPlace.setOnClickListener {
-            var intent = Intent(this, SearchPlaceActivity::class.java)
-            startActivityForResult(intent,1)
-        }
-        */
 
         //navigationListener
         main_nav.setNavigationItemSelectedListener(this)
@@ -87,9 +72,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     // searchview
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        sv_searchPlace.onActionViewExpanded()
-
         sv_searchPlace.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // 검색어가 변경되었을 때 이벤트 처리
@@ -97,7 +79,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             }
 
             override fun onQueryTextChange(keyword: String): Boolean {
-                // 검색 버튼이 눌러졌을 때 이벤트 처리
+                Toast.makeText(this@MainActivity, keyword ,Toast.LENGTH_SHORT).show()
                 return true
             }
         })
@@ -140,16 +122,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-/*
-
-    // SearchPlaceActivity에서 장소정보 받아오기
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        Toast.makeText(this,"place: " + data?.getStringExtra("place").toString() ,Toast.LENGTH_SHORT).show()
-    }
-
-*/
 
     // 좌표 눌렀을 때 커스텀 window adapter
     private class InfoWindowAdapter(private val context: Context) : InfoWindow.ViewAdapter() {
