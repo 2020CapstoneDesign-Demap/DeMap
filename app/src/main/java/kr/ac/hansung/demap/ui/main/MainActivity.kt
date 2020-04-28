@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
         }
 
+        window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
+
         main_nav.setNavigationItemSelectedListener(this) //navigationListener
         // bottom navigation
         bottom_nav.setOnNavigationItemSelectedListener(this)

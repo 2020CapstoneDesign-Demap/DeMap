@@ -24,6 +24,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
 
+    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     public MyAdapterForFolderList(Context context) {
         this.context = context;
@@ -33,7 +34,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.onBind(searchFolderResult.get(position));
 
-        Log.d("log", "우왕"+searchFolderResult.get(position).getName());
+//        Log.d("log", "우왕"+searchFolderResult.get(position).getName());
+//        holder.onBind(folderObjs.get(position));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +43,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
                 Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
 
                 intent.putExtra("folder_name", searchFolderResult.get(position).getName());
+//                intent.putExtra("folder_name", folderObjs.get(position).getName());
+                intent.putExtra("folder_subs_count", folderObjs.get(position).getSubscribeCount());
 
                 context.startActivity(intent);
             }
@@ -85,20 +89,11 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
             view = itemView;
             textView_folder_name = itemView.findViewById(R.id.textview_folderlist_name);
             textView_folder_tag = itemView.findViewById(R.id.textview_folderlist_tag);
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
-//                    intent.putExtra(textView_folder_name.getText(), );
-//                    v.getContext().startActivity(intent);
-//                }
-//            });
         }
 
         void onBind(FolderObj folderObj) {
             textView_folder_name.setText(folderObj.getName());
-            textView_folder_tag.setText(folderObj.getTimestamp().toString());
+            textView_folder_tag.setText(folderObj.getTag());
             // 화면에 띄운 결과 폴더는 리스트에서 삭제함
             //searchFolderResult.remove(folderObj);
         }

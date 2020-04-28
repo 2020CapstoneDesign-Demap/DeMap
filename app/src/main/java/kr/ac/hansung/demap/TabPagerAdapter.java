@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -15,8 +16,10 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private String[] tabTitles = new String[]{"내 폴더", "구독 폴더"};
 
     // adapter에 들어갈 folder list
-    private ArrayList<FolderDTO> myfolderDTOS = new ArrayList<>();
-    private ArrayList<FolderDTO> subsfolderDTOS = new ArrayList<>();
+//    private ArrayList<FolderDTO> myfolderDTOS = new ArrayList<>();
+//    private ArrayList<FolderDTO> subsfolderDTOS = new ArrayList<>();
+    private ArrayList<FolderObj> myfolderObjs = new ArrayList<>();
+    private ArrayList<FolderObj> subsfolderObjS = new ArrayList<>();
 
     private int tabCount;
 
@@ -25,12 +28,20 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         this.tabCount = tabCount;
     }
 
-    void addmyfolderItem(FolderDTO folderDTO) {
-        myfolderDTOS.add(folderDTO);
+    void addmyfolderItem(FolderObj folderObj) {
+        myfolderObjs.add(folderObj);
     }
 
-    void addsubsfolderItem(FolderDTO folderDTO) {
-        subsfolderDTOS.add(folderDTO);
+    void setmyfolderItem(ArrayList<FolderObj> myfolderObj) {
+        myfolderObjs = myfolderObj;
+    }
+
+    void addsubsfolderItem(FolderObj folderObj) {
+        subsfolderObjS.add(folderObj);
+    }
+
+    void setsubsfolderItem(ArrayList<FolderObj> subsfolderObj) {
+        subsfolderObjS = subsfolderObj;
     }
 
     // overriding getPageTitle()
@@ -46,11 +57,11 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 MyfolderFragment myfolderFragment = new MyfolderFragment();
-                myfolderFragment.setFolderDTOs(myfolderDTOS);
+                myfolderFragment.setFolderDTOs(myfolderObjs);
                 return myfolderFragment;
             case 1:
                 SubsfolderFragment subsfolderFragment = new SubsfolderFragment();
-                subsfolderFragment.setFolderDTOs(subsfolderDTOS);
+                subsfolderFragment.setFolderDTOs(subsfolderObjS);
                 return subsfolderFragment;
             default:
                 return null;

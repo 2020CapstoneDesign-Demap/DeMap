@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -26,6 +30,9 @@ public class MyfolderViewActivity extends AppCompatActivity {
 
     private UserMyFolderDTO userMyfolderDTO = new UserMyFolderDTO();
     private UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
+
+    private ArrayList<FolderObj> myfolderObjs = new ArrayList<FolderObj>();
+    private ArrayList<FolderObj> subsfolderObjs = new ArrayList<FolderObj>();
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -39,12 +46,48 @@ public class MyfolderViewActivity extends AppCompatActivity {
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle("폴더 리스트");
         // ActionBar의 배경색 변경
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_myfolder_view);
+
+        setData();
+
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout_myfolder);
+        tabLayout.addTab(tabLayout.newTab().setText("내 폴더"));
+        tabLayout.addTab(tabLayout.newTab().setText("구독 폴더"));
+        viewPager = findViewById(R.id.viewpager_folder_tab);
+
+        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // do nothing
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // do nothing
+            }
+        });
+
+    }
+
+    public void setData() {
 
         // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -61,10 +104,18 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
-                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
-                                        pagerAdapter.addmyfolderItem(folderDTO);
+                                        if (document.exists()) {
+//                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                                            FolderObj folderObj = document.toObject(FolderObj.class);
+                                            myfolderObjs.add(folderObj);
+
+                                            pagerAdapter.setmyfolderItem(myfolderObjs);
+
+                                        }
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
+
+
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
                                     }
@@ -72,6 +123,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
                             });
                         }
                     }
+
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
                 }
@@ -93,10 +145,17 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
-                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
-                                        pagerAdapter.addsubsfolderItem(folderDTO);
+                                        if (document.exists()) {
+//                                            FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                                            FolderObj folderObj = document.toObject(FolderObj.class);
+                                            subsfolderObjs.add(folderObj);
+
+                                            pagerAdapter.setsubsfolderItem(subsfolderObjs);
+
+                                        }
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
+
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
                                     }
@@ -107,33 +166,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
                 }
-            }
-        });
-
-
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout_myfolder);
-        tabLayout.addTab(tabLayout.newTab().setText("내 폴더"));
-        tabLayout.addTab(tabLayout.newTab().setText("구독 폴더"));
-        viewPager = findViewById(R.id.viewpager_folder_tab);
-
-        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                // do nothing
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                // do nothing
             }
         });
 

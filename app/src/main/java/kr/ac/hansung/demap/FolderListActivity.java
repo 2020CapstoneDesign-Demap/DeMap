@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -83,8 +84,8 @@ public class FolderListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_folder_list);
 
-        // 전체 폴더 모든 정보 리스트 가져오기
-        createFolderInfoList();
+        //구독 가능한 폴더 리스트
+        setSubableIDList();
 
         // 검색어 가져오기
         SearchView searchView =  findViewById(R.id.folder_name_edittext);
@@ -115,8 +116,6 @@ public class FolderListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapterForFolderList(getApplicationContext());
         recyclerView.setAdapter(adapter);
-
-
 
     }
 
@@ -153,58 +152,47 @@ public class FolderListActivity extends AppCompatActivity {
 
     }
 
-    // 전체 폴더 리스트의 모든 정보를 리스트로 가져옴
-    public void createFolderInfoList() {
-        CollectionReference folderRef = firestore.collection("folders");
-        // folders의 모든 도큐먼트 가져오기
-        folderRef.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                System.out.println(document.getId() + " => " + document.getData());
-                                // 가져온 도큐먼트를 folderDTO객체로 저장
-                                FolderDTO folderDTO = document.toObject(FolderDTO.class);
-                                // 가져온 도큐먼트를 folderObj객체로 저장
-                                FolderObj folderObj = document.toObject(FolderObj.class);
-                                folderObj.setId(document.getId()); // 폴더객체에 폴더도큐먼트id 삽입
-                                folderDTOs.add(folderDTO);
-                                folderObjs.add(folderObj);
-                                System.out.println("폴더디티오 : " + folderDTO.getName());
-                                System.out.println("폴더오비제 : " + folderObj.getId());
-                                //adapter.addItem(folderDTO);
-                            }
-
-                            setSubableIDList();
-                            //adapter.notifyDataSetChanged();
-                        } else {
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
-                            System.out.println("Error getting documents: " + task.getException());
-
-                        }
-                    }
-                });
-
-        // 구독 가능한 폴더 id 가져와 id리스트 설정
-        //setSubableIDList();
-
-
-        // 구독 가능한 폴더 리스트 설정
-        //setSubableFolderList();
-
-
-
-        //System.out.println("아니 이게 왜 안되냐고");
-
-
-    }
+//    public void createFolderInfoList() {
+//        CollectionReference folderRef = firestore.collection("folders");
+//        // folders의 모든 도큐먼트 가져오기
+//        folderRef.get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                //Log.d(TAG, document.getId() + " => " + document.getData());
+//                                System.out.println(document.getId() + " => " + document.getData());
+//                                // 가져온 도큐먼트를 folderDTO객체로 저장
+//                                FolderDTO folderDTO = document.toObject(FolderDTO.class);
+//                                // 가져온 도큐먼트를 folderObj객체로 저장
+//                                FolderObj folderObj = document.toObject(FolderObj.class);
+//                                folderObj.setId(document.getId()); // 폴더객체에 폴더도큐먼트id 삽입
+//                                folderDTOs.add(folderDTO);
+//                                folderObjs.add(folderObj);
+//                                System.out.println("폴더디티오 : " + folderDTO.getName());
+//                                System.out.println("폴더오비제 : " + folderObj.getId());
+//                                adapter.addItem(folderDTO);
+//                            }
+//                            setSubableIDList();
+//                            adapter.notifyDataSetChanged();
+//                        } else {
+//                            //Log.d(TAG, "Error getting documents: ", task.getException());
+//                            System.out.println("Error getting documents: " + task.getException());
+//
+//                        }
+//                    }
+//                });
+//
+//    }
 
     // 구독 가능한 폴더 id만 리스트로 저장
     public void setSubableIDList() {
-        CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
-        // folders에서 구독 가능한 folder 도큐먼트 가져오기
+
+        // firestore에서 folderPublic 내역 가져오기
+        CollectionReference folderPublicRef = firestore.collection("folderPublic");
+
+        // 구독 가능한 foler 도큐먼트 id 가져오기
         folderPublicRef.whereEqualTo("public", "공개").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -227,43 +215,102 @@ public class FolderListActivity extends AppCompatActivity {
                     }
                 });
 
-        //for(String id : subFolderIds) {
-        //    System.out.println("아이디만 저장이 되긴했냐 : " + id);
-        //}
-
-
     }
 
     // 구독 가능한 폴더 전체 정보를 리스트로 저장
     public void setSubableFolderList( ) {
 
-        //private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
-        //private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
-        //private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
+        for ( String subId : subFolderIds ) {
 
-        // 전체 folder 리스트를 for문 돌려 구독 가능 폴더 id와 비교
-        for ( FolderObj fObj : folderObjs ) {
-            int index = folderObjs.indexOf(fObj);
-            System.out.println("folderObjs index : " + index);
+            // 공개 설정한 폴더 id로 folders의 폴더 도큐먼트 가져오기
+            firestore.collection("folders").document(subId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
 
-            for ( String subId : subFolderIds ) {
-                if (fObj.getId().equals(subId)){ // 전체 폴더 중 구독 가능 폴더 id 리스트에 존재하는 폴더 id라면
-                    //FolderDTO publicfolderDTO = documentSub.toObject(FolderDTO.class);
-                    // 폴더 공개 여부를 "공개"로 설정 후 변경 사항 배열리스트에 set 시키기
-                    fObj.setIspublic("공개");
-                    folderObjs.set(folderObjs.indexOf(fObj), fObj);
-                    // 공개된 폴더를 구독가능폴더리스트에 저장
-                    subableFolderObjs.add(fObj);
-                    subscribeFolder(subFolderIds.indexOf(subId));
-                    //System.out.println("아니 이게 왜 안되냐고");
+                            // 가져온 도큐먼트를 folderDTO객체로 저장
+//                            FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                            // 가져온 도큐먼트를 folderObj객체로 저장
+                            FolderObj folderObj = document.toObject(FolderObj.class);
+
+                            // 폴더 객체에 폴더 정보 삽입
+                            folderObj.setId(document.getId());
+                            folderObj.setIspublic("공개");
+
+//                            folderDTOs.add(folderDTO);
+                            folderObjs.add(folderObj);
+
+//                            System.out.println("폴더디티오 : " + folderDTO.getName());
+//                            System.out.println("폴더오비제 : " + folderObj.getId());
+
+                        }
+
+                        setFolderTags();
+
+                    } else {
+                        System.out.println("Error getting documents: " + task.getException());
+                    }
                 }
-
-            }
-
-            System.out.println("구독 가능 여부 : " + fObj.getId() + fObj.getName() + fObj.getIspublic());
+            });
 
         }
 
+
+        // 전체 folder 리스트를 for문 돌려 구독 가능 폴더 id와 비교
+//        for ( FolderObj fObj : folderObjs ) {
+//            int index = folderObjs.indexOf(fObj);
+//            System.out.println("folderObjs index : " + index);
+//
+//            for ( String subId : subFolderIds ) {
+//                if (fObj.getId().equals(subId)){ // 전체 폴더 중 구독 가능 폴더 id 리스트에 존재하는 폴더 id라면
+//                    //FolderDTO publicfolderDTO = documentSub.toObject(FolderDTO.class);
+//                    // 폴더 공개 여부를 "공개"로 설정 후 변경 사항 배열리스트에 set 시키기
+//                    fObj.setIspublic("공개");
+//                    folderObjs.set(folderObjs.indexOf(fObj), fObj);
+//                    // 공개된 폴더를 구독가능폴더리스트에 저장
+//                    subableFolderObjs.add(fObj);
+//                    subscribeFolder(subFolderIds.indexOf(subId));
+//                }
+//
+//            }
+//
+//            System.out.println("구독 가능 여부 : " + fObj.getId() + fObj.getName() + fObj.getIspublic());
+//
+//        }
+
+    }
+
+    public void setFolderTags() {
+
+        for ( FolderObj folderObj : folderObjs ) {
+
+            // 공개 설정한 폴더 id로 폴더 태그 가져오기
+            firestore.collection("folderTags").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+
+                            String folderTag = document.get("folderTag").toString();
+                            folderObj.setTag(folderTag);
+                            folderObjs.set(folderObjs.indexOf(folderObj), folderObj);
+
+                            adapter.setItem(folderObjs);
+                        }
+
+//                        adapter.addItem(folderObj);
+                        adapter.notifyDataSetChanged();
+
+                    } else {
+                        System.out.println("Error getting documents: " + task.getException());
+                    }
+                }
+            });
+
+        }
 
     }
 

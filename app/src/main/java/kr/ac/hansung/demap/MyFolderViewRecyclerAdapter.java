@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 
 public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderViewRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
+//    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
+    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     @Override
     public void onBindViewHolder(@NonNull MyFolderViewRecyclerAdapter.MyViewHolder holder, int position) {
-        holder.onBind(folderDTOS.get(position));
+        holder.onBind(folderObjs.get(position));
     }
 
     @NonNull
@@ -33,27 +35,29 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     @Override
     public int getItemCount() {
-        return folderDTOS.size();
+        return folderObjs.size();
     }
 
-    void setItem(ArrayList<FolderDTO> folderDTO) {
-        folderDTOS = folderDTO;
+    void setItem(ArrayList<FolderObj> folderObj) {
+        folderObjs = folderObj;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textview_folderview_name;
-        public TextView textview_folderview_info;
+        public TextView textview_folderview_place_count;
+        public TextView textview_folderview_subs_count;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             textview_folderview_name = itemView.findViewById(R.id.textview_folderview_name);
-            textview_folderview_info = itemView.findViewById(R.id.textview_folderview_info);
+            textview_folderview_place_count = itemView.findViewById(R.id.tv_folder_place_count);
+            textview_folderview_subs_count = itemView.findViewById(R.id.tv_folder_subs_count);
         }
 
-        void onBind(FolderDTO folderDTO) {
-            textview_folderview_name.setText(folderDTO.getName());
-            textview_folderview_info.setText(folderDTO.getTimestamp().toString());
-
+        void onBind(FolderObj folderObj) {
+            textview_folderview_name.setText(folderObj.getName());
+            textview_folderview_place_count.setText(String.valueOf(folderObj.getSubscribeCount()));
+            textview_folderview_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
         }
     }
 }

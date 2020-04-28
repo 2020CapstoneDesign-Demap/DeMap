@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderObj;
 
 public class SubsfolderFragment extends Fragment {
 
 
     private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
+    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private MyFolderViewRecyclerAdapter adapter;
@@ -28,8 +30,8 @@ public class SubsfolderFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    void setFolderDTOs(ArrayList<FolderDTO> folderDTO) {
-        folderDTOS = folderDTO;
+    void setFolderDTOs(ArrayList<FolderObj> folderObj) {
+        folderObjs = folderObj;
     }
 
     @Nullable
@@ -40,7 +42,7 @@ public class SubsfolderFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);
         adapter = new MyFolderViewRecyclerAdapter();
-        adapter.setItem(folderDTOS);
+        adapter.setItem(folderObjs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 

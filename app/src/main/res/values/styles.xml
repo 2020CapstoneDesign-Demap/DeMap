@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorLineGray6</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!--Status Bar 글자색깔-->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="AppTheme.MainTheme">
@@ -14,6 +17,8 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:titleTextStyle">@style/ActionBarTextColor</item>
+        <!--Status Bar 글자색깔-->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
     <style name="ActionBarTextColor" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorLineGray6</item>
@@ -34,6 +39,8 @@
     <!-- main에서 toolbar 쓰려고 actionbar 없애기 -->
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--Status Bar 글자색깔-->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>
