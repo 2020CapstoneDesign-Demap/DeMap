@@ -1,16 +1,21 @@
 package kr.ac.hansung.demap.ui.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.PointF
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.naver.maps.geometry.LatLng
@@ -21,10 +26,16 @@ import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import kr.ac.hansung.demap.CreateFolderActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_content.*
+import kotlinx.android.synthetic.main.bottom_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
 import kr.ac.hansung.demap.R
+import kr.ac.hansung.demap.data.remote.source.NaverSearchRemoteDataSourceImpl
+import kr.ac.hansung.demap.databinding.ActivitySearchPlaceBinding
+import kr.ac.hansung.demap.model.SearchResponse
+import kr.ac.hansung.demap.ui.searchPlace.SearchPlaceAdapter
+import kr.ac.hansung.demap.ui.searchPlace.SearchPlaceContract
+import kr.ac.hansung.demap.ui.searchPlace.SearchPlacePresenter
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -42,10 +53,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
         }
 
-        main_nav.setNavigationItemSelectedListener(this) //navigationListener
+        /*
+        tv_searchPlace.setOnClickListener {
+            var intent = Intent(this, SearchPlaceActivity::class.java)
+            startActivityForResult(intent,1)
+        }
+        */
+
+        //navigationListener
+        main_nav.setNavigationItemSelectedListener(this)
         // bottom navigation
         bottom_nav.setOnNavigationItemSelectedListener(this)
-
 
         // naver map 객체 가져오기
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
@@ -53,7 +71,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 supportFragmentManager.beginTransaction().add(R.id.map_fragment, it).commit()
             }
         mapFragment.getMapAsync(this)
+
     }
+
 
     fun createFolder() {
         var intent = Intent(this, CreateFolderActivity::class.java)
@@ -63,6 +83,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     fun viewFolderList() {
         var intent = Intent(this, FolderListActivity::class.java)
         startActivity(intent)
+    }
+
+    // searchview
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        sv_searchPlace.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // 검색어가 변경되었을 때 이벤트 처리
+                return false
+            }
+
+            override fun onQueryTextChange(keyword: String): Boolean {
+                // 검색 버튼이 눌러졌을 때 이벤트 처리
+                return true
+            }
+        })
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -100,6 +136,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             super.onBackPressed()
         }
     }
+
+/*
+
+    // SearchPlaceActivity에서 장소정보 받아오기
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        Toast.makeText(this,"place: " + data?.getStringExtra("place").toString() ,Toast.LENGTH_SHORT).show()
+    }
+
+*/
 
     // 좌표 눌렀을 때 커스텀 window adapter
     private class InfoWindowAdapter(private val context: Context) : InfoWindow.ViewAdapter() {
@@ -140,15 +187,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = naverMap
 
         // 지도 아무데나 눌렀을 때
         naverMap.setOnMapClickListener { _, coord ->
             Toast.makeText(this, "${coord}", Toast.LENGTH_LONG).show()
+            var now : LatLng? = coord
+
+            if(now != marker.position) {
+
+                marker.map = null
+
+                marker.position = coord
+                marker.map = naverMap
+
+            }
+
             // 현재 마커 무한 생성..^^
-            Marker().apply {
+            /*Marker().apply {
                 position = coord
                 map = naverMap
-            }
+            }*/
             /*
             infoWindow.position = coord
             infoWindow.open(naverMap)

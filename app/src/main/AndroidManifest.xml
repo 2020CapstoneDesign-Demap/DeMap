@@ -13,29 +13,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateFolderActivity">
-        </activity>
-
-        <activity android:name=".ui.login.LoginActivity">
-        </activity>
-
-        <activity android:name=".ui.main.MainActivity"
+        <activity android:name=".ui.searchPlace.SearchPlaceActivity"></activity>
+        <activity android:name=".CreateFolderActivity" />
+        <activity android:name=".ui.login.LoginActivity" />
+        <activity
+            android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
-
-        <activity android:name=".ui.nickname.NickNameActivity"/>
-        <activity android:name=".ui.signup.SignupActivity"/>
-        <activity android:name=".FolderListActivity"/>
-
-        <!-- 네이버 api -->
+        <activity android:name=".ui.nickname.NickNameActivity" />
+        <activity android:name=".ui.signup.SignupActivity" />
+        <activity android:name=".FolderListActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="3vtiw45s9x" />
-
     </application>
 
 </manifest>
