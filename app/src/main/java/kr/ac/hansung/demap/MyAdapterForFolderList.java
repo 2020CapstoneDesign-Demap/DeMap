@@ -24,7 +24,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
 
-    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
+//    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     public MyAdapterForFolderList(Context context) {
         this.context = context;
@@ -42,9 +42,10 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
 
+                intent.putExtra("folder_id", searchFolderResult.get(position).getId());
                 intent.putExtra("folder_name", searchFolderResult.get(position).getName());
 //                intent.putExtra("folder_name", folderObjs.get(position).getName());
-                intent.putExtra("folder_subs_count", folderObjs.get(position).getSubscribeCount());
+                intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
 
                 context.startActivity(intent);
             }
