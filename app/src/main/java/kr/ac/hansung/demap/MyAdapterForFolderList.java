@@ -24,8 +24,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
 //    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
-    public MyAdapterForFolderList(Context context) {
-        this.context = context;
+    public MyAdapterForFolderList() {
+//        this.context = context;
         searchFolderResult.clear();
     }
 
@@ -60,6 +60,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         // create a new view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_list, parent, false);
         MyViewHolder vh = new MyViewHolder(view);
+        context = parent.getContext();
         return vh;
     }
 

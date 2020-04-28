@@ -135,7 +135,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapterForFolderList(getApplicationContext());
+        adapter = new MyAdapterForFolderList();
         recyclerView.setAdapter(adapter);
 
     }
