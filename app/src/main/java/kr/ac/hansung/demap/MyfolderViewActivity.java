@@ -108,6 +108,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
 //                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
+                                            folderObj.setOwner(auth.getCurrentUser().getUid());
                                             myfolderObjs.add(folderObj);
 
                                             pagerAdapter.setmyfolderItem(myfolderObjs);

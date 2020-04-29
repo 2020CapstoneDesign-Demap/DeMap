@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ public class MyfolderFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MyFolderViewRecyclerAdapter adapter;
+
+    private Button btn_folder_edit;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +47,15 @@ public class MyfolderFragment extends Fragment {
         adapter.setItem(folderObjs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        btn_folder_edit = view.findViewById(R.id.btn_myfolder_edit);
+
+        btn_folder_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         return view;
     }

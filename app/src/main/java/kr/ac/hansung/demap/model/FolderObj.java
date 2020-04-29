@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class FolderObj {
 
     private String id = null;
+    private String owner = null;
     private String name = null;
     private String ispublic = "비공개";
     private String tag = null;
@@ -20,6 +21,14 @@ public class FolderObj {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getName() {

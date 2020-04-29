@@ -51,6 +51,7 @@
             android:gravity="right">
 
             <Button
+                android:id="@+id/btn_myfolder_edit"
                 android:layout_gravity="center_vertical"
                 android:layout_width="37dp"
                 android:layout_height="27dp"
