@@ -69,6 +69,9 @@ public class FolderContentActivity extends AppCompatActivity {
         tv_folder_subsCount = findViewById(R.id.tv_folder_content_subs_count);
         tv_folder_subsCount.setText(intent.getExtras().get("folder_subs_count").toString());
 
+        TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
+        tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
+
         // 구독자 count 갱신을 위한 folderDTO
         firestore.collection("folders").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -98,6 +101,9 @@ public class FolderContentActivity extends AppCompatActivity {
                             btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_blue_border));
                             btn_subscribe.setText("구독취소");
                             btn_subscribe.setTextColor(getColor(R.color.colorTheme));
+                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
+                        } else {
+                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
                         }
                     }
                 } else {
@@ -121,7 +127,7 @@ public class FolderContentActivity extends AppCompatActivity {
                             btn_subscribe.setText("구독하기");
                             btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
                             btn_subscribe.setEnabled(false);
-//                            btn_subscribe.setVisibility(View.INVISIBLE);
+                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
                         }
                     }
                 } else {
