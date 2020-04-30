@@ -27,6 +27,8 @@ import kr.ac.hansung.demap.model.UserMyFolderDTO;
 
 public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderViewRecyclerAdapter.MyViewHolder> {
 
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
     private Context context;
 
     //    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
@@ -63,30 +65,28 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                                     @Override
                                     public void onClick(DialogInterface dialog, int id) {
 //                                        Toast.makeText(getApplicationContext(), "OK Click", Toast.LENGTH_SHORT).show();
-                                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                                        firestore.collection("folders").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("folderEditors").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("folderOwner").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("folderPublic").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("folderSubscribers").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("folderTags").document(folderObjs.get(position).getId()).delete();
-                                        firestore.collection("usersMyFolder").document(folderObjs.get(position).getOwner()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                                        String folderId = folderObjs.get(position).getId();
+                                        String folderOwner = folderObjs.get(position).getOwner();
+                                        firestore.collection("folders").document(folderId).delete();
+                                        firestore.collection("folderEditors").document(folderId).delete();
+                                        firestore.collection("folderOwner").document(folderId).delete();
+                                        firestore.collection("folderPublic").document(folderId).delete();
+                                        firestore.collection("folderSubscribers").document(folderId).delete();
+                                        firestore.collection("folderTags").document(folderId).delete();
+                                        firestore.collection("usersMyFolder").document(folderOwner).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                 DocumentSnapshot document = task.getResult();
                                                 if (document.exists()) {
                                                     userMyfolderDTO = document.toObject(UserMyFolderDTO.class);
-                                                    userMyfolderDTO.getMyfolders().remove(folderObjs.get(position).getId());
-                                                    firestore.collection("usersMyFolder").document(folderObjs.get(position).getOwner()).set(userMyfolderDTO);
+                                                    userMyfolderDTO.getMyfolders().remove(folderId);
+                                                    firestore.collection("usersMyFolder").document(folderOwner).set(userMyfolderDTO);
                                                 }
                                             }
                                         });
 
-                                        // 아래 세줄 넣으면 삭제하고 다시 조회했을때 데이터가 하나씩 덜보이거나 강종
-                                        folderObjs.remove(position);
-//                                        notifyItemRemoved(position);
-//                                        notifyItemRangeChanged(position, folderObjs.size());
-                                        setItem(folderObjs);
+                                        removeItem(position);
 
                                         //구독 리스트에서 삭제하는건 생각해봤는데 유튜브처럼 document가 비어있으면 삭제된 폴더라구 띄워주고 사용자가 직접 삭제하는게 어때..?
 //                                        firestore.collection("usersSubsFolder").document(folderObjs.get(position).getId()).delete();
@@ -121,6 +121,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                 intent.putExtra("folder_name", folderObjs.get(position).getName());
 //                intent.putExtra("folder_name", folderObjs.get(position).getName());
                 intent.putExtra("folder_subs_count", folderObjs.get(position).getSubscribeCount());
+                intent.putExtra("folder_public", folderObjs.get(position).getIspublic());
 
                 context.startActivity(intent);
             }
@@ -139,6 +140,11 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
     @Override
     public int getItemCount() {
         return folderObjs.size();
+    }
+
+    void removeItem(int position) {
+        folderObjs.remove(position);
+        setItem(folderObjs);
     }
 
     void setItem(ArrayList<FolderObj> folderObj) {

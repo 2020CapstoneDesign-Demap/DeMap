@@ -109,14 +109,15 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
                                             folderObj.setOwner(auth.getCurrentUser().getUid());
+
                                             myfolderObjs.add(folderObj);
-
-                                            pagerAdapter.setmyfolderItem(myfolderObjs);
-
                                         }
+
+                                        getPublic(myfolderObjs);
+
+                                        pagerAdapter.setmyfolderItem(myfolderObjs);
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
-
 
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
@@ -152,10 +153,11 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
                                             subsfolderObjs.add(folderObj);
-
-                                            pagerAdapter.setsubsfolderItem(subsfolderObjs);
-
                                         }
+
+                                        getPublic(subsfolderObjs);
+
+                                        pagerAdapter.setsubsfolderItem(subsfolderObjs);
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
 
@@ -172,6 +174,21 @@ public class MyfolderViewActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getPublic(ArrayList<FolderObj> folderObjs) {
+        for (FolderObj folderObj: folderObjs) {
+            firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        folderObj.setIspublic(document.getString("public"));
+                    }
+                }
+            });
+
+        }
     }
 
     @Override
