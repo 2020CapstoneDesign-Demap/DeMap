@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -22,19 +24,31 @@ import com.naver.maps.map.overlay.Marker
 import kr.ac.hansung.demap.CreateFolderActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
 import kr.ac.hansung.demap.MyfolderViewActivity
 import kr.ac.hansung.demap.R
+import kr.ac.hansung.demap.model.User
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
+    var auth: FirebaseAuth? = null
+    var firestore: FirebaseFirestore? = null
+
+    var nickname: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Initiate
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
         setSupportActionBar(toolbar_main) // 툴바를 액티비티의 앱바로 지정
         supportActionBar?.let {
@@ -46,11 +60,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
         window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
 
+        // 로그인한 유저 닉네임 받아오기
+        firestore?.collection("users")?.document(auth?.currentUser?.uid!!)?.get()?.addOnSuccessListener { documentSnapshot ->
+            nickname = documentSnapshot["nickName"].toString();
+            main_nav_header.tv_nickname.text = nickname
+            main_nav_header.tv_email.text = auth?.currentUser?.email
+        }
+
         //navigationListener
         main_nav.setNavigationItemSelectedListener(this)
+
         // bottom navigation
         bottom_nav.setOnNavigationItemSelectedListener(this)
-
 
         // naver map 객체 가져오기
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
