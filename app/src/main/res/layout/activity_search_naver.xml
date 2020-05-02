@@ -9,7 +9,7 @@
     tools:context=".FolderListActivity">
 
     <SearchView
-        android:id="@+id/folder_name_edittext"
+        android:id="@+id/searchword_edittext"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
