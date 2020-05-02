@@ -17,6 +17,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class SearchNaverActivity extends AppCompatActivity {
 
     private boolean inItem = false, inTitle = false, inAddress = false, inMapx = false, inMapy = false;
@@ -159,12 +161,12 @@ public class SearchNaverActivity extends AppCompatActivity {
                     System.out.println("검색어 utf-8 : " + searchword);
 
 
-                    URL url = new URL("http://openapi.naver.com/search/local?"
+                    URL url = new URL("https://openapi.naver.com/v1/search/local?"
                             //+ "key=" + clientSecret
                             + "&query=" + searchword //여기는 쿼리를 넣으세요(검색어)
                             + "&target=local&start=1&display=" + display);
 
-                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
                     con.setRequestMethod("GET");
                     con.setRequestProperty("X-Naver-Client-Id", clientId);
                     con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
@@ -196,27 +198,30 @@ public class SearchNaverActivity extends AppCompatActivity {
                         br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     }
 
-
-
+                    // 데이터 파싱
                     String data = searchResult.toString();
                     String[] array;
                     array = data.split("\"");
                     String[] title = new String[display];
-                    String[] address = new String[display];
-                    String[] mapx = new String[display];
-                    String[] mapy = new String[display];
+                    String[] roadaddress = new String[display];
+                    int[] mapx = new int[display];
+                    int[] mapy = new int[display];
                     //String[] postdate = new String[display];
 
                     int k = 0;
                     for (int i = 0; i < array.length; i++) {
-                        if (array[i].equals("title"))
+                        System.out.println(array[i]);
+
+                        if (array[i].equals("title")) {
                             title[k] = array[i + 2];
-                        if (array[i].equals("address"))
-                            address[k] = array[i + 2];
+                            System.out.println(array[i + 2]);
+                        }
+                        if (array[i].equals("roadAddress"))
+                            roadaddress[k] = array[i + 2];
                         if (array[i].equals("mapx"))
-                            mapx[k] = array[i + 2];
+                            mapx[k] = Integer.parseInt(array[i + 2]);
                         if (array[i].equals("mapy")) {
-                            mapy[k] = array[i + 2];
+                            mapy[k] = Integer.parseInt(array[i + 2]);
                             k++;
                         }
                         //if (array[i].equals("postdate")) {
