@@ -44,6 +44,7 @@ public class SearchNaverActivity extends AppCompatActivity {
     String[] roadaddress;
     int[] mapx;
     int[] mapy;
+    String[] category;
 
 
     @Override
@@ -144,7 +145,7 @@ public class SearchNaverActivity extends AppCompatActivity {
                     roadaddress = new String[display];
                     mapx = new int[display];
                     mapy = new int[display];
-                    //String[] postdate = new String[display];
+                    //category = new String[display];
 
                     int k = 0;
                     for (int i = 0; i < array.length; i++) {
@@ -161,16 +162,18 @@ public class SearchNaverActivity extends AppCompatActivity {
                             mapy[k] = Integer.parseInt(array[i + 2]);
                             k++;
                         }
-                        //if (array[i].equals("postdate")) {
-                        //    postdate[k] = array[i + 2];
-                        //    k++;
-                        //}
+                        /*if (array[i].equals("category")) {
+                            category[k] = Html.fromHtml(array[i + 2]).toString();
+                            k++;
+                        }*/
                     }
 
-                    System.out.println(array);
+                    //System.out.println(array);
                     System.out.println(roadaddress[0]+roadaddress[1]+roadaddress[2]+roadaddress[3]+roadaddress[4]);
+                    //System.out.println(category[0]+category[1]+category[2]+category[3]+category[4]);
 
-                    adapter.addItems(title, roadaddress);
+
+                    adapter.addItems(title, roadaddress, /*category,*/ mapx, mapy);
                     adapter.notifyDataSetChanged();
                     // title[0], link[0], bloggername[0] 등 인덱스 값에 맞게 검색결과를 변수화하였다.
 
