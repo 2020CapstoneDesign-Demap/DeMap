@@ -47,14 +47,14 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
+                Intent intent = new Intent(v.getContext(), NaverSearchContentActivity.class);
 
-                //intent.putExtra("folder_id", searchFolderResult.get(position).getId());
-                //intent.putExtra("folder_name", searchFolderResult.get(position).getName());
-//                intent.putExtra("folder_name", folderObjs.get(position).getName());
-                //intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
+                intent.putExtra("result_name", title[position]);
+                intent.putExtra("result_addr", roadaddress[position]);
+                intent.putExtra("result_mapx", mapx[position]);
+                intent.putExtra("result_mapy", mapy[position]);
 
-                //context.startActivity(intent);
+                context.startActivity(intent);
             }
         });
 
@@ -86,7 +86,7 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         return title.length;
     }
 
-    void addItems(String[] title, String[] roadaddress, /*String[] category,*/ int[] mapx, int[] mapy) {
+    public void addItems(String[] title, String[] roadaddress, /*String[] category,*/ int[] mapx, int[] mapy) {
         // 외부에서 item을 추가시킬 함수입니다.
         //this.title = null;
         //this.roadaddress = null;

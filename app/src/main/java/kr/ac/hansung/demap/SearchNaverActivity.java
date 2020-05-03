@@ -27,13 +27,6 @@ public class SearchNaverActivity extends AppCompatActivity {
 
     private MySearchNaverRecyclerAdapter adapter; // FolderList 어댑터
 
-    //private boolean inItem = false, inTitle = false, inAddress = false, inMapx = false, inMapy = false;
-    //private String title = null, address = null, mapx = null, mapy = null;
-    //private String query = null; //이부분은 검색어를 UTF-8로 넣어줄거임.
-
-    //파싱된 결과를 보여줄 textVeiw들
-    //private TextView status1;
-    //private TextView status2;
 
     private BufferedReader br;
     private StringBuilder searchResult;
@@ -44,7 +37,7 @@ public class SearchNaverActivity extends AppCompatActivity {
     String[] roadaddress;
     int[] mapx;
     int[] mapy;
-    String[] category;
+    //String[] category;
 
 
     @Override
@@ -84,7 +77,7 @@ public class SearchNaverActivity extends AppCompatActivity {
 
     }
 
-
+    // 네이버 지역 검색 api 연동 및 데이터 가져오기
     public void searchForNaverAPI(String query) {
         final String clientId = "F29Q2vNcHyw0fOQwkzbO";//애플리케이션 클라이언트 아이디값";
         final String clientSecret = "5dNDcpf9qo";//애플리케이션 클라이언트 시크릿값";
