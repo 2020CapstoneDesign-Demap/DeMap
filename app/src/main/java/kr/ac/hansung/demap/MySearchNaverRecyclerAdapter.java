@@ -82,10 +82,13 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         //this.roadaddress = null;
         //this.mapx = null;
         //this.mapy = null;
-        this.title = title;
-        this.roadaddress = roadaddress;
-        System.out.println(this.title);
-        System.out.println(this.roadaddress);
+        for (int i=0; i<getItemCount(); i++) {
+            this.title[i] = title[i];
+            this.roadaddress[i] = roadaddress[i];
+            System.out.println("어댑터로 넘어온 데이터 : " + (i+1) + this.title[i]);
+            System.out.println("어댑터로 넘어온 데이터 : "+ (i+1) +this.roadaddress[i]);
+        }
+
     }
 
     // RecyclerView의 핵심인 ViewHolder 입니다.

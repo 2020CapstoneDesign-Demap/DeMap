@@ -3,6 +3,7 @@ package kr.ac.hansung.demap;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.text.Html;
 import android.util.Log;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -37,6 +38,13 @@ public class SearchNaverActivity extends AppCompatActivity {
     private BufferedReader br;
     private StringBuilder searchResult;
 
+    String data;
+    String[] array;
+    String[] title;
+    String[] roadaddress;
+    int[] mapx;
+    int[] mapy;
+
 
     @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +76,7 @@ public class SearchNaverActivity extends AppCompatActivity {
         //System.out.println(query);
 
         RecyclerView recyclerView = findViewById(R.id.listView_search_result_list);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MySearchNaverRecyclerAdapter();
         recyclerView.setAdapter(adapter);
@@ -130,24 +138,23 @@ public class SearchNaverActivity extends AppCompatActivity {
                     }
 
                     // 데이터 파싱
-                    String data = searchResult.toString();
-                    String[] array;
+                    data = searchResult.toString();
                     array = data.split("\"");
-                    String[] title = new String[display];
-                    String[] roadaddress = new String[display];
-                    int[] mapx = new int[display];
-                    int[] mapy = new int[display];
+                    title = new String[display];
+                    roadaddress = new String[display];
+                    mapx = new int[display];
+                    mapy = new int[display];
                     //String[] postdate = new String[display];
 
                     int k = 0;
                     for (int i = 0; i < array.length; i++) {
 
                         if (array[i].equals("title")) {
-                            title[k] = array[i + 2];
+                            title[k] = Html.fromHtml(array[i + 2]).toString();
                             System.out.println(array[i + 2]);
                         }
                         if (array[i].equals("roadAddress"))
-                            roadaddress[k] = array[i + 2];
+                            roadaddress[k] = Html.fromHtml(array[i + 2]).toString();
                         if (array[i].equals("mapx"))
                             mapx[k] = Integer.parseInt(array[i + 2]);
                         if (array[i].equals("mapy")) {
