@@ -171,7 +171,8 @@ public class SearchNaverActivity extends AppCompatActivity {
                     //System.out.println(array);
                     System.out.println(roadaddress[0]+roadaddress[1]+roadaddress[2]+roadaddress[3]+roadaddress[4]);
                     //System.out.println(category[0]+category[1]+category[2]+category[3]+category[4]);
-
+                    System.out.println("x 좌표 : "+mapx[0]+mapx[1]+mapx[2]+mapx[3]+mapx[4]);
+                    System.out.println("y 좌표 : "+mapy[0]+mapy[1]+mapy[2]+mapy[3]+mapy[4]);
 
                     adapter.addItems(title, roadaddress, /*category,*/ mapx, mapy);
                     adapter.notifyDataSetChanged();

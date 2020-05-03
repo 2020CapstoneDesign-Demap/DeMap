@@ -22,9 +22,9 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
     // adapter에 들어갈 folder list
     private String[] title = {"초기값","초기값","초기값","초기값","초기값"};
     private String[] roadaddress = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] category = {"초기값","초기값","초기값","초기값","초기값"};
-    private int[] mapx = {};
-    private int[] mapy = {};
+    //private String[] category = {"초기값","초기값","초기값","초기값","초기값"};
+    private int[] mapx = {0,0,0,0,0};
+    private int[] mapy = {0,0,0,0,0};
 
 //    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
