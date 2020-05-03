@@ -50,17 +50,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private var adapter // FolderList 어댑터
             : MySearchNaverRecyclerAdapter? = null
 
-
-    private var br: BufferedReader? = null
-    private var searchResult: StringBuilder? = null
-
-    var datas: String? = null
-    var array: Array<String?>? = null
-    var title: Array<String?>? = null
-    var roadaddress: Array<String?>? = null
-    var mapx: IntArray? = null;
-    var mapy: IntArray? = null;
-    //var category: Array<String>
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +100,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             override fun onQueryTextSubmit(searchword: String): Boolean { // 검색 버튼이 눌러졌을 때 이벤트 처리
                 println("검색 처리됨 : $searchword")
                 //searchForFolderName(keyword);
-                searchForNaverAPI(searchword)
                 return true
             }
 
@@ -174,99 +163,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 */
-// 네이버 지역 검색 api 연동 및 데이터 가져오기
-open fun searchForNaverAPI(query: String?): Unit {
-    val clientId = "F29Q2vNcHyw0fOQwkzbO" //애플리케이션 클라이언트 아이디값";
-    val clientSecret = "5dNDcpf9qo" //애플리케이션 클라이언트 시크릿값";
-    val display = 5 // 보여지는 검색결과의 수
-    // 네트워크 연결은 Thread 생성 필요
-    object : Thread() {
-        override fun run() {
-            try {
-                val searchword : String? = URLEncoder.encode(query, "UTF-8")
-                println("검색어 utf-8 : $searchword")
-                val url = URL(
-                    "https://openapi.naver.com/v1/search/local?" //+ "key=" + clientSecret
-                            + "&query=" + searchword //여기는 쿼리를 넣으세요(검색어)
-                            + "&target=local&start=1&display=" + display
-                )
-                println("검색 url : $url")
-                val con =
-                    url.openConnection() as HttpsURLConnection
-                con.requestMethod = "GET"
-                con.setRequestProperty("X-Naver-Client-Id", clientId)
-                con.setRequestProperty("X-Naver-Client-Secret", clientSecret)
-                con.connect()
-                val responseCode = con.responseCode
-                br = if (responseCode == 200) { // 정상 호출
-                    BufferedReader(InputStreamReader(con.inputStream))
-                } else { // 에러 발생
-                    BufferedReader(InputStreamReader(con.errorStream))
-                }
-                searchResult = java.lang.StringBuilder()
-                println("207라인 정상")
-                var inputLine: String = br!!.readLine()
-                println("209라인 정상" + inputLine)
-                while (inputLine != null) {
-                    // 여기에서 FATAL 예외 발생 중
-                    searchResult!!.append(inputLine + "\n")
-                    inputLine = br!!.readLine()
-                }
-                println("212라인 정상")
-                br!!.close()
-                con.disconnect()
-                br = if (responseCode == 200) { // 정상 호출
-                    BufferedReader(InputStreamReader(con.inputStream))
-                } else { // 에러 발생
-                    BufferedReader(InputStreamReader(con.errorStream))
-                }
-                // 데이터 파싱
-                datas = searchResult.toString()
-                println("검색 datas : $datas")
-                array = datas!!.split("\"").toTypedArray()
-                title = arrayOfNulls(display)
-                roadaddress = arrayOfNulls(display)
-                mapx = IntArray(display)
-                mapy = IntArray(display)
-                //category = new String[display];
-                var k = 0
-                for (i in array!!.indices) {
-                    if (array!![i] == "title") {
-                        title!![k] = Html.fromHtml(array!![i + 2]).toString()
-                        println(array!![i + 2])
-                    }
-                    if (array!![i] == "roadAddress") roadaddress!![k] =
-                        Html.fromHtml(array!![i + 2]).toString()
-                    if (array!![i] == "mapx") mapx!![k] = array!![i + 2]?.toInt()!!
-                    if (array!![i] == "mapy") {
-                        mapy!![k] = array!![i + 2]?.toInt()!!
-                        k++
-                    }
-                    /*if (array[i].equals("category")) {
-                            category[k] = Html.fromHtml(array[i + 2]).toString();
-                            k++;
-                        }*/
-                }
-                //System.out.println(array);
-                println(
-                    roadaddress!![0] + roadaddress!![1] + roadaddress!![2] + roadaddress!![3] + roadaddress!![4]
-                )
-                //System.out.println(category[0]+category[1]+category[2]+category[3]+category[4]);
-                println(
-                    "x 좌표 : " + mapx!![0] + mapx!![1] + mapx!![2] + mapx!![3] + mapx!![4]
-                )
-                println(
-                    "y 좌표 : " + mapy!![0] + mapy!![1] + mapy!![2] + mapy!![3] + mapy!![4]
-                )
-                adapter!!.addItems(title, roadaddress,  /*category,*/mapx, mapy)
-                adapter!!.notifyDataSetChanged()
-                // title[0], link[0], bloggername[0] 등 인덱스 값에 맞게 검색결과를 변수화하였다.
-            } catch (e: Exception) { //status1.setText("에러가..났습니다...");
-                println("에러 발생 : $e")
-            }
-        }
-    }.start()
-}
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
