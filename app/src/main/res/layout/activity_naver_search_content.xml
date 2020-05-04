@@ -1,64 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NaverSearchContentActivity">
-
+    tools:context=".NaverSearchContentActivity"
+    android:gravity="bottom"
+    app:umanoDragView="@id/slide_drawer_search_content"
+    app:umanoPanelHeight="130dp"
+    app:umanoOverlay="false"
+    app:umanoParallaxOffset="130dp"
+    app:umanoShadowHeight="10dp"
+    >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <com.naver.maps.map.MapView
         android:id="@+id/navermap_map_view_search_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="130dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <androidx.slidingpanelayout.widget.SlidingPaneLayout-->
-<!--        android:id="@+id/slide_search_content"-->
-<!--        -->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
+</RelativeLayout>
 
-<!--        <ImageView-->
-<!--            android:id="@+id/handle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_launcher_background" />-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/content"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="#FFFFFFFF"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="SlidingDrawer의 content 부분입니다." />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btnclose"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="닫기" />-->
-<!--        </LinearLayout>-->
-
-<!--    </androidx.slidingpanelayout.widget.SlidingPaneLayout>-->
-
-    <SlidingDrawer
+    <LinearLayout
         android:id="@+id/slide_drawer_search_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:allowSingleTap="true"
-        android:animateOnClick="true"
-        android:content="@id/content"
-        android:handle="@id/handle"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
         android:orientation="vertical"
-        android:topOffset="500dp">
+        >
 
         <LinearLayout
             android:id="@+id/handle"
@@ -131,10 +106,10 @@
 
             </LinearLayout>
 
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:background="#EEEEEE" />-->
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="1dp"-->
+            <!--                android:background="#EEEEEE" />-->
 
             <ImageView
                 android:layout_gravity="center"
@@ -152,7 +127,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btn_naver_search_content_folder"
@@ -161,7 +136,7 @@
                 android:textColor="@color/colorWhite"
                 android:background="@drawable/background_btn_round_blue"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="100dp"
                 android:layout_height="40dp"/>
@@ -173,7 +148,7 @@
                 android:textColor="@color/colorTheme"
                 android:background="@drawable/background_btn_round_blue_border"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="80dp"
                 android:layout_height="40dp"/>
@@ -187,7 +162,7 @@
 
         </LinearLayout>
 
-    </SlidingDrawer>
+    </LinearLayout>
 
 
-</RelativeLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

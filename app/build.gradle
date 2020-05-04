@@ -99,4 +99,7 @@ dependencies {
 
     // 구글 지도
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // 슬라이딩업패널레이아웃 오픈소스
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }
