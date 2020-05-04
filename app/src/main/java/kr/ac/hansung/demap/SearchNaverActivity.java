@@ -1,8 +1,5 @@
 package kr.ac.hansung.demap;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
@@ -22,8 +19,6 @@ import android.os.Bundle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -34,6 +29,8 @@ public class SearchNaverActivity extends AppCompatActivity {
     private View rootView;
 
     private SearchView searchView;
+
+    private TextView textView; // 장소 검색 결과 화면 상단 검색어 보여주기
 
     private MySearchNaverRecyclerAdapter adapter; // FolderList 어댑터
 
@@ -55,10 +52,11 @@ public class SearchNaverActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_naver);
-        rootView = findViewById(R.id.linearLayout_search_activity);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setContentView(R.layout.activity_search_naver);
+        rootView = findViewById(R.id.place_search_activity);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_search_naver);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 홈 버튼 활성화
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite)); // 배경색
@@ -71,22 +69,16 @@ public class SearchNaverActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        // 검색어 가져오기
-        searchView = findViewById(R.id.sv_searchPlace);
-        searchView.setIconified(false);
-        searchView.setQuery(intent.getStringExtra("searchText"), false);
-        if (intent.getStringExtra("search_hint") != null) {
-            searchView.setQueryHint(intent.getStringExtra("search_hint"));
-        }
-        searchView.clearFocus();
-
+        /*
+        *  // 검색어 가져오기
+        SearchView searchView =  findViewById(R.id.folder_name_edittext);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String searchword) {
+            public boolean onQueryTextSubmit(String keyword) {
                 // 검색 버튼이 눌러졌을 때 이벤트 처리
-                System.out.println("검색 처리됨 : " + searchword);
-                //searchForFolderName(keyword);
-                searchForNaverAPI(searchword);
+                System.out.println("검색 처리됨 : " + keyword);
+                searchForFolderName(keyword);
+
                 return true;
             }
             @Override
@@ -96,7 +88,23 @@ public class SearchNaverActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.listView_search_result_list);
+        * */
+
+        textView = findViewById(R.id.tv_search_place_word);
+
+        // 메인 서치뷰의 검색어 넘겨 받기
+        String searchword = intent.getStringExtra("searchText");
+        System.out.println("넘어온 검색어 : " + searchword);
+
+
+        // 넘어온 검색어로 검색 작업 수행
+            System.out.println("검색어 넘어옴 : " + searchword);
+            //searchForFolderName(keyword);
+            textView.setText(searchword);
+            searchForNaverAPI(searchword);
+
+
+        RecyclerView recyclerView = findViewById(R.id.place_search_result_list);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MySearchNaverRecyclerAdapter();
