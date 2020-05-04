@@ -25,6 +25,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
     private Intent intent;
 
+
     private MapView mapView;
     private Marker marker;
 
@@ -71,6 +72,14 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(getApplicationContext(), AddPlaceToFolderActivity.class);
+                int x = intent.getIntExtra("result_mapx", 0);
+                int y = intent.getIntExtra("result_mapy", 0);
+                intent1.putExtra("result_mapx", x);
+                intent1.putExtra("result_mapy", y);
+                intent1.putExtra("result_name", intent.getStringExtra("result_name"));
+                intent1.putExtra("result_addr", intent.getStringExtra("result_addr"));
+                intent1.putExtra("result_phone", intent.getStringExtra("result_phone"));
+
                 startActivity(intent1);
             }
         });
@@ -80,6 +89,8 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         mapView.getMapAsync(this);
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
