@@ -14,8 +14,7 @@ class MyAdapterForFolderTag(private var item_list: Array<String>, private var li
 //    private var mSelectedItem : ArrayList<Int>? = null //선택된 아이템 위치(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val inflateView =
-            LayoutInflater.from(parent.context).inflate(R.layout.folder_tag_list, parent, false)
+        val inflateView = LayoutInflater.from(parent.context).inflate(R.layout.folder_tag_list, parent, false)
         return MyViewHolder(inflateView)
     }
 
