@@ -16,22 +16,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AddPlaceFormActivity"></activity>
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-        <activity android:name=".NaverSearchContentActivity"></activity>
-        <activity android:name=".SearchNaverActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".NaverSearchContentActivity" />
+        <activity
+            android:name=".SearchNaverActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateFolderActivity" />
-        <activity android:name=".ui.login.LoginActivity">
-
-        </activity>
-
+        <activity android:name=".ui.login.LoginActivity"></activity>
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,9 +42,7 @@
         <activity android:name=".FolderListActivity" />
         <activity android:name=".MyfolderViewActivity" />
         <activity android:name=".FolderContentActivity" />
-        <activity android:name=".AddPlaceToFolderActivity"/>
-
-        <!-- 네이버 api -->
+        <activity android:name=".AddPlaceToFolderActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="3vtiw45s9x" />

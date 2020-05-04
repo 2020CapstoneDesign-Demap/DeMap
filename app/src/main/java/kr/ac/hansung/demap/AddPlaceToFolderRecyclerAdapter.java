@@ -49,6 +49,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
     }
 
+    
     @NonNull
     @Override
     public AddPlaceToFolderRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

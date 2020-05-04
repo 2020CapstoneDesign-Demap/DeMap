@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
+import kr.ac.hansung.demap.ui.main.MainActivity;
 
 public class AddPlaceToFolderActivity extends AppCompatActivity {
 
@@ -83,10 +85,20 @@ public class AddPlaceToFolderActivity extends AppCompatActivity {
         // 장소를 저장할 내 폴더 리스트 가져오기
         setData();
 
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPlace();
+                // 장소 저장 폼으로 이동
+                Intent  placeFormIntent = new Intent(AddPlaceToFolderActivity.this, AddPlaceFormActivity.class);
+                placeFormIntent.putExtra("result_mapx", placeDTO.getX());
+                placeFormIntent.putExtra("result_mapy", placeDTO.getY());
+                placeFormIntent.putExtra("result_name", placeDTO.getName());
+                placeFormIntent.putExtra("result_addr", placeDTO.getAddress());
+                placeFormIntent.putExtra("result_phone", placeDTO.getTelephone());
+                startActivity(placeFormIntent);
             }
         });
 
@@ -95,7 +107,6 @@ public class AddPlaceToFolderActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AddPlaceToFolderRecyclerAdapter();
         recyclerView.setAdapter(adapter);
-
     }
 
     public void setData() {
@@ -143,25 +154,6 @@ public class AddPlaceToFolderActivity extends AppCompatActivity {
 
     }
 
-    public void addPlace() {
-    //place 데이터
-        placeDTO.setTimestamp(System.currentTimeMillis());
-        firestore.collection("places").document().set(placeDTO).addOnSuccessListener(new OnSuccessListener<Void>() {
-
-            @Override
-            public void onSuccess(Void aVoid) {
-                System.out.println("장소 추가 성공 : " + placeDTO);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                System.out.println("장소 추가 실패 : " + e);
-            }
-        });
-
-
-
-    }
 
 
     @Override
