@@ -27,7 +27,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_nickname"
+            android:id="@+id/tv_main_nickname"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center_vertical"
@@ -35,7 +35,7 @@
             android:textSize="15sp"/>
 
         <TextView
-            android:id="@+id/tv_email"
+            android:id="@+id/tv_main_email"
             android:layout_width="match_parent"
             android:layout_height="14dp"
             android:gravity="center_vertical"

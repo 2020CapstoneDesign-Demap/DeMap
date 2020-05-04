@@ -3,12 +3,18 @@ package kr.ac.hansung.demap;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,8 +31,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class SearchNaverActivity extends AppCompatActivity {
 
-    private MySearchNaverRecyclerAdapter adapter; // FolderList 어댑터
+    private View rootView;
 
+    private SearchView searchView;
+
+    private MySearchNaverRecyclerAdapter adapter; // FolderList 어댑터
 
     private BufferedReader br;
     private StringBuilder searchResult;
@@ -34,6 +43,8 @@ public class SearchNaverActivity extends AppCompatActivity {
     String data;
     String[] array;
     String[] title;
+    String[] category;
+    String[] telephone;
     String[] roadaddress;
     int[] mapx;
     int[] mapy;
@@ -45,12 +56,30 @@ public class SearchNaverActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_naver);
+        rootView = findViewById(R.id.linearLayout_search_activity);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 홈 버튼 활성화
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite)); // 배경색
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
         //status1 = (TextView)findViewById(R.id.textview_searchresult_name); //파싱된 결과를 보자
         //status2 = (TextView)findViewById(R.id.textview_seatchresult_address);
 
+        Intent intent = getIntent();
+
         // 검색어 가져오기
-        SearchView searchView =  findViewById(R.id.searchword_edittext);
+        searchView = findViewById(R.id.sv_searchPlace);
+        searchView.setIconified(false);
+        searchView.setQuery(intent.getStringExtra("searchText"), false);
+        if (intent.getStringExtra("search_hint") != null) {
+            searchView.setQueryHint(intent.getStringExtra("search_hint"));
+        }
+        searchView.clearFocus();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String searchword) {
@@ -58,7 +87,6 @@ public class SearchNaverActivity extends AppCompatActivity {
                 System.out.println("검색 처리됨 : " + searchword);
                 //searchForFolderName(keyword);
                 searchForNaverAPI(searchword);
-
                 return true;
             }
             @Override
@@ -67,7 +95,6 @@ public class SearchNaverActivity extends AppCompatActivity {
                 return false;
             }
         });
-        //System.out.println(query);
 
         RecyclerView recyclerView = findViewById(R.id.listView_search_result_list);
         recyclerView.setHasFixedSize(false);
@@ -89,10 +116,8 @@ public class SearchNaverActivity extends AppCompatActivity {
             public void run() {
                 try {
 
-
                     String searchword = URLEncoder.encode(query, "UTF-8");
                     System.out.println("검색어 utf-8 : " + searchword);
-
 
                     URL url = new URL("https://openapi.naver.com/v1/search/local?"
                             //+ "key=" + clientSecret
@@ -133,8 +158,11 @@ public class SearchNaverActivity extends AppCompatActivity {
 
                     // 데이터 파싱
                     data = searchResult.toString();
+                    Log.d("log", "data : " + data);
                     array = data.split("\"");
                     title = new String[display];
+                    category = new String[display];
+                    telephone = new String[display];
                     roadaddress = new String[display];
                     mapx = new int[display];
                     mapy = new int[display];
@@ -147,6 +175,12 @@ public class SearchNaverActivity extends AppCompatActivity {
                             title[k] = Html.fromHtml(array[i + 2]).toString();
                             System.out.println(array[i + 2]);
                         }
+                        if (array[i].equals("category")) {
+                            String s = Html.fromHtml(array[i + 2]).toString();
+                            category[k] = s.substring(s.lastIndexOf(">") + 1);
+                        }
+                        if (array[i].equals("telephone"))
+                            telephone[k] = Html.fromHtml(array[i + 2]).toString();
                         if (array[i].equals("roadAddress"))
                             roadaddress[k] = Html.fromHtml(array[i + 2]).toString();
                         if (array[i].equals("mapx"))
@@ -163,11 +197,12 @@ public class SearchNaverActivity extends AppCompatActivity {
 
                     //System.out.println(array);
                     System.out.println(roadaddress[0]+roadaddress[1]+roadaddress[2]+roadaddress[3]+roadaddress[4]);
-                    //System.out.println(category[0]+category[1]+category[2]+category[3]+category[4]);
+                    System.out.println(category[0]+category[1]+category[2]+category[3]+category[4]);
+                    System.out.println(telephone[0]+telephone[1]+telephone[2]+telephone[3]+telephone[4]);
                     System.out.println("x 좌표 : "+mapx[0]+mapx[1]+mapx[2]+mapx[3]+mapx[4]);
                     System.out.println("y 좌표 : "+mapy[0]+mapy[1]+mapy[2]+mapy[3]+mapy[4]);
 
-                    adapter.addItems(title, roadaddress, /*category,*/ mapx, mapy);
+                    adapter.addItems(title, roadaddress, category, telephone, mapx, mapy);
                     adapter.notifyDataSetChanged();
                     // title[0], link[0], bloggername[0] 등 인덱스 값에 맞게 검색결과를 변수화하였다.
 
@@ -178,6 +213,23 @@ public class SearchNaverActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        rootView.requestFocus();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

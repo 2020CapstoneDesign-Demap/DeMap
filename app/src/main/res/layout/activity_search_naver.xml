@@ -3,31 +3,41 @@
     android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout_search_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SearchNaverActivity">
 
-    <SearchView
-        android:id="@+id/searchword_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:queryHint="맛집 검색"
-        android:textSize="20sp" />
+    <include layout="@layout/toolbar_main" />
+
+<!--    <SearchView-->
+<!--        android:id="@+id/searchword_edittext"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:queryHint="맛집 검색"-->
+<!--        android:focusable="true"-->
+<!--        android:focusableInTouchMode="true"-->
+<!--        android:textSize="20sp" />-->
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:layout_marginBottom="1dp"-->
+<!--        android:background="@color/colorLineGray4" />-->
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/colorLineGray4" />
-
+        android:background="#DDDDDD" />
 
     <LinearLayout
         android:layout_width="match_parent"

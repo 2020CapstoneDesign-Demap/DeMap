@@ -4,9 +4,7 @@
     android:id="@+id/toolbar_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-
-    >
+    android:background="@color/colorWhite">
 
     <!--
     <ImageView
@@ -18,8 +16,10 @@
 
     <SearchView
         android:id="@+id/sv_searchPlace"
+        android:queryHint="상호명 검색"
+        android:textSize="20sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
 
 </androidx.appcompat.widget.Toolbar>

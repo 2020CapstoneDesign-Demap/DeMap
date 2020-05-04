@@ -21,12 +21,11 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
 
     // adapter에 들어갈 folder list
     private String[] title = {"초기값","초기값","초기값","초기값","초기값"};
+    private String[] category = {"초기값","초기값","초기값","초기값","초기값"};
+    private String[] telephone = {"초기값","초기값","초기값","초기값","초기값"};
     private String[] roadaddress = {"초기값","초기값","초기값","초기값","초기값"};
-    //private String[] category = {"초기값","초기값","초기값","초기값","초기값"};
     private int[] mapx = {0,0,0,0,0};
     private int[] mapy = {0,0,0,0,0};
-
-//    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     public MySearchNaverRecyclerAdapter() {
 //        this.context = context;
@@ -39,10 +38,7 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
     @Override
     public void onBindViewHolder(@NonNull MySearchNaverRecyclerAdapter.MyViewHolder holder, int position) {
         if (title[0]!="초기값")
-            holder.onBind(title[position], roadaddress[position]/*, category[position]*/);
-
-//        Log.d("log", "우왕"+searchFolderResult.get(position).getName());
-//        holder.onBind(folderObjs.get(position));
+            holder.onBind(title[position], roadaddress[position], category[position], telephone[position]);
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +47,8 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
 
                 intent.putExtra("result_name", title[position]);
                 intent.putExtra("result_addr", roadaddress[position]);
+                intent.putExtra("result_category", category[position]);
+                intent.putExtra("result_phone", telephone[position]);
                 intent.putExtra("result_mapx", mapx[position]);
                 intent.putExtra("result_mapy", mapy[position]);
 
@@ -67,17 +65,10 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         // return 인자는 ViewHolder 입니다.
         // create a new view
         View view;
-
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.naver_search_result_list, parent, false);
-            MySearchNaverRecyclerAdapter.MyViewHolder vh = new MySearchNaverRecyclerAdapter.MyViewHolder(view);
-            context = parent.getContext();
-            return vh;
-         /*else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_naver_init, parent, false);
-            MySearchNaverRecyclerAdapter.MyViewHolder vh = new MySearchNaverRecyclerAdapter.MyViewHolder(view,"초기값");
-            context = parent.getContext();
-            return vh;
-        }*/
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.naver_search_result_list, parent, false);
+        MySearchNaverRecyclerAdapter.MyViewHolder vh = new MySearchNaverRecyclerAdapter.MyViewHolder(view);
+        context = parent.getContext();
+        return vh;
     }
 
     @Override
@@ -86,22 +77,15 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         return title.length;
     }
 
-    public void addItems(String[] title, String[] roadaddress, /*String[] category,*/ int[] mapx, int[] mapy) {
+    public void addItems(String[] title, String[] roadaddress, String[] category, String[] telephone, int[] mapx, int[] mapy) {
         // 외부에서 item을 추가시킬 함수입니다.
-        //this.title = null;
-        //this.roadaddress = null;
-        //this.mapx = null;
-        //this.mapy = null;
         for (int i=0; i<getItemCount(); i++) {
             this.title[i] = title[i];
             this.roadaddress[i] = roadaddress[i];
-            //this.category[i] = category[i];
+            this.category[i] = category[i];
+            this.telephone[i] = telephone[i];
             this.mapx[i] = mapx[i];
             this.mapy[i] = mapy[i];
-            System.out.println("어댑터로 넘어온 데이터 : " + (i+1) + this.title[i]);
-            System.out.println("어댑터로 넘어온 데이터 : "+ (i+1) +this.roadaddress[i]);
-            System.out.println("어댑터로 넘어온 mapx : " + this.mapx[i] + "mapy : " + this.mapy[i]);
-
         }
 
     }
@@ -114,7 +98,6 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
 
         public TextView textView_searchresult_name;
         public TextView textView_searchresult_address;
-        //public TextView textView_searchresult_category;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -125,14 +108,7 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
 
         }
 
-        //init뷰 띄울때 호출할 생성자
-       /* public MyViewHolder(View itemView, String i) {
-            super(itemView);
-            view = itemView;
-            textView_search_naver_init = itemView.findViewById(R.id.search_naver_init);
-        }*/
-
-        void onBind(String title, String roadaddress/*, String category*/) {
+        void onBind(String title, String roadaddress, String category, String phone) {
             textView_searchresult_name.setText(title);
             textView_searchresult_address.setText(roadaddress);
             //textView_searchresult_category.setText(category);
