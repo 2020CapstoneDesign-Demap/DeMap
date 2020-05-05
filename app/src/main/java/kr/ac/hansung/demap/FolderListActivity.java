@@ -77,7 +77,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         super.onCreate(savedInstanceState);
 
         // ActionBar에 타이틀 변경
-        getSupportActionBar().setTitle("폴더 리스트");
+        getSupportActionBar().setTitle("폴더 검색");
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())

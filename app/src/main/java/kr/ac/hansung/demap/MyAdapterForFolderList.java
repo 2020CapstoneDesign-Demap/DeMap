@@ -22,8 +22,6 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
 
-//    private ArrayList<FolderObj> folderObjs = new ArrayList<>();
-
     public MyAdapterForFolderList() {
 //        this.context = context;
         searchFolderResult.clear();
@@ -32,9 +30,6 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.onBind(searchFolderResult.get(position));
-
-//        Log.d("log", "우왕"+searchFolderResult.get(position).getName());
-//        holder.onBind(folderObjs.get(position));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +40,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
                 intent.putExtra("folder_name", searchFolderResult.get(position).getName());
 //                intent.putExtra("folder_name", folderObjs.get(position).getName());
                 intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
+                intent.putExtra("folder_public", searchFolderResult.get(position).getIspublic());
 
                 context.startActivity(intent);
             }
