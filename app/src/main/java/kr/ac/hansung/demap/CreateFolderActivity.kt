@@ -183,7 +183,15 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             var folderIcon: MutableMap<String, Object> = HashMap()
             folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
 //          firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
+
+            //폴더 장소 정보 저장
+            var place: MutableMap<String, Object> = HashMap()
+            var places : MutableMap<String, Object> = HashMap()
+            place.put("places", places as Object)
+            firestore?.collection("folderPlaces")?.document(folderID)?.set(place)
         }
+
+
 
         Toast.makeText(this, "폴더 생성 성공!", Toast.LENGTH_SHORT).show()
         finish()
