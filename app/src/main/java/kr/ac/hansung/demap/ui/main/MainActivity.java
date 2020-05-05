@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
-
-
         // 로그인한 유저 닉네임 받아오기
         firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

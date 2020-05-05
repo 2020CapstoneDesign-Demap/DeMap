@@ -25,6 +25,8 @@ public class SubsfolderFragment extends Fragment {
     private RecyclerView recyclerView;
     private MyFolderViewRecyclerAdapter adapter;
 
+    private String authId;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,9 @@ public class SubsfolderFragment extends Fragment {
 
     void setFolderDTOs(ArrayList<FolderObj> folderObj) {
         folderObjs = folderObj;
+    }
+    void setAuthId(String authId) {
+        this.authId = authId;
     }
 
     @Nullable
@@ -43,6 +48,8 @@ public class SubsfolderFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         adapter = new MyFolderViewRecyclerAdapter();
         adapter.setItem(folderObjs);
+        adapter.setAuthId(authId);
+        adapter.setMyFolder(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 

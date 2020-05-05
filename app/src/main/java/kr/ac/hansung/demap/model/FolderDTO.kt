@@ -5,7 +5,7 @@ data class FolderDTO(
     var imageUrl: String? = null,
     var timestamp: Long? = null,
     var subscribeCount: Int = 0,
-    var places: MutableMap<String, Boolean> = HashMap()
+    var placeCount: Int = 0
 )
 
 data class FolderSubsDTO(var subscribers: MutableMap<String, Boolean> = HashMap())

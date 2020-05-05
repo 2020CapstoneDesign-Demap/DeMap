@@ -157,7 +157,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         void onBind(FolderObj folderObj, int selectedPosition, int position) {
             textview_folder_name.setText(folderObj.getName());
-            textview_folder_place_count.setText(String.valueOf(folderObj.getSubscribeCount()));
+            textview_folder_place_count.setText(String.valueOf(folderObj.getPlaceCount()));
             textview_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
 
             if (selectedPosition == position)

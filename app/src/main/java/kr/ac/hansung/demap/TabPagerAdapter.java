@@ -21,6 +21,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private ArrayList<FolderObj> myfolderObjs = new ArrayList<>();
     private ArrayList<FolderObj> subsfolderObjS = new ArrayList<>();
 
+    private String authId;
+
     private int tabCount;
 
     public TabPagerAdapter(@NonNull FragmentManager fm, int tabCount) {
@@ -44,6 +46,10 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         subsfolderObjS = subsfolderObj;
     }
 
+    void setAuthId(String authId) {
+        this.authId = authId;
+    }
+
     // overriding getPageTitle()
     @Override
     public CharSequence getPageTitle(int position) {
@@ -58,10 +64,12 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 MyfolderFragment myfolderFragment = new MyfolderFragment();
                 myfolderFragment.setFolderDTOs(myfolderObjs);
+                myfolderFragment.setAuthId(authId);
                 return myfolderFragment;
             case 1:
                 SubsfolderFragment subsfolderFragment = new SubsfolderFragment();
                 subsfolderFragment.setFolderDTOs(subsfolderObjS);
+                subsfolderFragment.setAuthId(authId);
                 return subsfolderFragment;
             default:
                 return null;

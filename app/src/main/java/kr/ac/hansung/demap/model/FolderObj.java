@@ -12,6 +12,7 @@ public class FolderObj {
     private String  imageUrl = null;
     private Long timestamp = null;
     private int subscribeCount = 0;
+    private int placeCount = 0;
     private HashMap<String, Boolean> subscribers  = new HashMap();
     private HashMap<String, Boolean> places  = new HashMap();
 
@@ -77,6 +78,14 @@ public class FolderObj {
 
     public void setSubscribeCount(int subscribeCount) {
         this.subscribeCount = subscribeCount;
+    }
+
+    public int getPlaceCount() {
+        return placeCount;
+    }
+
+    public void setPlaceCount(int placeCount) {
+        this.placeCount = placeCount;
     }
 
     public HashMap<String, Boolean> getPlaces() {

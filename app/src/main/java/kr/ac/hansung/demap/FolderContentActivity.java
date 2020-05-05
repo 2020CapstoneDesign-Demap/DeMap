@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,9 +23,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.util.ArrayList;
+
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
+import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -41,6 +49,13 @@ public class FolderContentActivity extends AppCompatActivity {
 
     private UserMyFolderDTO userMyfolderDTO = new UserMyFolderDTO();
     private UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
+
+    private FolderPlacesDTO folderPlacesDTO;
+    private ArrayList<PlaceDTO> placeDTOS = new ArrayList<PlaceDTO>();
+    private ArrayList<String> placeId = new ArrayList<String>();
+
+    private PlaceListAdapter adapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +87,31 @@ public class FolderContentActivity extends AppCompatActivity {
         TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
         tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
 
+        setFolderData();
+        setUserData();
+
+        RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new PlaceListAdapter();
+        adapter.setFolderId(docId);
+        recyclerView.setAdapter(adapter);
+
+        setPlaceData();
+
+        btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
+        btn_subscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subscribeFolder();
+            }
+        });
+
+    }
+
+    public void setFolderData() {
+
         // 구독자 count 갱신을 위한 folderDTO
         firestore.collection("folders").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -80,6 +120,7 @@ public class FolderContentActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         folderDTO = document.toObject(FolderDTO.class);
+                        adapter.setPlaceCount(folderDTO.getPlaceCount());
                     }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
@@ -112,6 +153,10 @@ public class FolderContentActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void setUserData() {
+
         // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -122,12 +167,18 @@ public class FolderContentActivity extends AppCompatActivity {
                         userMyfolderDTO = document.toObject(UserMyFolderDTO.class);
 
                         // 폴더가 내 폴더일 경우
-                        if (userMyfolderDTO.getMyfolders().containsKey(intent.getExtras().get("folder_id").toString())) {
+                        if (userMyfolderDTO.getMyfolders().containsKey(docId)) {
                             btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
                             btn_subscribe.setText("구독하기");
                             btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
                             btn_subscribe.setEnabled(false);
                             btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
+
+                            adapter.setMyFolder(true);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            adapter.setMyFolder(false);
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 } else {
@@ -151,13 +202,44 @@ public class FolderContentActivity extends AppCompatActivity {
             }
         });
 
+    }
 
-        btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
+    public void setPlaceData() {
 
-        btn_subscribe.setOnClickListener(new View.OnClickListener() {
+        // 폴더에 저장된 장소 id 가져오기
+        firestore.collection("folderPlaces").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                subscribeFolder();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        folderPlacesDTO = document.toObject(FolderPlacesDTO.class);
+
+                        // 장소 데이터 가져오기
+                        for (String key : folderPlacesDTO.getPlaces().keySet()) {
+                            firestore.collection("places").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            PlaceDTO placeDTO = document.toObject(PlaceDTO.class);
+                                            placeDTOS.add(placeDTO);
+                                            placeId.add(document.getId());
+                                        }
+                                        adapter.setItem(placeDTOS, placeId);
+                                        adapter.notifyDataSetChanged();
+
+                                    } else {
+                                        System.out.println("Error getting documents: " + task.getException());
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
             }
         });
 

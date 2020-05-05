@@ -73,9 +73,11 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
         String name = intentForAddPlace.getStringExtra("result_name");
         placeDTO.setName(name);
         String addr = intentForAddPlace.getStringExtra("result_addr");
-//        placeDTO.setAddress(addr);
+        placeDTO.setAddress(addr);
+        String category = intentForAddPlace.getStringExtra("result_category");
+        placeDTO.setCategory(category);
         String phone = intentForAddPlace.getStringExtra("result_phone");
-//        placeDTO.setTelephone(phone);
+        placeDTO.setTelephone(phone);
         int x = intentForAddPlace.getIntExtra("result_mapx",0);
         placeDTO.setX(x);
         int y = intentForAddPlace.getIntExtra("result_mapy",0);
@@ -101,8 +103,9 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                 placeFormIntent.putExtra("result_mapx", placeDTO.getX());
                 placeFormIntent.putExtra("result_mapy", placeDTO.getY());
                 placeFormIntent.putExtra("result_name", placeDTO.getName());
-//                placeFormIntent.putExtra("result_addr", placeDTO.getAddress());
-//                placeFormIntent.putExtra("result_phone", placeDTO.getTelephone());
+                placeFormIntent.putExtra("result_addr", placeDTO.getAddress());
+                placeFormIntent.putExtra("result_phone", placeDTO.getTelephone());
+                placeFormIntent.putExtra("result_category", placeDTO.getCategory());
 
                 placeFormIntent.putExtra("folder_id", folderId);
 
