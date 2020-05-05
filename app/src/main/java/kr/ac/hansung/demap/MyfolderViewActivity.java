@@ -116,6 +116,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                         getPublic(myfolderObjs);
 
                                         pagerAdapter.setmyfolderItem(myfolderObjs);
+                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
 
@@ -158,6 +159,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                         getPublic(subsfolderObjs);
 
                                         pagerAdapter.setsubsfolderItem(subsfolderObjs);
+                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
                                         viewPager.setAdapter(pagerAdapter);
                                         pagerAdapter.notifyDataSetChanged();
 

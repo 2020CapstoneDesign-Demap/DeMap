@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,6 +68,11 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     // 저장할 폴더 ID
     String folder_id;
+
+    // 폴더에 저장된 장소 count
+    int placeCount;
+
+    // 폴더에 저장된 장소 ID 리스트
     FolderPlacesDTO folderPlacesDTO;
 
     @Override
@@ -83,9 +89,11 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         String name = intent.getStringExtra("result_name");
         placeDTO.setName(name);
         String addr = intent.getStringExtra("result_addr");
-//        placeDTO.setAddress(addr);
+        placeDTO.setAddress(addr);
+        String category = intent.getStringExtra("result_category");
+        placeDTO.setCategory(category);
         String phone = intent.getStringExtra("result_phone");
-//        placeDTO.setTelephone(phone);
+        placeDTO.setTelephone(phone);
         int x = intent.getIntExtra("result_mapx",0);
         placeDTO.setX(x);
         int y = intent.getIntExtra("result_mapy",0);
@@ -119,6 +127,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
             @Override
             public void onClick(View view) {
                 addPlace();
+                Toast.makeText(AddPlaceFormActivity.this, "폴더에 장소를 넣었습니다!", Toast.LENGTH_SHORT).show();
                 finish();
 //                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
 //                startActivity(intent2);
@@ -135,18 +144,6 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
             tags.put(tag, true);
         }
         placeDTO.setTags(tags);
-
-//        firestore.collection("places").document().set(placeDTO).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                System.out.println("장소 추가 성공 : " + placeDTO);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                System.out.println("장소 추가 실패 : " + e);
-//            }
-//        });
 
         firestore.collection("places").add(placeDTO).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -169,9 +166,20 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                     }
                 });
 
-//                Map<String, Boolean> placeId = new HashMap();
-//                placeId.put(documentReference.getId(), true);
-//                firestore.collection("folderPlaces").document(folder_id).set();
+                // 장소 count + 1
+                firestore.collection("folders").document(folder_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                                folderDTO.setPlaceCount(folderDTO.getPlaceCount() + 1);
+                                firestore.collection("folders").document(folder_id).set(folderDTO);
+                            }
+                        }
+                    }
+                });
 
             }
         });
@@ -217,10 +225,5 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         }
 
     }
-
-
-
-
-
 
 }

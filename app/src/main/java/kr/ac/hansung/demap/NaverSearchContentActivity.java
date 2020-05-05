@@ -78,6 +78,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
                 intent1.putExtra("result_mapy", y);
                 intent1.putExtra("result_name", intent.getStringExtra("result_name"));
                 intent1.putExtra("result_addr", intent.getStringExtra("result_addr"));
+                intent1.putExtra("result_category", intent.getStringExtra("result_category"));
                 intent1.putExtra("result_phone", intent.getStringExtra("result_phone"));
 
                 startActivity(intent1);
