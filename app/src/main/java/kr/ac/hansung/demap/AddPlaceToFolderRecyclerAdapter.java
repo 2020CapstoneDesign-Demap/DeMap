@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -22,13 +23,19 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface;
 
 public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPlaceToFolderRecyclerAdapter.MyViewHolder> {
+
+    private Map<String, Boolean> mCheckedFolders = new HashMap<>();
 
     private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
@@ -44,6 +51,19 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
     public void onBindViewHolder(@NonNull AddPlaceToFolderRecyclerAdapter.MyViewHolder holder, int position) {
 
         holder.onBind(folderObjs.get(position), mSelectedPosition, position);
+
+        /*
+        // 폴더들의 체크 상태
+        boolean isChecked = mCheckedFolders.get(folderObjs.get(mSelectedPosition).getId()) == null
+                ? false
+                : mCheckedFolders.get(folderObjs.get(mSelectedPosition).getId());
+
+        holder.checkBox.setChecked(isChecked);
+
+        listOnClickInterface.onCheckbox(mCheckedFolders); //체크한 폴더ID 넘겨주기
+*/
+
+
 
         if ((mSelectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
             mSelectedPosition = 0;
@@ -63,6 +83,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         });
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
@@ -72,6 +93,12 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             }
         });
 
+
+
+    }
+
+    public Map<FolderObj, Boolean> getCheckdFolders(Map<FolderObj, Boolean> mCheckedFolders) {
+        return mCheckedFolders;
     }
 
     
@@ -79,7 +106,20 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
     @Override
     public AddPlaceToFolderRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myfolder_check_list, parent, false);
-        AddPlaceToFolderRecyclerAdapter.MyViewHolder vh = new AddPlaceToFolderRecyclerAdapter.MyViewHolder(view);
+        final AddPlaceToFolderRecyclerAdapter.MyViewHolder vh = new AddPlaceToFolderRecyclerAdapter.MyViewHolder(view);
+
+        /*
+        // 리사이클러뷰 체크박스 다중 선택 시 선택한 폴더들의 정보 전달해주기 위한 코드
+        vh.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                // 체크가 되면 해당 뷰 홀더의 포지션을 가지고 오고, 그 포지션에 해당하는 폴더객체를 가지고 옴
+                FolderObj folderObj = folderObjs.get(vh.getAdapterPosition());
+                String folderId = folderObj.getId();
+                mCheckedFolders.put(folderId, isChecked);
+            }
+        });*/
+
         return vh;
     }
 

@@ -2,13 +2,10 @@ package kr.ac.hansung.demap;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,23 +14,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.security.Key;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import kr.ac.hansung.demap.generated.callback.OnClickListener;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
-import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface;
-import kr.ac.hansung.demap.ui.main.MainActivity;
 
 public class AddPlaceToFolderActivity extends AppCompatActivity implements FolderList_onClick_interface {
 
@@ -57,6 +50,8 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
     // 체크한 폴더 ID
     private String folderId;
+    private Map<FolderObj, Key> folderIdMap;
+    private ArrayList<CheckedFolderId> folderIds;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +92,10 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
+                for(CheckedFolderId fid : folderIds) {
+                    System.out.println("폴더 아이디 리스트 정상으로 넘어옴 : " + fid.getFolderId());
+                }*/
                 // 장소 저장 폼으로 이동
                 Intent placeFormIntent = new Intent(AddPlaceToFolderActivity.this, AddPlaceFormActivity.class);
                 placeFormIntent.putExtra("result_mapx", placeDTO.getX());
@@ -175,7 +174,20 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
         }
         return super.onOptionsItemSelected(item);
     }
+/*
+    @Override
+    public void onCheckbox(Map<String, Boolean> FolderId) {
+        for(FolderObj folderObj : myfolderObjs) {
+            String folderId = folderObj.getId();
+            CheckedFolderId fId = new CheckedFolderId();
+            if(FolderId.get(folderId)) { // 해당 폴더id가 해시맵에 존재하고, 그 값이 true이면 폴더id 리스트에 저장
+                fId.setFolderId(folderId);
+                folderIds.add(fId);
+            }
+        }
 
+    }
+*/
     @Override
     public void onCheckbox(String FolderId) {
         folderId = FolderId;

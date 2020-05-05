@@ -67,6 +67,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     // 저장할 폴더 ID
     String folder_id;
+    ArrayList<CheckedFolderId> folder_ids;
     FolderPlacesDTO folderPlacesDTO;
 
     @Override
@@ -91,6 +92,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         int y = intent.getIntExtra("result_mapy",0);
         placeDTO.setY(y);
 
+        //folder_ids = (ArrayList<CheckedFolderId>) intent.getSerializableExtra("folder_ids");
         folder_id = intent.getStringExtra("folder_id");
 
         System.out.println("인텐트로 가져온 장소 : " + placeDTO.getName());
@@ -120,8 +122,8 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
             public void onClick(View view) {
                 addPlace();
                 finish();
-//                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
-//                startActivity(intent2);
+                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
+                startActivity(intent2);
             }
         });
     }
