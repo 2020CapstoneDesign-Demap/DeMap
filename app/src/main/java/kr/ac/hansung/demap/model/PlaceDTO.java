@@ -5,6 +5,9 @@ import java.util.HashMap;
 public class PlaceDTO {
 
     private String name = null;
+    private String address = null;
+    private String category = null;
+    private String telephone = null;
     private int x = 0;
     private int y = 0;
     private Long timestamp = null;
@@ -16,6 +19,30 @@ public class PlaceDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public int getX() {
