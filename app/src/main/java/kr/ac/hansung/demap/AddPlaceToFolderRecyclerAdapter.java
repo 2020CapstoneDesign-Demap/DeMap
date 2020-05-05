@@ -34,15 +34,40 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
     private int mSelectedPosition = -1; //선택된 아이템 위치(position)
 
+    private FolderList_onClick_interface listOnClickInterface;
+
+    public AddPlaceToFolderRecyclerAdapter(FolderList_onClick_interface listOnClickInterface) {
+        this.listOnClickInterface = listOnClickInterface;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull AddPlaceToFolderRecyclerAdapter.MyViewHolder holder, int position) {
+
         holder.onBind(folderObjs.get(position), mSelectedPosition, position);
+
+        if ((mSelectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
+            mSelectedPosition = 0;
+            holder.checkBox.setChecked(true);
+            listOnClickInterface.onCheckbox(folderObjs.get(mSelectedPosition).getId()); //체크한 폴더ID 넘겨주기
+            holder.onBind(folderObjs.get(position), mSelectedPosition, position);
+        }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                holder.onBind(folderObjs.get(position), mSelectedPosition, position);
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSelectedPosition = position;
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                holder.onBind(folderObjs.get(position), mSelectedPosition, position);
                 notifyDataSetChanged();
             }
         });
@@ -95,12 +120,10 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             textview_folder_place_count.setText(String.valueOf(folderObj.getSubscribeCount()));
             textview_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
 
-            if (selectedPosition == position) {
+            if (selectedPosition == position)
                 checkBox.setChecked(true);
-            }
-            else {
+            else
                 checkBox.setChecked(false);
-            }
         }
 
     }
