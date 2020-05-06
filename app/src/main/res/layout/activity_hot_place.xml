@@ -6,8 +6,13 @@
     tools:context=".ui.hotPlace.HotPlaceActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     >
+    <SearchView
+        android:id="@+id/sv_hotPlaceTag"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,9 +22,4 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <WebView
-        android:id="@+id/hot_webview"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        />
 </LinearLayout>

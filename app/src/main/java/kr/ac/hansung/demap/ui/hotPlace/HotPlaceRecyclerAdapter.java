@@ -37,7 +37,11 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
         return hotPlaceList.size();
     }
 
-    void addHotPlace(HotPlaceDTO data) {
+    public void clearHotPlace() {
+        hotPlaceList.clear();
+    }
+
+    public void addHotPlace(HotPlaceDTO data) {
         hotPlaceList.add(data);
     }
 

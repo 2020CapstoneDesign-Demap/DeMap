@@ -3,10 +3,12 @@ package kr.ac.hansung.demap.ui.hotPlace;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.R;
@@ -29,6 +33,7 @@ public class HotPlaceActivity extends AppCompatActivity {
     String instagram_url = "https://www.instagram.com/";
     WebView webView;
     String source;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +52,8 @@ public class HotPlaceActivity extends AppCompatActivity {
 
         adapter = new HotPlaceRecyclerAdapter();
         recyclerView.setAdapter(adapter);
-
-
+        searchView = findViewById(R.id.sv_hotPlaceTag);
         webView = new WebView(this);
-        // webView = findViewById(R.id.hot_webview);
 
         // WebView 자바스크립트 활성화
         webView.getSettings().setJavaScriptEnabled(true);
@@ -67,27 +70,42 @@ public class HotPlaceActivity extends AppCompatActivity {
                 view.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);");
             }
         });
-        //지정한 URL을 웹 뷰로 접근하기
-        String tagUrl = "explore/tags/homecafe";
-        webView.loadUrl(instagram_url + tagUrl);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // 검색 버튼을 눌렀을 때
+                adapter.clearHotPlace();
+                String tagUrl = "explore/tags/" + query;
+                //지정한 URL을 웹 뷰로 접근하기
+                webView.loadUrl(instagram_url + tagUrl);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // 검색어가 변경됐을 때
+                return false;
+            }
+        });
     }
 
-    // 전달받은 html 소스를 Jsoup로 로컬에서 직접 파싱을 한 후, 원하는 작업을 수행하면 된다.
+    // 전달받은 html 소스를 Jsoup로 로컬에서 직접 파싱을 한 후, 원하는 작업을 수행
     public class MyJavascriptInterface {
-        ArrayList<String> listComment = new ArrayList<>();
-        ArrayList<String> listImageUrl = new ArrayList<>();
-
         @JavascriptInterface
         public void getHtml(String html) {
+            ArrayList<String> listComment = new ArrayList<>();
+            ArrayList<String> listImageUrl = new ArrayList<>();
+
             //위 자바스크립트가 호출되면 여기로 html이 반환됨
             source = html;
             Document doc = Jsoup.parse(source);
-            Elements image_list = doc.select("div.v1Nh3 img");
-            int elementSize = image_list.size();
+            Elements item_list = doc.select("div.v1Nh3 img");
+            int elementSize = item_list.size();
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                for(Element element : image_list) {
+                for(Element element : item_list) {
                     listImageUrl.add(element.attr("src"));
                     listComment.add(element.attr("alt"));
                 }
@@ -96,7 +114,6 @@ public class HotPlaceActivity extends AppCompatActivity {
                     HotPlaceDTO data = new HotPlaceDTO();
                     data.setImageUrl(listImageUrl.get(i));
                     data.setTag(listComment.get(i));
-
                     adapter.addHotPlace(data);
                 }
 
