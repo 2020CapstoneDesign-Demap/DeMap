@@ -35,6 +35,7 @@ import kr.ac.hansung.demap.FolderListActivity;
 import kr.ac.hansung.demap.MyfolderViewActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.SearchNaverActivity;
+import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -228,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void viewSearchHotPlace() {
-        Intent intent = new Intent(this, SearchNaverActivity.class);
-        intent.putExtra("search_hint", "맛집 검색");
+        Intent intent = new Intent(this, HotPlaceActivity.class);
+//        intent.putExtra("search_hint", "맛집 검색");
         startActivity(intent);
     }
 
