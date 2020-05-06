@@ -101,7 +101,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         if (id == android.R.id.home) {
             finish();
-            NavUtils.navigateUpFromSameTask(this);
+//            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
