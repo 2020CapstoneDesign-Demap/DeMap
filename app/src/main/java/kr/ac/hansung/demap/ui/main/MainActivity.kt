@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.toolbar_main.*
 import kr.ac.hansung.demap.FolderListActivity
 import kr.ac.hansung.demap.MyfolderViewActivity
 import kr.ac.hansung.demap.R
+import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -75,6 +76,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         startActivity(intent)
     }
 
+    fun viewHotPlaceList() {
+        var intent = Intent(this, HotPlaceActivity::class.java)
+        startActivity(intent)
+    }
 /*
 
     // searchview
@@ -108,7 +113,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         when(item.itemId){
             R.id.search_folder_menu-> viewFolderList() //Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
             R.id.my_folder_menu-> viewMyFolderList() //Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
-            R.id.hotplace_menu-> Toast.makeText(this,"핫플 clicked",Toast.LENGTH_SHORT).show()
+            R.id.hotplace_menu-> viewHotPlaceList() //Toast.makeText(this,"핫플 clicked",Toast.LENGTH_SHORT).show()
             R.id.history_menu-> Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show()
             R.id.setting_menu-> Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show()
             R.id.service_menu-> Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show()

@@ -95,4 +95,11 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.8.0'
+
+    // 이미지 url 로드
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // 이미지를 원하는 도형 모양에 맞게 커스터마이징
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.3'
+    // html 크롤링
+    implementation 'org.jsoup:jsoup:1.12.1'
 }
