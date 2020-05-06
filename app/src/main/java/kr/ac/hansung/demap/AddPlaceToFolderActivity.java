@@ -110,6 +110,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                 placeFormIntent.putExtra("folder_id", folderId);
 
                 startActivity(placeFormIntent);
+                finish();
             }
         });
 
