@@ -3,6 +3,7 @@ package kr.ac.hansung.demap;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -113,6 +114,24 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             });
         }
 
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlaceDTO tmpPlace = placeDTOS.get(position);
+
+                Intent intent1 = new Intent(v.getContext(), NaverSearchContentActivity.class);
+
+                intent1.putExtra("result_name", tmpPlace.getName());
+                intent1.putExtra("result_addr", tmpPlace.getAddress());
+                intent1.putExtra("result_category", tmpPlace.getCategory());
+                intent1.putExtra("result_phone", tmpPlace.getTelephone());
+                intent1.putExtra("result_mapx", tmpPlace.getX());
+                intent1.putExtra("result_mapy", tmpPlace.getY());
+
+                context.startActivity(intent1);
+            }
+        });
+
     }
 
     private void removeItem(int position) {
@@ -153,8 +172,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
         public TextView textView_Options_place;
 
+        public View view;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            view = itemView;
 
             textview_place_name = itemView.findViewById(R.id.tv_place_name);
             textview_place_address = itemView.findViewById(R.id.tv_place_address);
