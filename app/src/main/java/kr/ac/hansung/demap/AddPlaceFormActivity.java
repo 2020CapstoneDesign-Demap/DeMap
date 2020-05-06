@@ -131,9 +131,15 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
             public void onClick(View view) {
                 addPlace();
                 Toast.makeText(AddPlaceFormActivity.this, "폴더에 장소를 넣었습니다!", Toast.LENGTH_SHORT).show();
-                finish();
-//                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
-//                startActivity(intent2);
+                //finish();
+                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
+                intent2.putExtra("result_mapx", placeDTO.getX());
+                intent2.putExtra("result_mapy", placeDTO.getY());
+                intent2.putExtra("result_name", placeDTO.getName());
+                intent2.putExtra("result_addr", placeDTO.getAddress());
+                intent2.putExtra("result_category", placeDTO.getCategory());
+                intent2.putExtra("result_phone", placeDTO.getTelephone());
+                startActivity(intent2);
             }
         });
     }
