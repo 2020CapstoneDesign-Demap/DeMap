@@ -53,6 +53,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
 
         tv__name = findViewById(R.id.tv_naver_search_content_name);
         tv__name.setText(intent.getStringExtra("result_name"));
