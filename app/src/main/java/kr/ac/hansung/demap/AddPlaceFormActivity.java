@@ -58,6 +58,15 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     CheckBox office;
     CheckBox photo;
     CheckBox rest;
+    // 편의 체크박스
+    CheckBox nokid;
+    CheckBox welkid;
+    CheckBox gendertoilet;
+    CheckBox publictoilet;
+    CheckBox stairs;
+    CheckBox nostairs;
+    CheckBox manyoulet;
+    CheckBox lessoulet;
 
     TextView tv_placename;
 
@@ -109,7 +118,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
         tv_placename.setText(name);
 
-        // 선택된 태그 가져오기
+        // 선택된 분위기 태그 가져오기
         study = (CheckBox) findViewById(R.id.study_check);
         dating = (CheckBox)findViewById(R.id.dating_check);
         family = (CheckBox)findViewById(R.id.family_check);
@@ -123,6 +132,25 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         office.setOnCheckedChangeListener(this);
         photo.setOnCheckedChangeListener(this);
         rest.setOnCheckedChangeListener(this);
+
+        // 선택된 편의 태그 가져오기
+        nokid = (CheckBox) findViewById(R.id.nokid_check);
+        welkid = (CheckBox)findViewById(R.id.welkid_check);
+        gendertoilet = (CheckBox)findViewById(R.id.gendertoilet_check);
+        publictoilet = (CheckBox)findViewById(R.id.publictoilet_check);
+        stairs = (CheckBox)findViewById(R.id.stairs_check);
+        nostairs = (CheckBox)findViewById(R.id.nostairs_check);
+        manyoulet = (CheckBox)findViewById(R.id.manyoulet_check);
+        lessoulet = (CheckBox)findViewById(R.id.lessoulet_check);
+
+        nokid.setOnCheckedChangeListener(this);
+        welkid.setOnCheckedChangeListener(this);
+        gendertoilet.setOnCheckedChangeListener(this);
+        publictoilet.setOnCheckedChangeListener(this);
+        stairs.setOnCheckedChangeListener(this);
+        nostairs.setOnCheckedChangeListener(this);
+        manyoulet.setOnCheckedChangeListener(this);
+        lessoulet.setOnCheckedChangeListener(this);
 
 
         // 확인 버튼 클릭
@@ -229,8 +257,48 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
             }
             if (rest.isChecked() == true) {
                 listTags.add("편안히 쉬기 좋은");
-        } else {
+            } else {
                 listTags.remove("편안히 쉬기 좋은");
+            }
+        if (nokid.isChecked() == true) {
+            listTags.add("노키드존");
+        } else {
+            listTags.remove("노키드존");
+        }
+        if (welkid.isChecked() == true) {
+            listTags.add("웰컴키드존");
+        } else {
+            listTags.remove("웰컴키드존");
+        }
+        if (gendertoilet.isChecked() == true) {
+            listTags.add("남녀화장실 분리");
+        } else {
+            listTags.remove("남녀화장실 분리");
+        }
+        if (publictoilet.isChecked() == true) {
+            listTags.add("공용 화장실");
+        } else {
+            listTags.remove("공용 화장실");
+        }
+        if (stairs.isChecked() == true) {
+            listTags.add("계단 있음");
+        } else {
+            listTags.remove("계단 있음");
+        }
+        if (nostairs.isChecked() == true) {
+            listTags.add("계단 없음");
+        } else {
+            listTags.remove("계단 없음");
+        }
+        if (manyoulet.isChecked() == true) {
+            listTags.add("콘센트 많음");
+        } else {
+            listTags.remove("콘센트 많음");
+        }
+        if (lessoulet.isChecked() == true) {
+            listTags.add("콘센트 적음");
+        } else {
+            listTags.remove("콘센트 적음");
         }
 
     }
