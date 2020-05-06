@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import android.content.Intent;
 import android.graphics.PointF;
@@ -100,6 +101,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         if (id == android.R.id.home) {
             finish();
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
