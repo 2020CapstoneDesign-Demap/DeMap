@@ -21,6 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
@@ -64,6 +66,65 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                             switch (item.getItemId()) {
                                 case R.id.myplace_menu_edit:
                                     //handle menu1 click
+                                    Intent intent = new Intent(v.getContext(), AddPlaceFormActivity.class);
+
+                                    PlaceDTO placeDTO = placeDTOS.get(position);
+                                    /*
+                                    Map<String, Boolean> tags = new HashMap<>();
+                                    ArrayList<String> taglist = new ArrayList<>();
+                                    tags.putAll(placeDTO.getTags());
+                                    // 하드 코딩 죄송합니다
+                                    // 선택된 태그 장소 저장 폼으로 인텐트에 담아 전송
+                                    if(tags.get("노키즈존") == true) {
+                                        taglist.add("노키즈존");
+                                    }
+                                    if(tags.get("웰컴키즈존") == true) {
+                                        taglist.add("웰컴키즈존");
+                                    }
+                                    if(tags.get("남녀화장실 분리") == true) {
+                                        taglist.add("남녀화장실 분리");
+                                    }
+                                    if(tags.get("공용 화장실") == true) {
+                                        taglist.add("공용 화장실");
+                                    }
+                                    if(tags.get("계단 있음") == true) {
+                                        taglist.add("계단 있음");
+                                    }
+                                    if(tags.get("계단 없음") == true) {
+                                        taglist.add("계단 없음");
+                                    }
+                                    if(tags.get("콘센트 많음") == true) {
+                                        taglist.add("콘센트 많음");
+                                    }
+                                    if(tags.get("콘센트 적음") == true) {
+                                        taglist.add("콘센트 적음");
+                                    }
+                                    if(tags.get("공부하기 좋은") == true) {
+                                        taglist.add("공부하기 좋은");
+                                    }
+                                    if(tags.get("데이트하기 좋은") == true) {
+                                        taglist.add("데이트하기 좋은");
+                                    }
+                                    if(tags.get("가족모임하기 좋은") == true) {
+                                        taglist.add("가족모임하기 좋은");
+                                    }
+                                    if(tags.get("회식하기 좋은") == true) {
+                                        taglist.add("회식하기 좋은");
+                                    }
+                                    if(tags.get("사진 찍기 좋은") == true) {
+                                        taglist.add("사진 찍기 좋은");
+                                    }
+                                    if(tags.get("편안히 쉬기 좋은") == true) {
+                                        taglist.add("편안히 쉬기 좋은");
+                                    }
+
+                                     */
+                                    intent.putExtra("result_name", placeDTO.getName());
+
+                                    //intent.putStringArrayListExtra("edit_tags", taglist);
+                                    intent.putExtra("edit_id", placeDTO.getTimestamp());
+                                    intent.putExtra("flag", "edit");
+                                    v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
                                 case R.id.myplace_menu_delete:
                                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
