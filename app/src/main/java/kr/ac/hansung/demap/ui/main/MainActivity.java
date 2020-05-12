@@ -36,6 +36,7 @@ import kr.ac.hansung.demap.MyfolderViewActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.SearchNaverActivity;
 import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
+import kr.ac.hansung.demap.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -234,6 +235,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void logout() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -253,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.history_menu: Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show(); break;
             case R.id.setting_menu: Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show(); break;
             case R.id.service_menu: Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show(); break;
-            case R.id.logout_menu: Toast.makeText(this,"로그아웃 clicked",Toast.LENGTH_SHORT).show(); break;
+            case R.id.logout_menu: logout(); break;
 
             //바텀
             case R.id.history_bottom_nav: Toast.makeText(this,"바텀히스토리 clicked",Toast.LENGTH_SHORT).show(); break;
