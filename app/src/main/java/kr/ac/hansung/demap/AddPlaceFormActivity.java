@@ -80,6 +80,8 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     // 저장할 폴더 ID
     String folder_id;
+    // 수정할 장소 ID
+    String placeId;
 
     ArrayList<CheckedFolderId> folder_ids;
 
@@ -91,8 +93,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     // 장소 수정과 저장 플래그변수
     String editFlag;
     // 장소 수정시 인텐트에서 받아올 태그
-    ArrayList<String> tagFromIntent = new ArrayList<>();
-    Long timeStamp = null;
+    ArrayList<String> tagForEdit = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +118,13 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         placeDTO.setX(x);
         int y = intent.getIntExtra("result_mapy",0);
         placeDTO.setY(y);
+        placeId = intent.getStringExtra("edit_id");
 
-        tagFromIntent = intent.getStringArrayListExtra("edit_tags");
         if(intent.getStringExtra("flag") != null) {
             editFlag = intent.getStringExtra("flag");
         } else {
             editFlag = "nonedit";
         }
-        timeStamp = intent.getLongExtra("edit_id", 0);
 
 
 
@@ -204,18 +204,47 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         }
         placeDTO.setTags(tags);
 
-        firestore.collection("places").whereEqualTo("timestamp", timeStamp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("places").document(placeId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                       // Log.d(TAG, document.getId() + " => " + document.getData());
-                        firestore.collection("places").document(document.getId()).update("tags", tags);
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        System.out.println("장소 id로 가져오기 성공 ");
+                        firestore.collection("places").document(placeId).update("tags", tags);
                     }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
                 }
             }
         });
 
+
+    }
+
+    public void getEditTags() {
+
+        firestore.collection("places").document(placeId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        System.out.println("장소 id로 가져오기 성공 ");
+                        firestore.collection("places").document(placeId).update("tags", tags);
+
+                        //place 데이터
+                        placeDTO.setTimestamp(System.currentTimeMillis());
+                        for(String tag : listTags) {
+                            tags.put(tag, true);
+                        }
+                        placeDTO.setTags(tags);
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            }
+        });
 
 
     }
@@ -277,55 +306,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         listTags.clear();
-        /*
-        if(editFlag == "edit") {
-            listTags.addAll(tagFromIntent);
-            for ( String tag : listTags) {
-                if(tag.equals("공부하기 좋은")) {
-                    study.setChecked(true);
-                }
-                if(tag.equals("데이트하기 좋은")) {
-                    dating.setChecked(true);
-                }
-                if(tag.equals("가족모임하기 좋은")) {
-                    family.setChecked(true);
-                }
-                if(tag.equals("회식하기 좋은")) {
-                    office.setChecked(true);
-                }
-                if(tag.equals("사진 찍기 좋은")) {
-                    photo.setChecked(true);
-                }
-                if(tag.equals("편안히 쉬기 좋은")) {
-                    rest.setChecked(true);
-                }
-                if(tag.equals("노키드존")) {
-                    nokid.setChecked(true);
-                }
-                if(tag.equals("웰컴키드존")) {
-                    welkid.setChecked(true);
-                }
-                if(tag.equals("남녀화장실 분리")) {
-                    gendertoilet.setChecked(true);
-                }
-                if(tag.equals("공용 화장실")) {
-                    publictoilet.setChecked(true);
-                }
-                if(tag.equals("계단 있음")) {
-                    stairs.setChecked(true);
-                }
-                if(tag.equals("계단 없음")) {
-                    nostairs.setChecked(true);
-                }
-                if(tag.equals("콘센트 많음")) {
-                    manyoulet.setChecked(true);
-                }
-                if(tag.equals("콘센트 적음")) {
-                    lessoulet.setChecked(true);
-                }
-            }
-        }
-*/
+
             if (study.isChecked() == true) {
                 listTags.add("공부하기 좋은"); // 체크 활성화 됐으면 서치태그리스트에 추가
             } else {

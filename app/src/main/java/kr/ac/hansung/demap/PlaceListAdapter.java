@@ -69,6 +69,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                                     Intent intent = new Intent(v.getContext(), AddPlaceFormActivity.class);
 
                                     PlaceDTO placeDTO = placeDTOS.get(position);
+                                    String placeId = placeIds.get(position);
                                     /*
                                     Map<String, Boolean> tags = new HashMap<>();
                                     ArrayList<String> taglist = new ArrayList<>();
@@ -120,9 +121,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
                                      */
                                     intent.putExtra("result_name", placeDTO.getName());
-
+                                    intent.putExtra("edit_id",placeId);
                                     //intent.putStringArrayListExtra("edit_tags", taglist);
-                                    intent.putExtra("edit_id", placeDTO.getTimestamp());
                                     intent.putExtra("flag", "edit");
                                     v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
