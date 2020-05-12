@@ -229,7 +229,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         public TextView textview_place_address;
         public TextView textview_place_tag1;
         public TextView textview_place_tag2;
-        public TextView textview_place_tag3;
 
         public TextView textView_Options_place;
 
@@ -243,7 +242,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             textview_place_address = itemView.findViewById(R.id.tv_place_address);
             textview_place_tag1 = itemView.findViewById(R.id.tv_place_tag1);
             textview_place_tag2 = itemView.findViewById(R.id.tv_place_tag2);
-            textview_place_tag3 = itemView.findViewById(R.id.tv_place_tag3);
 
             textView_Options_place = itemView.findViewById(R.id.textView_Options_place);
         }
@@ -256,7 +254,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             for (String key : placeDTO.getTags().keySet()) {
                 if (i == 0) textview_place_tag1.setText("#" + key);
                 else if (i == 1) textview_place_tag2.setText("#" + key);
-                else if (i == 2) textview_place_tag3.setText("#" + key);
                 i++;
             }
 
