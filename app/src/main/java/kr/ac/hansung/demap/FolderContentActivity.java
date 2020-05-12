@@ -26,11 +26,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
+import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
@@ -45,6 +48,8 @@ public class FolderContentActivity extends AppCompatActivity {
 
     private String docId;
     private boolean isMyFolder;
+
+    private String folder_name;
 
     private Button btn_subscribe;
     private TextView tv_folder_subsCount;
@@ -83,9 +88,10 @@ public class FolderContentActivity extends AppCompatActivity {
         isMyFolder = intent.getBooleanExtra("isMyFolder", false);
 
         docId = intent.getExtras().get("folder_id").toString();
+        folder_name = intent.getExtras().get("folder_name").toString();
 
         TextView tv_foldername = findViewById(R.id.tv_folder_content_foldername);
-        tv_foldername.setText(intent.getExtras().get("folder_name").toString());
+        tv_foldername.setText(folder_name);
 
         tv_folder_subsCount = findViewById(R.id.tv_folder_content_subs_count);
         tv_folder_subsCount.setText(intent.getExtras().get("folder_subs_count").toString());
@@ -289,6 +295,44 @@ public class FolderContentActivity extends AppCompatActivity {
             btn_subscribe.setTextColor(getColor(R.color.colorTheme));
 
             tv_folder_subsCount.setText(String.valueOf(folderDTO.getSubscribeCount()));
+
+            firestore.collection("folderOwner").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String ownerId = document.get("owner").toString();
+                        firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String nickname = document.get("nickName").toString();
+                                    String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
+                                    firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+                                                noticeDTO.getNotices().put(notice, true);
+                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
+                                            }
+                                            else {
+                                                NoticeDTO noticeDTO = new NoticeDTO();
+                                                noticeDTO.getNotices().put(notice, true);
+                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
         } else if (btn_subscribe.getText().equals("구독취소")) {
 
             // 구독자 리스트에서 삭제
