@@ -68,7 +68,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         if ((mSelectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
             mSelectedPosition = 0;
             holder.checkBox.setChecked(true);
-            listOnClickInterface.onCheckbox(folderObjs.get(mSelectedPosition).getId()); //체크한 폴더ID 넘겨주기
+            listOnClickInterface.onCheckbox(folderObjs.get(mSelectedPosition).getId(), folderObjs.get(mSelectedPosition).getOwner(), folderObjs.get(mSelectedPosition).getName()); //체크한 폴더ID 넘겨주기
             holder.onBind(folderObjs.get(position), mSelectedPosition, position);
         }
 
@@ -76,7 +76,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
-                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId(), folderObjs.get(position).getOwner(), folderObjs.get(position).getName()); //체크한 폴더ID 넘겨주기
                 holder.onBind(folderObjs.get(position), mSelectedPosition, position);
                 notifyDataSetChanged();
             }
@@ -87,7 +87,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
-                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId(), folderObjs.get(position).getOwner(), folderObjs.get(position).getName()); //체크한 폴더ID 넘겨주기
                 holder.onBind(folderObjs.get(position), mSelectedPosition, position);
                 notifyDataSetChanged();
             }

@@ -31,6 +31,7 @@ import java.util.Map;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
+import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
@@ -80,6 +81,10 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     // 저장할 폴더 ID
     String folder_id;
+    String folder_name;
+    String folder_owner;
+
+    String place_name;
 
     ArrayList<CheckedFolderId> folder_ids;
 
@@ -105,8 +110,8 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         intent = getIntent();
 
         // 장소 정보를 placeDTO에 저장
-        String name = intent.getStringExtra("result_name");
-        placeDTO.setName(name);
+        place_name = intent.getStringExtra("result_name");
+        placeDTO.setName(place_name);
         String addr = intent.getStringExtra("result_addr");
         placeDTO.setAddress(addr);
         String category = intent.getStringExtra("result_category");
@@ -130,11 +135,13 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
         //folder_ids = (ArrayList<CheckedFolderId>) intent.getSerializableExtra("folder_ids");
         folder_id = intent.getStringExtra("folder_id");
+        folder_owner = intent.getStringExtra("folder_owner");
+        folder_name = intent.getStringExtra("folder_name");
 
         System.out.println("인텐트로 가져온 장소 : " + placeDTO.getName());
         System.out.println("인텐트로 가져온 폴더 ID : " + folder_id);
 
-        tv_placename.setText(name);
+        tv_placename.setText(place_name);
 
         // 선택된 분위기 태그 가져오기
         study = (CheckBox) findViewById(R.id.study_check);
@@ -265,6 +272,46 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                         }
                     }
                 });
+
+                // 내 폴더가 아닐 경우 폴더 주인에게 장소가 추가되었음을 알림
+                if (folder_owner.equals("notMine")) {
+                    firestore.collection("folderOwner").document(folder_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String ownerId = document.get("owner").toString();
+                                firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            String nickname = document.get("nickName").toString();
+                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
+                                            firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+                                                        noticeDTO.getNotices().put(notice, true);
+                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
+                                                    }
+                                                    else {
+                                                        NoticeDTO noticeDTO = new NoticeDTO();
+                                                        noticeDTO.getNotices().put(notice, true);
+                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
 
             }
         });

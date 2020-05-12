@@ -49,8 +49,11 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
     // 장소 추가 버튼
     private Button addButton;
 
-    // 체크한 폴더 ID
+    // 체크한 폴더 ID, 소유자
     private String folderId;
+    private String folderOwner;
+    private String folderName;
+
     private Map<FolderObj, Key> folderIdMap;
     private ArrayList<CheckedFolderId> folderIds;
 
@@ -114,6 +117,8 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                 placeFormIntent.putExtra("result_category", placeDTO.getCategory());
 
                 placeFormIntent.putExtra("folder_id", folderId);
+                placeFormIntent.putExtra("folder_owner", folderOwner);
+                placeFormIntent.putExtra("folder_name", folderName);
 
                 startActivity(placeFormIntent);
                 finish();
@@ -206,6 +211,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                                                                         if (document.exists()) {
                                                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                                                             folderObj.setId(document.getId());
+                                                                            folderObj.setOwner("notMine");
                                                                             myfolderObjs.add(folderObj);
                                                                         }
 
@@ -266,7 +272,9 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
     }
 */
     @Override
-    public void onCheckbox(String FolderId) {
+    public void onCheckbox(String FolderId, String FolderOwner, String FolderName) {
         folderId = FolderId;
+        folderOwner = FolderOwner;
+        folderName = FolderName;
     }
 }
