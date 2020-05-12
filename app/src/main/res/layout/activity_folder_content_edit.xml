@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FFFFFF"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FolderListActivity">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_folder_editor_nickname"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+
+            android:layout_marginRight="5dp"
+            android:background="@drawable/background_et_round"
+            android:paddingStart="20dp"
+            android:hint="닉네임 입력"
+            android:textColor="@color/colorLineGray7"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_add_folder_editor"
+            android:text="추가"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/background_btn_round_blue"
+            android:layout_marginRight="15dp"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="50dp"/>
+
+    </LinearLayout>
+
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:layout_marginBottom="1dp"-->
+<!--        android:background="@color/colorLineGray4" />-->
+
+    <TextView
+        android:text="수정 권한이 있는 유저들"
+        android:textColor="@color/colorLineGray7"
+        android:textSize="16sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listView_folder_editor_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#EEEEEE"
+            tools:listitem="@layout/folder_editor_list">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+
+</LinearLayout>

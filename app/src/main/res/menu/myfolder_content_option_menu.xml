@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/myfolder_menu_edit_user"
+        android:visible="false"
+        android:title="수정 권한 관리"/>
+
+</menu>

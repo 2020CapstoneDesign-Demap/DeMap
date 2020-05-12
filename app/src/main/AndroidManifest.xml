@@ -51,6 +51,7 @@
         <activity android:name=".FolderListActivity" />
         <activity android:name=".MyfolderViewActivity" />
         <activity android:name=".FolderContentActivity" />
+        <activity android:name=".FolderContentEditorActivity"/>
         <activity android:name=".AddPlaceToFolderActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

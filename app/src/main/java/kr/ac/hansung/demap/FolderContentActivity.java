@@ -3,11 +3,13 @@ package kr.ac.hansung.demap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +41,10 @@ public class FolderContentActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
 
+//    private Intent intent = getIntent();
+
     private String docId;
+    private boolean isMyFolder;
 
     private Button btn_subscribe;
     private TextView tv_folder_subsCount;
@@ -55,7 +60,6 @@ public class FolderContentActivity extends AppCompatActivity {
     private ArrayList<String> placeId = new ArrayList<String>();
 
     private PlaceListAdapter adapter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +80,8 @@ public class FolderContentActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_folder_content);
 
+        isMyFolder = intent.getBooleanExtra("isMyFolder", false);
+
         docId = intent.getExtras().get("folder_id").toString();
 
         TextView tv_foldername = findViewById(R.id.tv_folder_content_foldername);
@@ -87,9 +93,6 @@ public class FolderContentActivity extends AppCompatActivity {
         TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
         tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
 
-        setFolderData();
-        setUserData();
-
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
         recyclerView.setHasFixedSize(false);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -98,15 +101,32 @@ public class FolderContentActivity extends AppCompatActivity {
         adapter.setFolderId(docId);
         recyclerView.setAdapter(adapter);
 
-        setPlaceData();
-
         btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
+
+        if (isMyFolder) { // 내 폴더일 경우
+            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
+            btn_subscribe.setText("구독하기");
+            btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
+            btn_subscribe.setEnabled(false);
+            btn_subscribe.setVisibility(View.VISIBLE);
+
+            adapter.setMyFolder(true);
+            adapter.notifyDataSetChanged();
+        } else { // 내 폴더가 아닐 경우
+            setFolderData();
+            setUserData();
+
+            adapter.setMyFolder(false);
+            adapter.notifyDataSetChanged();
+        }
         btn_subscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 subscribeFolder();
             }
         });
+
+        setPlaceData();
 
     }
 
@@ -158,34 +178,34 @@ public class FolderContentActivity extends AppCompatActivity {
     public void setUserData() {
 
         // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
-        firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        userMyfolderDTO = document.toObject(UserMyFolderDTO.class);
-
-                        // 폴더가 내 폴더일 경우
-                        if (userMyfolderDTO.getMyfolders().containsKey(docId)) {
-                            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
-                            btn_subscribe.setText("구독하기");
-                            btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
-                            btn_subscribe.setEnabled(false);
-                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
-
-                            adapter.setMyFolder(true);
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            adapter.setMyFolder(false);
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                } else {
-                    System.out.println("Error getting documents: " + task.getException());
-                }
-            }
-        });
+//        firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        userMyfolderDTO = document.toObject(UserMyFolderDTO.class);
+//
+//                        // 폴더가 내 폴더일 경우
+//                        if (userMyfolderDTO.getMyfolders().containsKey(docId)) {
+//                            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
+//                            btn_subscribe.setText("구독하기");
+//                            btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
+//                            btn_subscribe.setEnabled(false);
+//                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
+//
+//                            adapter.setMyFolder(true);
+//                            adapter.notifyDataSetChanged();
+//                        } else {
+//                            adapter.setMyFolder(false);
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                    }
+//                } else {
+//                    System.out.println("Error getting documents: " + task.getException());
+//                }
+//            }
+//        });
 
         // usersSubsFolder의 현재 로그인한 유저가 구독한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersSubsFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -201,6 +221,8 @@ public class FolderContentActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
     }
 
@@ -244,7 +266,6 @@ public class FolderContentActivity extends AppCompatActivity {
         });
 
     }
-
 
     // 폴더 구독 메서드
     public void subscribeFolder() {
@@ -328,12 +349,52 @@ public class FolderContentActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.myfolder_content_option_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.myfolder_menu_edit_user);
+
+        // show the button when some condition is true
+        if (isMyFolder) {
+            menuItem.setVisible(true);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             finish();
             return true;
+        }
+        if (id == R.id.myfolder_menu_edit_user) {
+            if (item.getTitle().equals("수정 권한 관리")) {
+
+                firestore.collection("folderEditors").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String edit = document.getString("edit_auth");
+                            if (edit.equals("불가능")) {
+                                Toast.makeText(FolderContentActivity.this, "폴더 수정이 불가능합니다", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (edit.equals("전체 유저")) {
+                                Toast.makeText(FolderContentActivity.this, "모든 유저가 수정할 수 있습니다", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (edit.equals("초대한 유저")) {
+                                Intent intent = new Intent(FolderContentActivity.this, FolderContentEditorActivity.class);
+                                intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                                intent.putExtra("folder_id", docId);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+            }
         }
         return super.onOptionsItemSelected(item);
     }
