@@ -33,6 +33,7 @@ import com.naver.maps.map.util.FusedLocationSource;
 import kr.ac.hansung.demap.CreateFolderActivity;
 import kr.ac.hansung.demap.FolderListActivity;
 import kr.ac.hansung.demap.MyfolderViewActivity;
+import kr.ac.hansung.demap.NoticeActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.SearchNaverActivity;
 import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
@@ -235,6 +236,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void notice() {
+        Intent intent = new Intent(this, NoticeActivity.class);
+        startActivity(intent);
+    }
+
     public void logout() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -257,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.search_folder_menu: viewFolderList(); break; // 폴더 검색
             case R.id.my_folder_menu: viewMyFolderList(); break; // 마이 폴더
             case R.id.hotplace_menu: viewSearchHotPlace(); break; // 핫플레이스
-            case R.id.history_menu: Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show(); break;
+            case R.id.history_menu: notice(); break;
             case R.id.setting_menu: Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show(); break;
             case R.id.service_menu: Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show(); break;
             case R.id.logout_menu: logout(); break;
