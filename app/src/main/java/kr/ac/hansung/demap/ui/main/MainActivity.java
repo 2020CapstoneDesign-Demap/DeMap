@@ -36,6 +36,7 @@ import kr.ac.hansung.demap.MyfolderViewActivity;
 import kr.ac.hansung.demap.NoticeActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.SearchNaverActivity;
+import kr.ac.hansung.demap.SettingsActivity;
 import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
 import kr.ac.hansung.demap.ui.login.LoginActivity;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+    private Intent settingsIntent;
 
     private String nickname = "";
     private TextView tv_nickname;
@@ -78,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
+        settingsIntent = new Intent(this, SettingsActivity.class);
+
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
         // 로그인한 유저 닉네임 받아오기
@@ -90,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     tv_nickname.setText(nickname);
                     tv_email = findViewById(R.id.tv_main_email);
                     tv_email.setText(auth.getCurrentUser().getEmail());
+
+                    settingsIntent.putExtra("nickname", nickname);
                 }
             });
         }
@@ -243,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void settings() {
+        startActivity(settingsIntent);
+    }
+
     public void logout() {
         auth.signOut();
         Intent intent = new Intent(this, LoginActivity.class);
@@ -267,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.my_folder_menu: viewMyFolderList(); break; // 마이 폴더
             case R.id.hotplace_menu: viewSearchHotPlace(); break; // 핫플레이스
             case R.id.history_menu: notice(); break;
-            case R.id.setting_menu: Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show(); break;
+            case R.id.setting_menu: settings(); break;
             case R.id.service_menu: Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show(); break;
             case R.id.logout_menu: logout(); break;
 
