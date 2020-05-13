@@ -69,8 +69,10 @@
                         <TextView
                             android:id="@+id/tv_naver_search_content_category"
                             android:text="카테고리"
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:textColor="@color/colorLineGray6"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>

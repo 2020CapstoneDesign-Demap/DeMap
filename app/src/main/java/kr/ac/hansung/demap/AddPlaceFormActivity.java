@@ -31,6 +31,7 @@ import java.util.Map;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
+import kr.ac.hansung.demap.model.FolderSubsDTO;
 import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
@@ -98,6 +99,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     FolderPlacesDTO folderPlacesDTO;
     // 장소 수정과 저장 플래그변수
     String editFlag;
+    int position;
     // 장소 수정시 인텐트에서 받아올 태그
     ArrayList<String> tagForEdit = new ArrayList<>();
 
@@ -128,6 +130,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
         if(intent.getStringExtra("flag") != null) {
             editFlag = intent.getStringExtra("flag");
+            position = intent.getIntExtra("position", -1);
         } else {
             editFlag = "nonedit";
         }
@@ -209,21 +212,25 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     public void editPlace() {
 
-        //place 데이터
-        placeDTO.setTimestamp(System.currentTimeMillis());
-        for(String tag : listTags) {
-            tags.put(tag, true);
-        }
-        placeDTO.setTags(tags);
-
         firestore.collection("places").document(placeId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        placeDTO = document.toObject(PlaceDTO.class);
+
+                        //place 데이터
+                        placeDTO.setTimestamp(System.currentTimeMillis());
+                        for(String tag : listTags) {
+                            tags.put(tag, true);
+                        }
+                        placeDTO.setTags(tags);
+
                         System.out.println("장소 id로 가져오기 성공 ");
                         firestore.collection("places").document(placeId).update("tags", tags);
+
+                        ((FolderContentActivity)FolderContentActivity.mContext).setAdapterItem(position, placeDTO);
                     }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
@@ -403,6 +410,41 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                             }
                         }
                     });
+                }
+                else { // 내 폴더일 경우 구독자들에게 장소 추가 알림
+
+                    firestore.collection("folderSubscribers").document(folder_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                FolderSubsDTO subsDTO = document.toObject(FolderSubsDTO.class);
+
+                                for (String key: subsDTO.getSubscribers().keySet()) {
+
+                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
+
+                                    firestore.collection("notices").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+                                                noticeDTO.getNotices().put(notice, true);
+                                                firestore.collection("notices").document(key).set(noticeDTO);
+                                            }
+                                            else {
+                                                NoticeDTO noticeDTO = new NoticeDTO();
+                                                noticeDTO.getNotices().put(notice, true);
+                                                firestore.collection("notices").document(key).set(noticeDTO);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
                 }
 
             }

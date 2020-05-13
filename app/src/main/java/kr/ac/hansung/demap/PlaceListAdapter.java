@@ -124,6 +124,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                                     intent.putExtra("edit_id",placeId);
                                     //intent.putStringArrayListExtra("edit_tags", taglist);
                                     intent.putExtra("flag", "edit");
+                                    intent.putExtra("position", position);
                                     v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
                                 case R.id.myplace_menu_delete:
@@ -208,6 +209,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     void setItem(ArrayList<PlaceDTO> placeDTOs, ArrayList<String> placeIds) {
         this.placeDTOS = placeDTOs;
         this.placeIds = placeIds;
+        notifyDataSetChanged();
+    }
+
+    void setTag(int position, PlaceDTO placeDTO) {
+        placeDTOS.set(position, placeDTO);
         notifyDataSetChanged();
     }
 
