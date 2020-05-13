@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +30,7 @@ import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
-public class AddPlaceToFolderActivity extends AppCompatActivity implements FolderList_onClick_interface {
+public class AddPlaceToFolderActivity extends AppCompatActivity implements FolderList_onClick_interface, View.OnClickListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -59,6 +60,8 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
     private String nickName;
 
+    private FloatingActionButton fab_main;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,9 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        // 플로팅 버튼 생성
+        fab_main = (FloatingActionButton) findViewById(R.id.fab);
+        fab_main.setOnClickListener(this);
 
         // 장소 추가 버튼 생성
         addButton = findViewById(R.id.btn_checkfolder_add);
@@ -276,5 +281,15 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
         folderId = FolderId;
         folderOwner = FolderOwner;
         folderName = FolderName;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab:
+                Intent intent = new Intent(AddPlaceToFolderActivity.this, CreateFolderActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

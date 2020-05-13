@@ -77,7 +77,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     private ArrayList<String> listTags = new ArrayList<String>();
 
     private HashMap<String, Boolean> tags  = new HashMap();
-    private HashMap<String, Boolean> tag  = new HashMap();
+    private HashMap<String, Boolean> edittagmap  = new HashMap();
 
     // 저장할 폴더 ID
     String folder_id;
@@ -85,6 +85,9 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     String folder_owner;
 
     String place_name;
+
+    // 수정할 장소 ID
+    String placeId;
 
     ArrayList<CheckedFolderId> folder_ids;
 
@@ -96,8 +99,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     // 장소 수정과 저장 플래그변수
     String editFlag;
     // 장소 수정시 인텐트에서 받아올 태그
-    ArrayList<String> tagFromIntent = new ArrayList<>();
-    Long timeStamp = null;
+    ArrayList<String> tagForEdit = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,14 +124,13 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         placeDTO.setX(x);
         int y = intent.getIntExtra("result_mapy",0);
         placeDTO.setY(y);
+        placeId = intent.getStringExtra("edit_id");
 
-        tagFromIntent = intent.getStringArrayListExtra("edit_tags");
         if(intent.getStringExtra("flag") != null) {
             editFlag = intent.getStringExtra("flag");
         } else {
             editFlag = "nonedit";
         }
-        timeStamp = intent.getLongExtra("edit_id", 0);
 
 
 
@@ -167,6 +168,10 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         nostairs = (CheckBox)findViewById(R.id.nostairs_check);
         manyoulet = (CheckBox)findViewById(R.id.manyoulet_check);
         lessoulet = (CheckBox)findViewById(R.id.lessoulet_check);
+
+        if(editFlag.equals("edit") && placeId!=null) {
+            getEditTags();
+        }
 
         nokid.setOnCheckedChangeListener(this);
         welkid.setOnCheckedChangeListener(this);
@@ -211,23 +216,152 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         }
         placeDTO.setTags(tags);
 
-        firestore.collection("places").whereEqualTo("timestamp", timeStamp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("places").document(placeId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                       // Log.d(TAG, document.getId() + " => " + document.getData());
-                        firestore.collection("places").document(document.getId()).update("tags", tags);
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        System.out.println("장소 id로 가져오기 성공 ");
+                        firestore.collection("places").document(placeId).update("tags", tags);
                     }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
                 }
             }
         });
 
 
+    }
+
+    // 클릭한 장소 기존 태그를 DB에서 가져오는 함수
+    public void getEditTags() {
+
+        // 여기에서 NullPointerException 발생 : 라인 233, 240
+        firestore.collection("places").document(placeId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                edittagmap.clear();
+                PlaceDTO pDto = documentSnapshot.toObject(PlaceDTO.class);
+                System.out.println(pDto.getName());
+                tagForEdit.addAll(pDto.getTags().keySet());
+//                edittagmap.putAll(pDto.getTags());
+//                if(edittagmap.get("노키즈존") == true) {
+//                    tagForEdit.add("노키즈존");
+//                }
+//                if(edittagmap.get("웰컴키즈존") == true) {
+//                    tagForEdit.add("웰컴키즈존");
+//                }
+//                if(edittagmap.get("남녀화장실 분리") == true) {
+//                    tagForEdit.add("남녀화장실 분리");
+//                }
+//                if(edittagmap.get("공용 화장실") == true) {
+//                    tagForEdit.add("공용 화장실");
+//                }
+//                if(edittagmap.get("계단 있음") == true) {
+//                    tagForEdit.add("계단 있음");
+//                }
+//                if(edittagmap.get("계단 없음") == true) {
+//                    tagForEdit.add("계단 없음");
+//                }
+//                if(edittagmap.get("콘센트 많음") == true) {
+//                    tagForEdit.add("콘센트 많음");
+//                }
+//                if(edittagmap.get("콘센트 적음") == true) {
+//                    tagForEdit.add("콘센트 적음");
+//                }
+//                if(edittagmap.get("공부하기 좋은") == true) {
+//                    tagForEdit.add("공부하기 좋은");
+//                }
+//                if(edittagmap.get("데이트하기 좋은") == true) {
+//                    tagForEdit.add("데이트하기 좋은");
+//                }
+//                if(edittagmap.get("가족모임하기 좋은") == true) {
+//                    tagForEdit.add("가족모임하기 좋은");
+//                }
+//                if(edittagmap.get("회식하기 좋은") == true) {
+//                    tagForEdit.add("회식하기 좋은");
+//                }
+//                if(edittagmap.get("사진 찍기 좋은") == true) {
+//                    tagForEdit.add("사진 찍기 좋은");
+//                }
+//                if(edittagmap.get("편안히 쉬기 좋은") == true) {
+//                    tagForEdit.add("편안히 쉬기 좋은");
+//                }
+
+                setCheckforEdit();
+            }
+        });
 
     }
 
+    // 폴더 수정 시 기존 태그를 체크 표시 해주기 위한 함수
+    public void setCheckforEdit() {
+        for(String tag : tagForEdit) {
+            switch (tag) {
+               case "공부하기 좋은" :
+                   study.setChecked(true);
+                   break;
 
+                case "데이트하기 좋은" :
+                    dating.setChecked(true);
+                    break;
+
+                case "가족모임하기 좋은" :
+                    family.setChecked(true);
+                    break;
+
+                case "회식하기 좋은" :
+                    office.setChecked(true);
+                    break;
+
+                case "사진 찍기 좋은" :
+                    photo.setChecked(true);
+                    break;
+
+                case "편안히 쉬기 좋은" :
+                    rest.setChecked(true);
+                    break;
+
+                case "노키드존" :
+                    nokid.setChecked(true);
+                    break;
+
+                case "웰컴키드존" :
+                    welkid.setChecked(true);
+                    break;
+
+                case "남녀화장실 분리" :
+                    gendertoilet.setChecked(true);
+                    break;
+
+                case "공용 화장실" :
+                    publictoilet.setChecked(true);
+                    break;
+
+                case "계단 있음" :
+                    stairs.setChecked(true);
+                    break;
+
+                case "계단 없음" :
+                    nostairs.setChecked(true);
+                    break;
+
+                case "콘센트 많음" :
+                    manyoulet.setChecked(true);
+                    break;
+
+                case "콘센트 적음" :
+                    lessoulet.setChecked(true);
+                    break;
+
+
+            }
+
+        }
+    }
+
+    // 장소를 저장하는 메서드
     public void addPlace() {
 
         //place 데이터
@@ -324,55 +458,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         listTags.clear();
-        /*
-        if(editFlag == "edit") {
-            listTags.addAll(tagFromIntent);
-            for ( String tag : listTags) {
-                if(tag.equals("공부하기 좋은")) {
-                    study.setChecked(true);
-                }
-                if(tag.equals("데이트하기 좋은")) {
-                    dating.setChecked(true);
-                }
-                if(tag.equals("가족모임하기 좋은")) {
-                    family.setChecked(true);
-                }
-                if(tag.equals("회식하기 좋은")) {
-                    office.setChecked(true);
-                }
-                if(tag.equals("사진 찍기 좋은")) {
-                    photo.setChecked(true);
-                }
-                if(tag.equals("편안히 쉬기 좋은")) {
-                    rest.setChecked(true);
-                }
-                if(tag.equals("노키드존")) {
-                    nokid.setChecked(true);
-                }
-                if(tag.equals("웰컴키드존")) {
-                    welkid.setChecked(true);
-                }
-                if(tag.equals("남녀화장실 분리")) {
-                    gendertoilet.setChecked(true);
-                }
-                if(tag.equals("공용 화장실")) {
-                    publictoilet.setChecked(true);
-                }
-                if(tag.equals("계단 있음")) {
-                    stairs.setChecked(true);
-                }
-                if(tag.equals("계단 없음")) {
-                    nostairs.setChecked(true);
-                }
-                if(tag.equals("콘센트 많음")) {
-                    manyoulet.setChecked(true);
-                }
-                if(tag.equals("콘센트 적음")) {
-                    lessoulet.setChecked(true);
-                }
-            }
-        }
-*/
+
             if (study.isChecked() == true) {
                 listTags.add("공부하기 좋은"); // 체크 활성화 됐으면 서치태그리스트에 추가
             } else {

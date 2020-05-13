@@ -69,6 +69,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                                     Intent intent = new Intent(v.getContext(), AddPlaceFormActivity.class);
 
                                     PlaceDTO placeDTO = placeDTOS.get(position);
+                                    String placeId = placeIds.get(position);
                                     /*
                                     Map<String, Boolean> tags = new HashMap<>();
                                     ArrayList<String> taglist = new ArrayList<>();
@@ -120,9 +121,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
                                      */
                                     intent.putExtra("result_name", placeDTO.getName());
-
+                                    intent.putExtra("edit_id",placeId);
                                     //intent.putStringArrayListExtra("edit_tags", taglist);
-                                    intent.putExtra("edit_id", placeDTO.getTimestamp());
                                     intent.putExtra("flag", "edit");
                                     v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
@@ -229,7 +229,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         public TextView textview_place_address;
         public TextView textview_place_tag1;
         public TextView textview_place_tag2;
-        public TextView textview_place_tag3;
 
         public TextView textView_Options_place;
 
@@ -243,7 +242,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             textview_place_address = itemView.findViewById(R.id.tv_place_address);
             textview_place_tag1 = itemView.findViewById(R.id.tv_place_tag1);
             textview_place_tag2 = itemView.findViewById(R.id.tv_place_tag2);
-            textview_place_tag3 = itemView.findViewById(R.id.tv_place_tag3);
 
             textView_Options_place = itemView.findViewById(R.id.textView_Options_place);
         }
@@ -256,7 +254,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             for (String key : placeDTO.getTags().keySet()) {
                 if (i == 0) textview_place_tag1.setText("#" + key);
                 else if (i == 1) textview_place_tag2.setText("#" + key);
-                else if (i == 2) textview_place_tag3.setText("#" + key);
                 i++;
             }
 

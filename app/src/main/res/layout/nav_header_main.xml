@@ -17,7 +17,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:src="@drawable/ic_account_circle_gray_24dp" />
+        android:src="@drawable/demap_propic" />
 
     <LinearLayout
         android:gravity="center"

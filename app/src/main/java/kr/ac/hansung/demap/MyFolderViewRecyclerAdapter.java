@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -62,7 +63,14 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.myfolder_menu_edit_folder:
-                                    //handle menu1 click
+                                    Intent intent = new Intent(v.getContext(), CreateFolderActivity.class);
+                                    intent.putExtra("folder_name", folderObjs.get(position).getName());
+                                    intent.putExtra("folder_public", folderObjs.get(position).getIspublic());
+                                    intent.putExtra("folder_tag", folderObjs.get(position).getTag());
+                                    intent.putExtra("folder_img", folderObjs.get(position).getImageUrl());
+                                    intent.putExtra("folder_id", folderObjs.get(position).getId());
+                                    intent.putExtra("folder_edit_flag", "forder_edit");
+                                    v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
                                 case R.id.myfolder_menu_delete_folder:
                                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
