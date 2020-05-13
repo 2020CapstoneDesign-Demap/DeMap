@@ -26,6 +26,7 @@ import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
+import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -33,7 +34,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-    private Context context;
+    public static Context context;
 
     //    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private ArrayList<FolderObj> folderObjs = new ArrayList<>();
@@ -70,6 +71,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                                     intent.putExtra("folder_img", folderObjs.get(position).getImageUrl());
                                     intent.putExtra("folder_id", folderObjs.get(position).getId());
                                     intent.putExtra("folder_edit_flag", "folder_edit");
+                                    intent.putExtra("edit_position",position);
                                     v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
                                 case R.id.myfolder_menu_delete_folder:
@@ -278,6 +280,17 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
     void removeItem(int position) {
         folderObjs.remove(position);
         setItem(folderObjs);
+    }
+
+    void updateName(int position, FolderDTO folderDTO, String folderId) {
+        FolderObj fObj = new FolderObj();
+        fObj.setId(folderId);
+        fObj.setName(folderDTO.getName());
+        fObj.setPlaceCount(folderDTO.getPlaceCount());
+        fObj.setSubscribeCount(folderDTO.getSubscribeCount());
+        fObj.setImageUrl(folderDTO.getImageUrl());
+        folderObjs.set(position, fObj);
+        notifyDataSetChanged();
     }
 
     void setItem(ArrayList<FolderObj> folderObj) {

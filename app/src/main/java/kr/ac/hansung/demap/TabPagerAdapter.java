@@ -9,8 +9,11 @@ import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.PlaceDTO;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
+
+    MyfolderFragment myfolderFragment = new MyfolderFragment();
 
     // tab titles
     private String[] tabTitles = new String[]{"내 폴더", "구독 폴더"};
@@ -50,6 +53,20 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         this.authId = authId;
     }
 
+    void setUpdate(int position, FolderDTO folderDTO, String folderId) {
+        FolderObj fObj = new FolderObj();
+        fObj.setId(folderId);
+        fObj.setName(folderDTO.getName());
+        fObj.setPlaceCount(folderDTO.getPlaceCount());
+        fObj.setSubscribeCount(folderDTO.getSubscribeCount());
+        fObj.setImageUrl(folderDTO.getImageUrl());
+        myfolderObjs.set(position, fObj);
+        setmyfolderItem(myfolderObjs);
+        myfolderFragment.updateAdapterItem(position,folderDTO,folderId);
+
+    }
+
+
     // overriding getPageTitle()
     @Override
     public CharSequence getPageTitle(int position) {
@@ -62,7 +79,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                MyfolderFragment myfolderFragment = new MyfolderFragment();
+                //MyfolderFragment myfolderFragment = new MyfolderFragment();
                 myfolderFragment.setFolderDTOs(myfolderObjs);
                 myfolderFragment.setAuthId(authId);
                 return myfolderFragment;

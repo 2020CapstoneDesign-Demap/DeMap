@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.PlaceDTO;
 
 public class MyfolderFragment extends Fragment {
 
@@ -40,6 +42,12 @@ public class MyfolderFragment extends Fragment {
     void setAuthId(String authId) {
         this.authId = authId;
     }
+
+    public void updateAdapterItem(int position, FolderDTO folderDTO, String folderId) {
+        adapter.updateName(position, folderDTO, folderId);
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Nullable
     @Override

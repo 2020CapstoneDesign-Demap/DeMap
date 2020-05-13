@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -20,10 +21,12 @@ import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
+import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
 public class MyfolderViewActivity extends AppCompatActivity {
+    public static Context mContext;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -55,6 +58,8 @@ public class MyfolderViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_myfolder_view);
+        mContext = this;
+
 
         setData();
 
@@ -86,6 +91,12 @@ public class MyfolderViewActivity extends AppCompatActivity {
         });
 
     }
+
+    public void setAdapterItem(int position, FolderDTO folderDTO, String folderId) {
+        pagerAdapter.setUpdate(position, folderDTO, folderId);
+        pagerAdapter.notifyDataSetChanged();
+    }
+
 
     public void setData() {
 

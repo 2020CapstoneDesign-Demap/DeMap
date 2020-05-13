@@ -18,6 +18,8 @@ import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderTag
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForPublic
+//import sun.jvm.hotspot.utilities.IntArray
+
 
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private lateinit var recyclerView: RecyclerView
@@ -33,6 +35,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
     //어댑터에서 넘겨받은 아이템 리스트 위치 저장하는 변수
     var position = arrayOfNulls<Int>(4) //0:공개 1:수정권한 2:태그 3:폴더아이콘
+
 
     //리스트에 들어갈 아이템
     val item_pub = arrayOf<String>("비공개", "공개")
@@ -54,6 +57,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private var old_pub : String? = ""
     private var old_editor : String?= ""
     private var old_tag : String?= ""
+    private var edit_position : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +71,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         val intent : Intent = intent
         val edit_name = intent.getStringExtra("folder_name")
         //val edit_public = intent.getStringExtra("folder_public")
-        //val edit_tag = intent.getStringExtra("folder_tag")
+        edit_position = intent.getIntExtra("edit_position",-1)
         //val edit_img = intent.getStringExtra("folder_img")
         edit_id = intent.getStringExtra("folder_id")
         if(intent.getStringExtra("folder_edit_flag") != null) {
@@ -169,6 +173,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     }
 
     fun editFolder() {
+        var folderDTO = FolderDTO()
+        folderDTO.name = folder_name_edittext.text.toString()
         firestore!!.collection("folders").document(edit_id!!).get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val document = task.result
@@ -176,6 +182,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
                     println("폴더 id로 가져오기 성공 ")
                     // 폴더명 수정
                     firestore!!.collection("folders").document(edit_id!!).update("name", folder_name_edittext.text.toString())
+
                     // 폴더 공개여부 수정
                     firestore!!.collection("folderPublic").document(edit_id!!).update("public", item_pub[position[0]!!] as Object)
                     // 폴더 수정권한 수정
@@ -192,6 +199,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             }
         }
 
+        (MyfolderViewActivity.mContext as MyfolderViewActivity).setAdapterItem(edit_position!!, folderDTO, edit_id)
+        println("갱신할 폴더명 : "+folderDTO.name)
         Toast.makeText(this, "폴더가 수정 되었습니다", Toast.LENGTH_SHORT).show()
         finish()
 
