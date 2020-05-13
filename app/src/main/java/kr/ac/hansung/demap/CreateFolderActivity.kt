@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
+import kr.ac.hansung.demap.model.PlaceDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
@@ -38,7 +40,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     val item_desc = arrayOf<String>("나만 볼 수 있음", "모든 사용자가 검색/조회 가능")
     val item_edit_auth = arrayOf<String>("불가능", "초대한 유저", "전체 유저")
     val item_edit_desc = arrayOf<String>("나만 수정할 수 있음", "초대된 유저만 수정 가능", "모든 사용자가 수정 가능")
-    val item_folder_tag = arrayOf<String>("맛집", "카페", "스포츠", "관광지", "뷰티")
+    val item_folder_tag = arrayOf<String>("맛집", "카페", "스포츠", "관광지", "공연/전시")
     val item_folder_icon = arrayOf<Int>(
         R.drawable.ic_folder_blue_24dp,
         R.drawable.ic_folder_violet_24dp,
@@ -46,6 +48,9 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         R.drawable.ic_folder_peach_24dp,
         R.drawable.ic_folder_green_24dp
     )
+
+    var edit_id = ""
+    var flag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +60,22 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+        // 폴더 수정 시 인텐트
+        val intent : Intent = intent
+        val edit_name = intent.getStringExtra("folder_name")
+        //val edit_public = intent.getStringExtra("folder_public")
+        //val edit_tag = intent.getStringExtra("folder_tag")
+        //val edit_img = intent.getStringExtra("folder_img")
+        edit_id = intent.getStringExtra("folder_id")
+        flag = intent.getStringExtra("folder_edit_flag")
+
         // ActionBar에 타이틀 변경
-        supportActionBar?.setTitle("새 폴더 추가");
+        if(flag == "folder_edit") {
+            supportActionBar?.setTitle("폴더 수정");
+        }
+        else {
+            supportActionBar?.setTitle("새 폴더 추가");
+        }
         // ActionBar의 배경색 변경
         supportActionBar?.setBackgroundDrawable(getDrawable(R.color.colorWhite))
         //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
@@ -67,6 +86,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_create_folder)
+
 
         //공개 범위
         viewManager = LinearLayoutManager(this)
@@ -121,6 +141,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         }
 
         folder_name_edittext = findViewById(R.id.folder_name_edittext)
+        folder_name_edittext.setText(edit_name)
         folderCreateButton = findViewById(R.id.folder_create_btn)
         folderCreateButton.setOnClickListener {
             //create folder
@@ -211,6 +232,20 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    // 클릭한 장소 기존 태그를 DB에서 가져오는 함수
+    fun getEditTags() { // 여기에서 NullPointerException 발생 : 라인 233, 240
+        firestore!!.collection("folders").document(edit_id).get()
+            .addOnSuccessListener { documentSnapshot ->
+                //edittagmap.clear()
+                val pDto = documentSnapshot.toObject(
+                    FolderDTO::class.java
+                )
+                println(pDto!!.name)
+                //tagForEdit.addAll(pDto.tags.keys)
+                //setCheckforEdit()
+            }
     }
 
 }

@@ -64,7 +64,7 @@ public class FolderContentActivity extends AppCompatActivity {
     private ArrayList<PlaceDTO> placeDTOS = new ArrayList<PlaceDTO>();
     private ArrayList<String> placeId = new ArrayList<String>();
 
-    private PlaceListAdapter adapter;
+    public static PlaceListAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
