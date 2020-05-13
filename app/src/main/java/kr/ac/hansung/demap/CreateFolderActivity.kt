@@ -49,8 +49,11 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         R.drawable.ic_folder_green_24dp
     )
 
-    var edit_id = ""
-    var flag = ""
+    // 수정할 폴더 기존 데이터
+    private var edit_id : String?= ""
+    private var editflag = "create"
+    private var old_pub : String? = ""
+    private var old_editor : String?= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +70,16 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         //val edit_tag = intent.getStringExtra("folder_tag")
         //val edit_img = intent.getStringExtra("folder_img")
         edit_id = intent.getStringExtra("folder_id")
-        flag = intent.getStringExtra("folder_edit_flag")
+        if(intent.getStringExtra("folder_edit_flag") != null) {
+            editflag = intent.getStringExtra("folder_edit_flag")
+        }
 
         // ActionBar에 타이틀 변경
-        if(flag == "folder_edit") {
+        if(editflag.equals("folder_edit")) {
             supportActionBar?.setTitle("폴더 수정");
+            getOldData()
         }
-        else {
+        else if(editflag.equals("create")){
             supportActionBar?.setTitle("새 폴더 추가");
         }
         // ActionBar의 배경색 변경
@@ -94,6 +100,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             0,
             item_pub,
             item_desc,
+            old_pub,
             this
         )
         recyclerView = findViewById<RecyclerView>(R.id.listView_public).apply {
@@ -108,6 +115,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             1,
             item_edit_auth,
             item_edit_desc,
+            old_editor,
             this
         )
         recyclerView = findViewById<RecyclerView>(R.id.listView_edit_auth).apply {
@@ -140,8 +148,13 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             adapter = viewAdapter
         }
 
-        folder_name_edittext = findViewById(R.id.folder_name_edittext)
-        folder_name_edittext.setText(edit_name)
+        if(editflag.equals("folder_edit")) {
+            folder_name_edittext = findViewById(R.id.folder_name_edittext)
+            folder_name_edittext.setText(edit_name)
+        }
+        else if(editflag.equals("create")){
+            folder_name_edittext = findViewById(R.id.folder_name_edittext)
+        }
         folderCreateButton = findViewById(R.id.folder_create_btn)
         folderCreateButton.setOnClickListener {
             //create folder
@@ -235,19 +248,56 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     }
 
     // 클릭한 장소 기존 태그를 DB에서 가져오는 함수
-    fun getEditTags() { // 여기에서 NullPointerException 발생 : 라인 233, 240
-        firestore!!.collection("folders").document(edit_id).get()
-            .addOnSuccessListener { documentSnapshot ->
-                //edittagmap.clear()
-                val pDto = documentSnapshot.toObject(
-                    FolderDTO::class.java
-                )
-                println(pDto!!.name)
-                //tagForEdit.addAll(pDto.tags.keys)
-                //setCheckforEdit()
-            }
+    fun getOldData() { // 여기에서 NullPointerException 발생 : 라인 233, 240
+        if(edit_id!=null) {
+            firestore!!.collection("folders").document(edit_id!!).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    //edittagmap.clear()
+                    val editfDto = documentSnapshot.toObject(
+                        FolderDTO::class.java
+                    )
+                    //old_pub = editfDto.
+                    println("수정할 폴더 : " + editfDto!!.name)
+                    //tagForEdit.addAll(pDto.tags.keys)
+                    //setCheckforEdit()
+                }
+            firestore!!.collection("folderPublic").document(edit_id!!).get()
+                .addOnSuccessListener { documentSnapshot ->
+
+                    if (documentSnapshot != null) {
+                        //edittagmap.clear()
+                        val editf_pub = documentSnapshot.get("public")
+                        old_pub = editf_pub.toString()
+                        println("폴더 ID : " + edit_id+"공개여부 : " + old_pub)
+                        //tagForEdit.addAll(pDto.tags.keys)
+                        //setCheckforEdit()
+
+                    } else {
+
+                    }
+                }
+
+                }
+            /*
+            firestore!!.collection("folderEditors").document(edit_id!!).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    //edittagmap.clear()
+                    val old_editor_map : java.util.HashMap<String, String>? = documentSnapshot.toObject(
+                        HashMap<String,String>::class.java
+                    )
+                    if (old_editor_map != null) {
+                        old_editor = old_editor_map.get("edit_auth").toString()
+                    }
+
+                    println("수정권한 : " + old_editor)
+                    //tagForEdit.addAll(pDto.tags.keys)
+                    //setCheckforEdit()
+                }
+
+             */
+        }
     }
 
-}
+
 
 

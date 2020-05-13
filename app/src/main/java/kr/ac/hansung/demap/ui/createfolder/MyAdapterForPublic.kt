@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.folder_public_list.view.*
 import kr.ac.hansung.demap.R
 
-class MyAdapterForPublic(private var flag: Int, private var item_list: Array<String>, private var item_desc: Array<String>, private var listOnclickInterface: List_onClick_interface) :
+class MyAdapterForPublic(private var flag: Int, private var item_list: Array<String>, private var item_desc: Array<String>, private var old_item : String?, private var listOnclickInterface: List_onClick_interface) :
     RecyclerView.Adapter<MyAdapterForPublic.MyViewHolder>() {
 
     private var mSelectedItem = -1 //선택된 아이템 위치(position)

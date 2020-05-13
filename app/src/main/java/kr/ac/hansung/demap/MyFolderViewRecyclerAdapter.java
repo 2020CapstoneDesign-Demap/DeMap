@@ -69,7 +69,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                                     intent.putExtra("folder_tag", folderObjs.get(position).getTag());
                                     intent.putExtra("folder_img", folderObjs.get(position).getImageUrl());
                                     intent.putExtra("folder_id", folderObjs.get(position).getId());
-                                    intent.putExtra("folder_edit_flag", "forder_edit");
+                                    intent.putExtra("folder_edit_flag", "folder_edit");
                                     v.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     return true;
                                 case R.id.myfolder_menu_delete_folder:
