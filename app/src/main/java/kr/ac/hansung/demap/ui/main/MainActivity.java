@@ -81,16 +81,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
         // 로그인한 유저 닉네임 받아오기
-        firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                nickname = documentSnapshot.get("nickName").toString();
-                tv_nickname = findViewById(R.id.tv_main_nickname);
-                tv_nickname.setText(nickname);
-                tv_email = findViewById(R.id.tv_main_email);
-                tv_email.setText(auth.getCurrentUser().getEmail());
-            }
-        });
+        if (auth.getCurrentUser() != null) {
+            firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    nickname = documentSnapshot.get("nickName").toString();
+                    tv_nickname = findViewById(R.id.tv_main_nickname);
+                    tv_nickname.setText(nickname);
+                    tv_email = findViewById(R.id.tv_main_email);
+                    tv_email.setText(auth.getCurrentUser().getEmail());
+                }
+            });
+        }
 
         navigationView = findViewById(R.id.main_nav);
         navigationView.setNavigationItemSelectedListener(this);
@@ -242,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void logout() {
+        auth.signOut();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

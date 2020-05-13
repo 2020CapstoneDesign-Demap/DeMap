@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kr.ac.hansung.demap.R
 import kr.ac.hansung.demap.databinding.ActivityLoginBinding
@@ -20,6 +21,8 @@ import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
+
+    var auth: FirebaseAuth? = null
 
     private val presenter: LoginContract.Presenter by inject {
         parametersOf(this)
@@ -34,6 +37,13 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
         window.statusBarColor = resources.getColor(R.color.colorTheme, theme) // api 23 이상
 
+        auth = FirebaseAuth.getInstance()
+
+        if (auth?.currentUser != null) {
+            var intent = Intent(this, MainActivity::class.java);
+            startActivity(intent)
+            finish()
+        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.activity = this
