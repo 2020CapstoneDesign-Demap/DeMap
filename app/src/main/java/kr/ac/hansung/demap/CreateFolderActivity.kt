@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
-import kr.ac.hansung.demap.model.PlaceDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
@@ -54,6 +53,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private var editflag = "create"
     private var old_pub : String? = ""
     private var old_editor : String?= ""
+    private var old_tag : String?= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,12 +157,47 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         }
         folderCreateButton = findViewById(R.id.folder_create_btn)
         folderCreateButton.setOnClickListener {
-            //create folder
-            createFoler()
+
+            if(editflag.equals("create")) {
+                //create folder
+                createFolder()
+            }
+            else if(editflag.equals("folder_edit")) {
+                editFolder()
+            }
         }
     }
 
-    fun createFoler() {
+    fun editFolder() {
+        firestore!!.collection("folders").document(edit_id!!).get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document!!.exists()) {
+                    println("폴더 id로 가져오기 성공 ")
+                    // 폴더명 수정
+                    firestore!!.collection("folders").document(edit_id!!).update("name", folder_name_edittext.text.toString())
+                    // 폴더 공개여부 수정
+                    firestore!!.collection("folderPublic").document(edit_id!!).update("public", item_pub[position[0]!!] as Object)
+                    // 폴더 수정권한 수정
+                    firestore!!.collection("folderEditors").document(edit_id!!).update("edit_auth", item_edit_auth[position[1]!!] as Object)
+                    // 폴더 태그 수정
+                    firestore!!.collection("folderTags").document(edit_id!!).update("folderTag", item_folder_tag[position[2]!!] as Object)
+
+                    //폴더 아이콘 저장
+                    var folderIcon: MutableMap<String, Object> = HashMap()
+                    folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
+                }
+            } else {
+                println("Error getting documents: " + task.exception)
+            }
+        }
+
+        Toast.makeText(this, "폴더가 수정 되었습니다", Toast.LENGTH_SHORT).show()
+        finish()
+
+    }
+
+    fun createFolder() {
 
         //folder 데이터
         var folderDTO = FolderDTO()
@@ -247,8 +282,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         return super.onOptionsItemSelected(item)
     }
 
-    // 클릭한 장소 기존 태그를 DB에서 가져오는 함수
-    fun getOldData() { // 여기에서 NullPointerException 발생 : 라인 233, 240
+    // 클릭한 폴더 기존 정보를 DB에서 가져오는 함수
+    fun getOldData() {
         if(edit_id!=null) {
             firestore!!.collection("folders").document(edit_id!!).get()
                 .addOnSuccessListener { documentSnapshot ->
@@ -278,25 +313,40 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
                 }
 
                 }
-            /*
-            firestore!!.collection("folderEditors").document(edit_id!!).get()
-                .addOnSuccessListener { documentSnapshot ->
-                    //edittagmap.clear()
-                    val old_editor_map : java.util.HashMap<String, String>? = documentSnapshot.toObject(
-                        HashMap<String,String>::class.java
-                    )
-                    if (old_editor_map != null) {
-                        old_editor = old_editor_map.get("edit_auth").toString()
-                    }
+        firestore!!.collection("folderEditors").document(edit_id!!).get()
+            .addOnSuccessListener { documentSnapshot ->
 
-                    println("수정권한 : " + old_editor)
+                if (documentSnapshot != null) {
+                    //edittagmap.clear()
+                    val editf_edit = documentSnapshot.get("edit_auth")
+                    old_editor = editf_edit.toString()
+                    println("폴더 ID : " + edit_id+"수정권한 : " + old_editor)
                     //tagForEdit.addAll(pDto.tags.keys)
                     //setCheckforEdit()
-                }
 
-             */
-        }
+                } else {
+
+                }
+            }
+        firestore!!.collection("folderTags").document(edit_id!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+
+                if (documentSnapshot != null) {
+                    //edittagmap.clear()
+                    val editf_tag = documentSnapshot.get("folderTag")
+                    old_tag = editf_tag.toString()
+                    println("폴더 ID : " + edit_id+"수정권한 : " + old_tag)
+                    //tagForEdit.addAll(pDto.tags.keys)
+                    //setCheckforEdit()
+
+                } else {
+
+                }
+            }
+
     }
+}
+
 
 
 
