@@ -98,6 +98,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     FolderPlacesDTO folderPlacesDTO;
     // 장소 수정과 저장 플래그변수
     String editFlag;
+    int position;
     // 장소 수정시 인텐트에서 받아올 태그
     ArrayList<String> tagForEdit = new ArrayList<>();
 
@@ -128,6 +129,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
         if(intent.getStringExtra("flag") != null) {
             editFlag = intent.getStringExtra("flag");
+            position = intent.getIntExtra("position", -1);
         } else {
             editFlag = "nonedit";
         }
@@ -209,21 +211,25 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     public void editPlace() {
 
-        //place 데이터
-        placeDTO.setTimestamp(System.currentTimeMillis());
-        for(String tag : listTags) {
-            tags.put(tag, true);
-        }
-        placeDTO.setTags(tags);
-
         firestore.collection("places").document(placeId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        placeDTO = document.toObject(PlaceDTO.class);
+
+                        //place 데이터
+                        placeDTO.setTimestamp(System.currentTimeMillis());
+                        for(String tag : listTags) {
+                            tags.put(tag, true);
+                        }
+                        placeDTO.setTags(tags);
+
                         System.out.println("장소 id로 가져오기 성공 ");
                         firestore.collection("places").document(placeId).update("tags", tags);
+
+                        ((FolderContentActivity)FolderContentActivity.mContext).setAdapterItem(position, placeDTO);
                     }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());

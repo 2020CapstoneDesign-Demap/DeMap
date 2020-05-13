@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +42,8 @@ import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
 
 public class FolderContentActivity extends AppCompatActivity {
+
+    public static Context mContext;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
@@ -84,6 +88,8 @@ public class FolderContentActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         setContentView(R.layout.activity_folder_content);
+
+        mContext = this;
 
         isMyFolder = intent.getBooleanExtra("isMyFolder", false);
 
@@ -134,6 +140,11 @@ public class FolderContentActivity extends AppCompatActivity {
 
         setPlaceData();
 
+    }
+
+    public void setAdapterItem(int position, PlaceDTO placeDTO) {
+        adapter.setTag(position, placeDTO);
+        adapter.notifyDataSetChanged();
     }
 
     public void setFolderData() {
