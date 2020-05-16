@@ -164,7 +164,23 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+        <!-- 동적으로 생성될 태그 텍스트뷰 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tags_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/place_tag_list"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
+</LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

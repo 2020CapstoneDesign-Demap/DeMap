@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -70,56 +71,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
                                     PlaceDTO placeDTO = placeDTOS.get(position);
                                     String placeId = placeIds.get(position);
-                                    /*
-                                    Map<String, Boolean> tags = new HashMap<>();
-                                    ArrayList<String> taglist = new ArrayList<>();
-                                    tags.putAll(placeDTO.getTags());
-                                    // 하드 코딩 죄송합니다
-                                    // 선택된 태그 장소 저장 폼으로 인텐트에 담아 전송
-                                    if(tags.get("노키즈존") == true) {
-                                        taglist.add("노키즈존");
-                                    }
-                                    if(tags.get("웰컴키즈존") == true) {
-                                        taglist.add("웰컴키즈존");
-                                    }
-                                    if(tags.get("남녀화장실 분리") == true) {
-                                        taglist.add("남녀화장실 분리");
-                                    }
-                                    if(tags.get("공용 화장실") == true) {
-                                        taglist.add("공용 화장실");
-                                    }
-                                    if(tags.get("계단 있음") == true) {
-                                        taglist.add("계단 있음");
-                                    }
-                                    if(tags.get("계단 없음") == true) {
-                                        taglist.add("계단 없음");
-                                    }
-                                    if(tags.get("콘센트 많음") == true) {
-                                        taglist.add("콘센트 많음");
-                                    }
-                                    if(tags.get("콘센트 적음") == true) {
-                                        taglist.add("콘센트 적음");
-                                    }
-                                    if(tags.get("공부하기 좋은") == true) {
-                                        taglist.add("공부하기 좋은");
-                                    }
-                                    if(tags.get("데이트하기 좋은") == true) {
-                                        taglist.add("데이트하기 좋은");
-                                    }
-                                    if(tags.get("가족모임하기 좋은") == true) {
-                                        taglist.add("가족모임하기 좋은");
-                                    }
-                                    if(tags.get("회식하기 좋은") == true) {
-                                        taglist.add("회식하기 좋은");
-                                    }
-                                    if(tags.get("사진 찍기 좋은") == true) {
-                                        taglist.add("사진 찍기 좋은");
-                                    }
-                                    if(tags.get("편안히 쉬기 좋은") == true) {
-                                        taglist.add("편안히 쉬기 좋은");
-                                    }
 
-                                     */
                                     intent.putExtra("result_name", placeDTO.getName());
                                     intent.putExtra("edit_id",placeId);
                                     //intent.putStringArrayListExtra("edit_tags", taglist);
@@ -180,8 +132,12 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             @Override
             public void onClick(View v) {
                 PlaceDTO tmpPlace = placeDTOS.get(position);
+                ArrayList<String> tmpTags = new ArrayList<String>();
+                tmpTags.addAll(tmpPlace.getTags().keySet());
 
                 Intent intent1 = new Intent(v.getContext(), NaverSearchContentActivity.class);
+                Bundle bundle = new Bundle(); // 장소 태그를 담을 번들 객체
+                bundle.putStringArrayList("result_tags",tmpTags);
 
                 intent1.putExtra("result_name", tmpPlace.getName());
                 intent1.putExtra("result_addr", tmpPlace.getAddress());
@@ -189,6 +145,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                 intent1.putExtra("result_phone", tmpPlace.getTelephone());
                 intent1.putExtra("result_mapx", tmpPlace.getX());
                 intent1.putExtra("result_mapy", tmpPlace.getY());
+                intent1.putExtras(bundle);
 
                 context.startActivity(intent1);
             }

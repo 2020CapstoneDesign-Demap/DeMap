@@ -3,6 +3,9 @@ package kr.ac.hansung.demap;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.PointF;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,10 +26,14 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 
+import java.util.ArrayList;
+
 public class NaverSearchContentActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private Intent intent;
-
+    private Bundle bundle;
+    private ArrayList<String> result_tags = new ArrayList<String>();
+    private PlaceTagListAdapter adapter;
 
     private MapView mapView;
     private Marker marker;
@@ -34,6 +42,8 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
     private TextView tv_address;
     private TextView tv_category;
     private TextView tv_phone;
+    //private TextView tv_tags;
+    private RecyclerView rv_tags;
 
     private Button btn_folder_save;
 
@@ -43,6 +53,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         setContentView(R.layout.activity_naver_search_content);
 
         intent = getIntent();
+        bundle = intent.getExtras();
 
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle(intent.getStringExtra("result_name"));
@@ -67,6 +78,24 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         tv_phone = findViewById(R.id.tv_naver_search_content_phone);
         tv_phone.setText(intent.getStringExtra("result_phone"));
+
+        result_tags.addAll(bundle.getStringArrayList("result_tags"));
+        if(result_tags != null) {
+            rv_tags = findViewById(R.id.tags_RecyclerView);
+            rv_tags.setHasFixedSize(false);
+            rv_tags.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new PlaceTagListAdapter();
+            if(result_tags.size()%3 ==1) {
+                result_tags.add(null);
+                result_tags.add(null);
+            } else if(result_tags.size()%3 ==2) {
+                result_tags.add(null);
+            }
+            adapter.setItem(result_tags);
+            adapter.setTagCount(result_tags);
+            rv_tags.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
 
         btn_folder_save = findViewById(R.id.btn_naver_search_content_folder);
         btn_folder_save.setEnabled(true);
