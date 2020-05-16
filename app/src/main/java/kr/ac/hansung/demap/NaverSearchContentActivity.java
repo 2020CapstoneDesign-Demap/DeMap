@@ -79,7 +79,9 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         tv_phone = findViewById(R.id.tv_naver_search_content_phone);
         tv_phone.setText(intent.getStringExtra("result_phone"));
 
-        result_tags.addAll(bundle.getStringArrayList("result_tags"));
+        if(bundle.getStringArrayList("result_tags") != null) {
+            result_tags.addAll(bundle.getStringArrayList("result_tags"));
+        }
         if(result_tags != null) {
             rv_tags = findViewById(R.id.tags_RecyclerView);
             rv_tags.setHasFixedSize(false);
