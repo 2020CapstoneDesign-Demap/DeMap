@@ -30,11 +30,11 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView_search_result_list"
+            android:id="@+id/search_blog_result_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="#EEEEEE"
-            tools:listitem="@layout/naver_search_result_list">
+            tools:listitem="@layout/search_blog_result_list">
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:background="@drawable/demap_icon_splash"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+            </androidx.appcompat.widget.AppCompatImageView>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/textview_folderview_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="~블로그 제목~"
+                android:textSize="18sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="1dp"
+                />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="~블로그 게시글 일부 내용~"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/textView_Options_myfolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#8942;"
+                android:textColor="@color/colorLineGray6"
+                android:textAppearance="?android:textAppearanceLarge" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
