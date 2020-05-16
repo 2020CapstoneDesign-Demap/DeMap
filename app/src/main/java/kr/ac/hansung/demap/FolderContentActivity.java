@@ -37,6 +37,7 @@ import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
 import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
+import kr.ac.hansung.demap.model.User;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -54,6 +55,7 @@ public class FolderContentActivity extends AppCompatActivity {
     private boolean isMyFolder;
 
     private String folder_name;
+    private String ownerNickName = "생성자";
 
     private Button btn_subscribe;
     private TextView tv_folder_subsCount;
@@ -69,6 +71,8 @@ public class FolderContentActivity extends AppCompatActivity {
     private ArrayList<String> placeId = new ArrayList<String>();
 
     public static PlaceListAdapter adapter;
+
+    private TextView tv_folderCreator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,8 +109,9 @@ public class FolderContentActivity extends AppCompatActivity {
         TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
         tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
 
-        TextView tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
-        tv_folderCreator.setText(intent.getExtras().get("folder_owner").toString());
+        tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
+        String ownerId = intent.getExtras().get("folder_owner").toString();
+        setOwnerNickname(ownerId);
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
         recyclerView.setHasFixedSize(false);
@@ -148,6 +153,28 @@ public class FolderContentActivity extends AppCompatActivity {
     public void setAdapterItem(int position, PlaceDTO placeDTO) {
         adapter.setTag(position, placeDTO);
         adapter.notifyDataSetChanged();
+    }
+
+    public void setOwnerNickname(String ownerId) {
+
+        // 구독자 count 갱신을 위한 folderDTO
+        firestore.collection("users").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        User user = document.toObject(User.class);
+                        ownerNickName = user.getNickName();
+                        tv_folderCreator.setText(ownerNickName);
+                        System.out.println("폴더 생성자 닉네임 : " + ownerNickName);
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            }
+        });
+
     }
 
     public void setFolderData() {
