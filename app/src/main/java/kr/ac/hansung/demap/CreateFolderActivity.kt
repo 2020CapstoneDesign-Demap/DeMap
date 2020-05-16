@@ -24,6 +24,7 @@ import kr.ac.hansung.demap.ui.createfolder.MyAdapterForPublic
 class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter1: MyAdapterForPublic
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private lateinit var folder_name_edittext: EditText
@@ -115,7 +116,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //수정 권한
         viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapterForPublic(
+        viewAdapter1 = MyAdapterForPublic(
             1,
             item_edit_auth,
             item_edit_desc,
@@ -125,7 +126,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         recyclerView = findViewById<RecyclerView>(R.id.listView_edit_auth).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
-            adapter = viewAdapter
+            adapter = viewAdapter1
         }
 
         //폴더 태그
@@ -279,6 +280,14 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     //어댑터에서 체크한 데이터 위치 넘겨받음
     override fun onCheckbox(index: Int, p: Int) {
         position[index] = p
+        if (index == 0 && p == 0) {
+            viewAdapter1.setEnabled(1)
+            viewAdapter1.notifyDataSetChanged()
+        }
+        else if (index == 0 && p != 0) {
+            viewAdapter1.setEnabled(0)
+            viewAdapter1.notifyDataSetChanged()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
