@@ -181,6 +181,26 @@
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/blog_search_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@drawable/background_btn_round_blue_border"
+            android:textColor="@color/colorPrimary"
+            android:text="Naver 블로그 후기"
+            />
+    </LinearLayout>
+
 </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

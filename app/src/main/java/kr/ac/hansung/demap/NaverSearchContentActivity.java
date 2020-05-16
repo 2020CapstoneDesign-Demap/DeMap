@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
     private RecyclerView rv_tags;
 
     private Button btn_folder_save;
+    private Button btn_search_blog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +117,25 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
                 intent1.putExtra("result_phone", intent.getStringExtra("result_phone"));
 
                 startActivity(intent1);
+            }
+        });
+
+        btn_search_blog = findViewById(R.id.blog_search_btn);
+        btn_search_blog.setEnabled(true);
+        btn_search_blog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), SearchBlogActivity.class);
+                //int x = intent.getIntExtra("result_mapx", 0);
+                //int y = intent.getIntExtra("result_mapy", 0);
+                //intent2.putExtra("result_mapx", x);
+                //intent2.putExtra("result_mapy", y);
+                intent2.putExtra("result_name", intent.getStringExtra("result_name"));
+                //intent2.putExtra("result_addr", intent.getStringExtra("result_addr"));
+                //intent2.putExtra("result_category", intent.getStringExtra("result_category"));
+                //intent2.putExtra("result_phone", intent.getStringExtra("result_phone"));
+
+                startActivity(intent2);
             }
         });
 

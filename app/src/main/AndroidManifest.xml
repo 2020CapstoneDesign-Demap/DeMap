@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddPlaceFormActivity"></activity>
+        <activity android:name=".SearchBlogActivity"></activity>
+        <activity android:name=".AddPlaceFormActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -31,34 +32,28 @@
             android:name=".SearchNaverActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateFolderActivity" />
-
-        <activity android:name=".ui.login.LoginActivity">
-        </activity>
-
+        <activity android:name=".ui.login.LoginActivity"></activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-        <activity android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.hotPlace.HotPlaceActivity">
-        </activity>
+        <activity android:name=".ui.hotPlace.HotPlaceActivity"></activity>
         <activity android:name=".ui.nickname.NickNameActivity" />
         <activity android:name=".ui.signup.SignupActivity" />
         <activity android:name=".FolderListActivity" />
         <activity android:name=".MyfolderViewActivity" />
         <activity android:name=".FolderContentActivity" />
-        <activity android:name=".FolderContentEditorActivity"/>
-        <activity android:name=".NoticeActivity"/>
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".FolderContentEditorActivity" />
+        <activity android:name=".NoticeActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".AddPlaceToFolderActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

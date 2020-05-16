@@ -3,26 +3,11 @@
     android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout_search_activity"
+    android:id="@+id/linearLayout_search_blog_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SearchNaverActivity">
-
-
-
-    <SearchView
-        android:id="@+id/searchword_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:queryHint="맛집 검색"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:textSize="20sp" />
+    tools:context=".SearchBlogActivity">
 
     <View
         android:layout_width="match_parent"
