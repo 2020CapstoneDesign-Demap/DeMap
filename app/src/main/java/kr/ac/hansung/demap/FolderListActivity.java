@@ -178,14 +178,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String uid = document.getId();
                                 System.out.println("검색한 닉네임의 uid : "+ uid);
-                                // 검색어가 닉네임인 사용자의 소유 폴더 id 목록가져오기
-                                //for(FolderObj tmpFolder : folderObjs) {
-                                //    String strUid = tmpFolder.getOwner();
-                                //    if(strUid.equals(uid)==true) {
-                                //        searchByNicknameFolderObjs.add(tmpFolder);
-                                //        searchFolderResult.add(tmpFolder);
-                                //    }
-                                //}
 
                                 firestore.collection("usersMyFolder").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
@@ -201,7 +193,9 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                                                     for(FolderObj tmpFolder : folderObjs) {
                                                         if(tmpFolder.getId().equals(key)==true) {
                                                             searchByNicknameFolderObjs.add(tmpFolder);
-                                                            searchFolderResult.add(tmpFolder);
+                                                            if(!searchFolderResult.contains(tmpFolder)) {
+                                                                searchFolderResult.add(tmpFolder);
+                                                            }
                                                             for(FolderObj tmpFolder2 : searchFolderResult) {
                                                                 System.out.println("닉네임 폴더 검색 최종 결과 : "+tmpFolder2.getName());
                                                             }
@@ -249,13 +243,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         //System.out.println("키워드 검사 논리 결과 : "+ b);
         if (b) {
             //System.out.println("키워드 여부 검사 성공");
-            //for(FolderObj tmpfobj : searchFolderResult) {
-            //    if(tmpfobj.getId().equals(tempfolder.getId())) {
-            //        break;
-            //    }
+            if(!searchFolderResult.contains(tempfolder)) {
                 searchFolderResult.add(tempfolder);
+            }
                 System.out.println(tempfolder.getName() + " : " + tempfolder.getId() + " , " + tempfolder.getIspublic());
-            //}
+
         }
 
     }
