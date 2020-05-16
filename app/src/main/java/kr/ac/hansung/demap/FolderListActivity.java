@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +36,7 @@ import java.util.Map;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
+import kr.ac.hansung.demap.model.User;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 import kr.ac.hansung.demap.ui.main.MainActivity;
@@ -56,10 +58,12 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     private ArrayList<FolderDTO> folderDTOs = new ArrayList<FolderDTO>(); // 폴더 리스트를 저장 할 FolderDTO ArrayList 생성
     private ArrayList<FolderObj> folderObjs = new ArrayList<FolderObj>(); // 폴더 관련 모든 데이터를 저장 할 FolderObj ArrayList 생성
-    private ArrayList<FolderObj> subableFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
+    private ArrayList<FolderObj> searchByNicknameFolderObjs = new ArrayList<FolderObj>(); // 구독 가능 폴더 리스트를 저장 할 FolderObj ArrayList 생성
     private ArrayList<String> subFolderIds = new ArrayList<String>(); // 구독 가능 폴더 id만 담아 놓을 배열리스트
     private ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 폴더 리스트를 저장 할 FolderObj ArrayList 생성
     private ArrayList<String> tagsForSearch = new ArrayList<String>(); // 서치할 태그 저장
+    private UserMyFolderDTO nicknameResultFolderDTO = new UserMyFolderDTO();
+    private ArrayList<FolderObj> tmpNicknameResultObjs = new ArrayList<FolderObj>(); // 닉네임 검색 결과 폴더 임시 저장 리스트(공개여부검증전)
 
     // 체크박스
     CheckBox restaurant;
@@ -101,7 +105,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                 // 검색 버튼이 눌러졌을 때 이벤트 처리
                 System.out.println("검색 처리됨 : " + keyword);
                 searchForFolderName(keyword);
-
+                //searchForFolderOwner(keyword);
                 return true;
             }
             @Override
@@ -140,34 +144,151 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
+    public void searchForFolderOwner(String nickName) {
+        searchByNicknameFolderObjs.clear();
+        tmpNicknameResultObjs.clear();
+        firestore.collection("users")
+                .whereEqualTo("nickName", nickName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String uid = document.getId();
+                                System.out.println("검색한 닉네임의 uid : "+ uid);
+                                // 검색어가 닉네임인 사용자의 소유 폴더 id 목록가져오기
+                                //for(FolderObj tmpFolder : folderObjs) {
+                                //    String strUid = tmpFolder.getOwner();
+                                //    if(strUid.equals(uid)==true) {
+                                //        searchByNicknameFolderObjs.add(tmpFolder);
+                                //        searchFolderResult.add(tmpFolder);
+                                //    }
+                                //}
+
+                                firestore.collection("usersMyFolder").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                nicknameResultFolderDTO = document.toObject(UserMyFolderDTO.class);
+                                                // 닉네임에 해당하는 유저 uid로 소유한 폴더 상세 데이터 가져오기
+                                                for (String key : nicknameResultFolderDTO.getMyfolders().keySet()) {
+                                                    System.out.println("닉네임으로 폴더 검색 결과 : "+key);
+
+                                                    for(FolderObj tmpFolder : folderObjs) {
+                                                        if(tmpFolder.getId().equals(key)==true) {
+                                                            searchByNicknameFolderObjs.add(tmpFolder);
+                                                            searchFolderResult.add(tmpFolder);
+                                                            for(FolderObj tmpFolder2 : searchFolderResult) {
+                                                                System.out.println("닉네임 폴더 검색 최종 결과 : "+tmpFolder2.getName());
+                                                            }
+                                                            adapter.addItems(searchFolderResult);
+                                                            adapter.notifyDataSetChanged();
+                                                        }
+                                                    }
+
+                                                    /*
+                                                    firestore.collection("folders").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                DocumentSnapshot document = task.getResult();
+                                                                if (document.exists()) {
+//                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
+                                                                    FolderObj folderObj = document.toObject(FolderObj.class);
+                                                                    folderObj.setId(document.getId());
+                                                                    folderObj.setOwner(auth.getCurrentUser().getUid());
+                                                                    // 폴더 태그 삽입
+
+                                                                    //getPublic(folderObj);
+                                                                    // 해당 폴더 공개 여부 체크
+
+                                                                    firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                            DocumentSnapshot document = task.getResult();
+                                                                            if (document.exists()) {
+                                                                                folderObj.setIspublic(document.getString("public"));
+                                                                                System.out.println("닉네임결과 중 공개된 폴더 : "+key);
+                                                                                if (folderObj.getIspublic().equals("공개")) {
+                                                                                    System.out.println("닉네임으로 검색한 폴더 이름 : " + folderObj.getName());
+                                                                                    searchByNicknameFolderObjs.add(folderObj);
+                                                                                    searchFolderResult.add(folderObj);
+                                                                                }
+                                                                                for(FolderObj fobj : searchFolderResult) {
+                                                                                    System.out.println("닉네임 검색 최종 결과 : " + fobj.getName());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                    tmpNicknameResultObjs.add(folderObj);
+
+                                                                }
+
+
+                                                            } else {
+                                                                System.out.println("Error getting documents: " + task.getException());
+                                                            }
+                                                        }
+                                                    }); */
+                                                }
+
+                                            }
+
+                                        } else {
+                                            System.out.println("Error getting documents: " + task.getException());
+                                        }
+                                    }
+                                });
+
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+
+
+                        } else {
+                            //Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        //adapter.addItems(searchFolderResult);
+        //adapter.notifyDataSetChanged();
+
+
+    }
+
+
     // 구독 가능한 폴더 리스트에서 폴더명 키워드로 검색
     public void searchForFolderName(String keyword) {
         // 검색 결과 리스트 초기화
         searchFolderResult.clear();
-        for(FolderObj tempfolder : folderObjs) {
-            // 키워드가 들어간 폴더들을 긁어와서
-            // 그 폴더들의 아이디가 구독가능폴더아이디 리스트에 있는거면
-            // 검색결과 리스트에 넣는다
-            // 그리고 그걸 화면에 보여줌
-            //System.out.println("함수는 돌아감");
-            String str1 = tempfolder.getName();
-            boolean b = str1.toLowerCase().contains(keyword.toLowerCase());
-            //System.out.println("키워드 검사 논리 결과 : "+ b);
-            if(b) {
-                //System.out.println("키워드 여부 검사 성공");
+
+        searchForFolderOwner(keyword);
+
+    for (FolderObj tempfolder : folderObjs) {
+        // 키워드가 들어간 폴더들을 긁어와서
+        // 그 폴더들의 아이디가 구독가능폴더아이디 리스트에 있는거면
+        // 검색결과 리스트에 넣는다
+        // 그리고 그걸 화면에 보여줌
+        //System.out.println("함수는 돌아감");
+        String str1 = tempfolder.getName();
+        boolean b = str1.toLowerCase().contains(keyword.toLowerCase());
+        //System.out.println("키워드 검사 논리 결과 : "+ b);
+        if (b) {
+            //System.out.println("키워드 여부 검사 성공");
+            for(FolderObj tmpfobj : searchFolderResult) {
+                if(tmpfobj.getId().equals(tempfolder.getId())) {
+                    break;
+                }
                 searchFolderResult.add(tempfolder);
-                System.out.println(tempfolder.getName()+" : "+tempfolder.getId()+" , "+tempfolder.getIspublic());
-                /*
-                for(FolderObj result : searchFolderResult) {
-                    int flag=0;
-                    if(tempfolder.equals(result))
-                        flag++;
-                }*/
-
-
+                System.out.println(tempfolder.getName() + " : " + tempfolder.getId() + " , " + tempfolder.getIspublic());
             }
-
         }
+
+    }
 
         adapter.addItems(searchFolderResult);
         adapter.notifyDataSetChanged();

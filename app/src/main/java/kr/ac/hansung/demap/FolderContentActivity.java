@@ -178,7 +178,7 @@ public class FolderContentActivity extends AppCompatActivity {
 
     }
 
-    // 내 폴더일 경우 폴더 생성자 닉네임 가져오는 메서드
+    // 폴더 생성자 닉네임 가져오는 메서드
     public void setNickname(String ownerId) {
 
         firestore.collection("users").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -268,7 +268,6 @@ public class FolderContentActivity extends AppCompatActivity {
 
     public void setPlaceData() {
 
-        // 폴더 생성자 닉네임 가져오기
         firestore.collection("folderPlaces").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
