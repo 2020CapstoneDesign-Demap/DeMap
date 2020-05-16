@@ -96,6 +96,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
         //구독 가능한 폴더 리스트
         setSubableIDList();
+        setMyFolderIdList();
 
         // 검색어 가져오기
         SearchView searchView =  findViewById(R.id.folder_name_edittext);
@@ -144,6 +145,26 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
+    public void setMyFolderIdList() {
+        // usersSubsFolder의 현재 로그인한 유저가 구독한 폴더 도큐먼트 이름 가져오기
+        firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        UserMyFolderDTO userMyFolderDTO = document.toObject(UserMyFolderDTO.class);
+                        ArrayList<String> userMyFolderId = new ArrayList<String>();
+                        userMyFolderId.addAll(userMyFolderDTO.getMyfolders().keySet());
+                        adapter.setMyFolderList(userMyFolderId,auth.getCurrentUser().getUid());
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            }
+        });
+    }
+
     public void searchForFolderOwner(String nickName) {
         searchByNicknameFolderObjs.clear();
         tmpNicknameResultObjs.clear();
@@ -189,51 +210,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                                                         }
                                                     }
 
-                                                    /*
-                                                    firestore.collection("folders").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                            if (task.isSuccessful()) {
-                                                                DocumentSnapshot document = task.getResult();
-                                                                if (document.exists()) {
-//                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
-                                                                    FolderObj folderObj = document.toObject(FolderObj.class);
-                                                                    folderObj.setId(document.getId());
-                                                                    folderObj.setOwner(auth.getCurrentUser().getUid());
-                                                                    // 폴더 태그 삽입
-
-                                                                    //getPublic(folderObj);
-                                                                    // 해당 폴더 공개 여부 체크
-
-                                                                    firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                                            DocumentSnapshot document = task.getResult();
-                                                                            if (document.exists()) {
-                                                                                folderObj.setIspublic(document.getString("public"));
-                                                                                System.out.println("닉네임결과 중 공개된 폴더 : "+key);
-                                                                                if (folderObj.getIspublic().equals("공개")) {
-                                                                                    System.out.println("닉네임으로 검색한 폴더 이름 : " + folderObj.getName());
-                                                                                    searchByNicknameFolderObjs.add(folderObj);
-                                                                                    searchFolderResult.add(folderObj);
-                                                                                }
-                                                                                for(FolderObj fobj : searchFolderResult) {
-                                                                                    System.out.println("닉네임 검색 최종 결과 : " + fobj.getName());
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    });
-
-                                                                    tmpNicknameResultObjs.add(folderObj);
-
-                                                                }
-
-
-                                                            } else {
-                                                                System.out.println("Error getting documents: " + task.getException());
-                                                            }
-                                                        }
-                                                    }); */
                                                 }
 
                                             }
@@ -244,19 +220,13 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                                     }
                                 });
 
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
                             }
 
 
                         } else {
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        //adapter.addItems(searchFolderResult);
-        //adapter.notifyDataSetChanged();
-
 
     }
 
@@ -279,13 +249,13 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         //System.out.println("키워드 검사 논리 결과 : "+ b);
         if (b) {
             //System.out.println("키워드 여부 검사 성공");
-            for(FolderObj tmpfobj : searchFolderResult) {
-                if(tmpfobj.getId().equals(tempfolder.getId())) {
-                    break;
-                }
+            //for(FolderObj tmpfobj : searchFolderResult) {
+            //    if(tmpfobj.getId().equals(tempfolder.getId())) {
+            //        break;
+            //    }
                 searchFolderResult.add(tempfolder);
                 System.out.println(tempfolder.getName() + " : " + tempfolder.getId() + " , " + tempfolder.getIspublic());
-            }
+            //}
         }
 
     }

@@ -21,6 +21,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     // adapter에 들어갈 folder list
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
+    private static ArrayList<String> myFolderList = new ArrayList<String>();
+    private static String currentUid;
 
     public MyAdapterForFolderList() {
 //        this.context = context;
@@ -37,8 +39,9 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
                 Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
 
                 intent.putExtra("folder_id", searchFolderResult.get(position).getId());
+                intent.putExtra("folder_owner", currentUid);
                 intent.putExtra("folder_name", searchFolderResult.get(position).getName());
-//                intent.putExtra("folder_name", folderObjs.get(position).getName());
+                intent.putExtra("isMyFolder", isMyFolder(position));
                 intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
                 intent.putExtra("folder_public", searchFolderResult.get(position).getIspublic());
 
@@ -70,6 +73,29 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         // 외부에서 item을 추가시킬 함수입니다.
         searchFolderResult.clear();
         searchFolderResult.addAll(searchFolderParam);
+    }
+
+    void setMyFolderList(ArrayList<String> myFolderParam, String myId) {
+        // 외부에서 내폴더 리스트를 추가시킬 함수입니다.
+        myFolderList.clear();
+        myFolderList.addAll(myFolderParam);
+        currentUid = myId;
+    }
+
+    private boolean isMyFolder(int position) {
+        boolean isMyFolder = false;
+        FolderObj folderObj1 = searchFolderResult.get(position);
+        searchFolderResult.get(position).setOwner("null");
+
+        for(String folderId1 : myFolderList) {
+                if(folderObj1.getId().equals(folderId1)==true) {
+                    searchFolderResult.get(position).setOwner(currentUid);
+                    isMyFolder = true;
+                    return isMyFolder;
+                }
+            }
+
+        return isMyFolder;
     }
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
