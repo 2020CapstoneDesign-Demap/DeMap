@@ -105,6 +105,9 @@ public class FolderContentActivity extends AppCompatActivity {
         TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
         tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
 
+        TextView tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
+        tv_folderCreator.setText(intent.getExtras().get("folder_owner").toString());
+
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
         recyclerView.setHasFixedSize(false);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

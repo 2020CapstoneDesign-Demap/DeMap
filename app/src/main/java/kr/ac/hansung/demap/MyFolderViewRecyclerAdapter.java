@@ -251,6 +251,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                 Intent intent = new Intent(v.getContext(), FolderContentActivity.class);
 
                 intent.putExtra("folder_id", folderObjs.get(position).getId());
+                intent.putExtra("folder_owner", folderObjs.get(position).getOwner());
                 intent.putExtra("folder_name", folderObjs.get(position).getName());
 //                intent.putExtra("folder_name", folderObjs.get(position).getName());
                 intent.putExtra("folder_subs_count", folderObjs.get(position).getSubscribeCount());
