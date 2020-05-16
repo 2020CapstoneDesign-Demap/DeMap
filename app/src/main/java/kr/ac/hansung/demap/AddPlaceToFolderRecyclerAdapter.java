@@ -52,7 +52,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         holder.onBind(folderObjs.get(position), mSelectedPosition, position);
 
-        /*
+        /* 지우지 말 것
         // 폴더들의 체크 상태
         boolean isChecked = mCheckedFolders.get(folderObjs.get(mSelectedPosition).getId()) == null
                 ? false
@@ -108,7 +108,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myfolder_check_list, parent, false);
         final AddPlaceToFolderRecyclerAdapter.MyViewHolder vh = new AddPlaceToFolderRecyclerAdapter.MyViewHolder(view);
 
-        /*
+        /* 지우지 말 것
         // 리사이클러뷰 체크박스 다중 선택 시 선택한 폴더들의 정보 전달해주기 위한 코드
         vh.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -20,7 +20,6 @@ public class MyfolderEditActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("폴더 리스트");
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 

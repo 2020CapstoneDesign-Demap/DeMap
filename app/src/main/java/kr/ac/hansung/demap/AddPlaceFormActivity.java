@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,15 +43,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-    //private UserMyFolderDTO userMyfolderDTO = new UserMyFolderDTO();
-    //private UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
-
-    //private ArrayList<FolderObj> myfolderObjs = new ArrayList<FolderObj>();
-    //private ArrayList<FolderObj> subsfolderObjs = new ArrayList<FolderObj>();
-
     private PlaceDTO placeDTO = new PlaceDTO();
-
-    //private AddPlaceToFolderRecyclerAdapter adapter;
 
     // 장소에 관한 데이터를 받아올 인텐트
     private Intent intent;
@@ -73,7 +66,6 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     CheckBox manyoulet;
     CheckBox lessoulet;
 
-    TextView tv_placename;
 
     private ArrayList<String> listTags = new ArrayList<String>();
 
@@ -105,17 +97,28 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place_form);
 
         addButton = findViewById(R.id.addplace_form_btn);
-        tv_placename = findViewById(R.id.tv_place_name);
 
         intent = getIntent();
 
         // 장소 정보를 placeDTO에 저장
         place_name = intent.getStringExtra("result_name");
         placeDTO.setName(place_name);
+        // ActionBar에 타이틀 변경
+        getSupportActionBar().setTitle(place_name);
+        // ActionBar의 배경색 변경
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
+        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
+
+        // 홈 아이콘 표시
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         String addr = intent.getStringExtra("result_addr");
         placeDTO.setAddress(addr);
         String category = intent.getStringExtra("result_category");
@@ -145,7 +148,6 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         System.out.println("인텐트로 가져온 장소 : " + placeDTO.getName());
         System.out.println("인텐트로 가져온 폴더 ID : " + folder_id);
 
-        tv_placename.setText(place_name);
 
         // 선택된 분위기 태그 가져오기
         study = (CheckBox) findViewById(R.id.study_check);
@@ -198,14 +200,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                     Toast.makeText(AddPlaceFormActivity.this, "폴더에 장소를 넣었습니다!", Toast.LENGTH_SHORT).show();
                 }
                 finish();
-//                Intent intent2 = new Intent(AddPlaceFormActivity.this, NaverSearchContentActivity.class);
-//                intent2.putExtra("result_mapx", placeDTO.getX());
-//                intent2.putExtra("result_mapy", placeDTO.getY());
-//                intent2.putExtra("result_name", placeDTO.getName());
-//                intent2.putExtra("result_addr", placeDTO.getAddress());
-//                intent2.putExtra("result_category", placeDTO.getCategory());
-//                intent2.putExtra("result_phone", placeDTO.getTelephone());
-//                startActivity(intent2);
+
             }
         });
     }

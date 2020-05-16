@@ -46,13 +46,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
-    //private CollectionReference folderRef = firestore.collection("folders"); // firestore에서 folder 내역 가져오기
-    //private CollectionReference folderPublicRef = firestore.collection("folderPublic"); // firestore에서 folderPublic 내역 가져오기
-    //private CollectionReference subableFolderRef = firestore.collection("folders"); // firestore에서 folders 내역 가져오기
-
-    //private String destinationUid;
-    //private String uid = auth.currentUser.uid;
-    //private String currentUserUid = null;
 
     private MyAdapterForFolderList adapter; // FolderList 어댑터
 
@@ -128,13 +121,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         tour.setOnCheckedChangeListener(this);
         sport.setOnCheckedChangeListener(this);
         entertain.setOnCheckedChangeListener(this);
-
-
-
-
-      // for ( FolderObj temp : subableFolderObjs )
-        //    System.out.println("구독 가능 폴더 : " + temp.getId() + temp.getName() + temp.getIspublic());
-
 
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
@@ -296,8 +282,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             searchForFolderTag(/*tagsForSearch*/);
         }
 
-        //if(!tagsForSearch.isEmpty())
-
     }
 
     // 구독 가능한 폴더 리스트에서 태그로 검색
@@ -334,39 +318,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
-//    public void createFolderInfoList() {
-//        CollectionReference folderRef = firestore.collection("folders");
-//        // folders의 모든 도큐먼트 가져오기
-//        folderRef.get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                //Log.d(TAG, document.getId() + " => " + document.getData());
-//                                System.out.println(document.getId() + " => " + document.getData());
-//                                // 가져온 도큐먼트를 folderDTO객체로 저장
-//                                FolderDTO folderDTO = document.toObject(FolderDTO.class);
-//                                // 가져온 도큐먼트를 folderObj객체로 저장
-//                                FolderObj folderObj = document.toObject(FolderObj.class);
-//                                folderObj.setId(document.getId()); // 폴더객체에 폴더도큐먼트id 삽입
-//                                folderDTOs.add(folderDTO);
-//                                folderObjs.add(folderObj);
-//                                System.out.println("폴더디티오 : " + folderDTO.getName());
-//                                System.out.println("폴더오비제 : " + folderObj.getId());
-//                                adapter.addItem(folderDTO);
-//                            }
-//                            setSubableIDList();
-//                            adapter.notifyDataSetChanged();
-//                        } else {
-//                            //Log.d(TAG, "Error getting documents: ", task.getException());
-//                            System.out.println("Error getting documents: " + task.getException());
-//
-//                        }
-//                    }
-//                });
-//
-//    }
 
     // 구독 가능한 폴더 id만 리스트로 저장
     public void setSubableIDList() {
@@ -412,8 +363,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
 
-                            // 가져온 도큐먼트를 folderDTO객체로 저장
-//                            FolderDTO folderDTO = document.toObject(FolderDTO.class);
                             // 가져온 도큐먼트를 folderObj객체로 저장
                             FolderObj folderObj = document.toObject(FolderObj.class);
 
@@ -421,11 +370,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                             folderObj.setId(document.getId());
                             folderObj.setIspublic("공개");
 
-//                            folderDTOs.add(folderDTO);
                             folderObjs.add(folderObj);
-
-//                            System.out.println("폴더디티오 : " + folderDTO.getName());
-//                            System.out.println("폴더오비제 : " + folderObj.getId());
 
                         }
 
@@ -440,27 +385,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         }
 
 
-        // 전체 folder 리스트를 for문 돌려 구독 가능 폴더 id와 비교
-//        for ( FolderObj fObj : folderObjs ) {
-//            int index = folderObjs.indexOf(fObj);
-//            System.out.println("folderObjs index : " + index);
-//
-//            for ( String subId : subFolderIds ) {
-//                if (fObj.getId().equals(subId)){ // 전체 폴더 중 구독 가능 폴더 id 리스트에 존재하는 폴더 id라면
-//                    //FolderDTO publicfolderDTO = documentSub.toObject(FolderDTO.class);
-//                    // 폴더 공개 여부를 "공개"로 설정 후 변경 사항 배열리스트에 set 시키기
-//                    fObj.setIspublic("공개");
-//                    folderObjs.set(folderObjs.indexOf(fObj), fObj);
-//                    // 공개된 폴더를 구독가능폴더리스트에 저장
-//                    subableFolderObjs.add(fObj);
-//                    subscribeFolder(subFolderIds.indexOf(subId));
-//                }
-//
-//            }
-//
-//            System.out.println("구독 가능 여부 : " + fObj.getId() + fObj.getName() + fObj.getIspublic());
-//
-//        }
 
     }
 
@@ -496,58 +420,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
-/*
-    public void getAllFolderList() {
-        Thread allFolderListThread = new Thread(new AllFolderListThread(folderRef, folderDTOs, folderObjs));
-        try {
-            allFolderListThread.start();
-            allFolderListThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        for (FolderDTO folderDTO : folderDTOs) {
-            adapter.addItem(folderDTO);
-            adapter.notifyDataSetChanged();
-        }
 
-
-    }
-*/
-    /*
-    fun getFollowing() {
-        followingListenerRegistration = firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                val followDTO = documentSnapshot?.toObject(FollowDTO::class.java)
-            if (followDTO == null) return@addSnapshotListener
-                    fragmentView!!.account_tv_following_count.text = followDTO?.followingCount.toString()
-        }
-    }*/
-
-/*
-    fun getFollower() {
-
-        followListenerRegistration = firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                val followDTO = documentSnapshot?.toObject(FollowDTO::class.java)
-            if (followDTO == null) return@addSnapshotListener
-                    fragmentView?.account_tv_follower_count?.text = followDTO?.followerCount.toString()
-            if (followDTO?.followers?.containsKey(currentUserUid)!!) {
-
-                fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
-                fragmentView?.account_btn_follow_signout
-                        ?.background
-                        ?.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
-            } else {
-
-                if (uid != currentUserUid) {
-
-                    fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
-                    fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
-                }
-            }
-
-        }
-
-    }
-*/
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -574,106 +447,3 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
 
 }
-
-//class FolderListActivity : AppCompatActivity() {
-//    private lateinit var recyclerView: RecyclerView
-//    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-//    private lateinit var viewManager: RecyclerView.LayoutManager
-//
-//    var auth: FirebaseAuth? = null
-//    var firestore: FirebaseFirestore? = null
-//
-//    var item_folder_list = arrayOf<FolderDTO>()
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        //Initiate
-//        auth = FirebaseAuth.getInstance()
-//        firestore = FirebaseFirestore.getInstance()
-//
-//        // ActionBar에 타이틀 변경
-//        getSupportActionBar()?.setTitle("폴더 리스트");
-//        // ActionBar의 배경색 변경
-//        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
-//
-//        // 홈 아이콘 표시
-//        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
-//
-//        setContentView(R.layout.activity_folder_list)
-//
-//        getData()
-//
-//        viewManager = LinearLayoutManager(this)
-//        viewAdapter = MyAdapterForFolderList()
-//        recyclerView = findViewById<RecyclerView>(R.id.listView_folder_list).apply {
-//            setHasFixedSize(true)
-//            layoutManager = viewManager
-//            adapter = viewAdapter
-//        }
-//    }
-//
-//    fun getData() {
-//        item_folder_list.apply {
-//            //folder 데이터
-//            var folderDTO = arrayOf<FolderDTO>()
-//            firestore?.collection("folders")?.get()?.addOnSuccessListener {
-//
-//            }
-//
-//            firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
-//
-//                var folderID = it.id //도큐먼트 ID 가져옴
-//
-//                //폴더 생성자 정보 저장
-//                var owner: MutableMap<String, Any> = HashMap()
-//                owner.put("owner", auth?.currentUser?.uid as Any)
-//                firestore?.collection("folderOwner")?.document(folderID)?.set(owner)
-//
-//                //폴더 구독자 정보 저장
-//                var subscriber: MutableMap<String, Any> = HashMap()
-//                var subscribers : MutableMap<String, Any> = HashMap()
-//                subscriber.put("subscribers", subscribers)
-//                firestore?.collection("folderSubscribers")?.document(folderID)?.set(subscriber)
-//
-//                // 내 폴더에 추가
-//                var doc = firestore?.collection("usersMyFolder")?.document(auth?.currentUser?.uid!!)
-//                firestore?.runTransaction {
-//                    var userMyfolderDTO = UserMyFolderDTO()
-//                    if (it.get(doc!!).toObject(UserMyFolderDTO::class.java) == null) { //리스트에 처음 들어갈 경우
-//                        userMyfolderDTO.myfolders[folderID] = true
-//                    }
-//                    else {
-//                        userMyfolderDTO = it.get(doc).toObject(UserMyFolderDTO::class.java)!!
-//                        userMyfolderDTO.myfolders[folderID] = true
-//                    }
-//                    it.set(doc, userMyfolderDTO)
-//                }
-//
-//                //폴더 공개 범위 저장
-//                var public: MutableMap<String, Any> = HashMap()
-//                public.put("public", item_pub[position[0]!!]) //어댑터에서 받아온 데이터 저장
-//                firestore?.collection("folderPublic")?.document(folderID)?.set(public)
-//
-//                //폴더 수정 권한 저장
-//                var edit_auth: MutableMap<String, Any> = HashMap()
-//                edit_auth.put("edit_auth", item_edit_auth[position[1]!!])
-//                firestore?.collection("folderEditors")?.document(folderID)?.set(edit_auth)
-//
-//                //폴더 태그 저장
-//                var folderTag: MutableMap<String, Any> = HashMap()
-//                folderTag.put("folderTag", item_folder_tag[position[2]!!])
-//                firestore?.collection("folderTags")?.document(folderID)?.set(folderTag)
-//            }
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-////        var id = item.getItemId()
-////
-////        if (id == android.R.id.home) {
-////            finish()
-////            return true
-////        }
-////        return super.onOptionsItemSelected(item)
-////    }
-//}

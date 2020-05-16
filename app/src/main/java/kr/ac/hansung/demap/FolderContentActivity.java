@@ -388,41 +388,6 @@ public class FolderContentActivity extends AppCompatActivity {
         }
 
 
-        //폴더 구독자 정보 저장
-//        Map<String, Object> subscriber  = new HashMap();
-//        Map<String, Object> subscribers  = new HashMap();
-//        subscribers.put(auth.getUid().toString(), true);
-//        subscriber.put("subscribers", subscribers);
-//        // 내 구독 폴더 목록 저장
-//        Map<String, Boolean> subscribefolders  = new HashMap();
-//        Map<String, Object> subscribefolder  = new HashMap();
-//
-//
-//        //DocumentReference subsDoc = firestore.collection("folderSubscribers").document(auth?.currentUser?.uid!!);
-//
-//        //firestore.collection("folderSubscribers").document(subFolderIds.get(index)).set(subscriber);
-//
-//        // 내 구독 폴더에 추가
-//        DocumentReference doc = firestore.collection("usersSubsFolder").document(auth.getUid());
-//
-//        //firestore.runTransaction();
-//        UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
-////        subscribefolders.put(subFolderIds.get(index), true);
-//
-///* 자바에서 런트랜잭션을 어캐 쓸지 몰라서 못함
-//            if (userSubsFolderDTO.get(doc).toObject(UserSubsFolderDTO.class) == null) { //리스트에 처음 들어갈 경우
-//                userSubsFolderDTO.setSubscribefolders(subscribefolders);
-//            }
-//            else {
-//                userSubsFolderDTO = it.get(doc).toObject(UserSubsFolderDTO.class);
-//                userSubsFolderDTO.setSubscribefolders(subscribefolders);
-//            }
-//            it.set(doc, usermyfolderDTO);*/
-//        // 구독 폴더 리스트 삽입 SetOptions.merge()쓰면 갱신해주는 옵션이래서 일단 이걸로 썼음
-//        subscribefolder.put("subscribefolders", subscribefolders);
-//        doc.set(subscribefolder, SetOptions.merge());
-
-
     }
 
     @Override

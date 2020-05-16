@@ -45,9 +45,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     private String authId;
 
-//    public MyFolderViewRecyclerAdapter(Context context) {
-//        this.context = context;
-//    }
 
     @Override
     public void onBindViewHolder(@NonNull MyFolderViewRecyclerAdapter.MyViewHolder holder, int position) {

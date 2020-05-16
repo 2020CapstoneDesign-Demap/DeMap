@@ -28,11 +28,7 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
     private int[] mapy = {0,0,0,0,0};
 
     public MySearchNaverRecyclerAdapter() {
-//        this.context = context;
-        //title = null;
-        //roadaddress = null;
-        //mapx = null;
-        //mapy = null;
+
     }
 
     @Override
@@ -111,9 +107,6 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
         void onBind(String title, String roadaddress, String category, String phone) {
             textView_searchresult_name.setText(title);
             textView_searchresult_address.setText(roadaddress);
-            //textView_searchresult_category.setText(category);
-            // 화면에 띄운 결과 폴더는 리스트에서 삭제함
-            //searchFolderResult.remove(folderObj);
         }
     }
 

@@ -126,14 +126,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
             @Override
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), SearchBlogActivity.class);
-                //int x = intent.getIntExtra("result_mapx", 0);
-                //int y = intent.getIntExtra("result_mapy", 0);
-                //intent2.putExtra("result_mapx", x);
-                //intent2.putExtra("result_mapy", y);
                 intent2.putExtra("result_name", intent.getStringExtra("result_name"));
-                //intent2.putExtra("result_addr", intent.getStringExtra("result_addr"));
-                //intent2.putExtra("result_category", intent.getStringExtra("result_category"));
-                //intent2.putExtra("result_phone", intent.getStringExtra("result_phone"));
 
                 startActivity(intent2);
             }

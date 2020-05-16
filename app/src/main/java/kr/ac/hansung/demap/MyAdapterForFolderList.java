@@ -117,8 +117,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         void onBind(FolderObj folderObj) {
             textView_folder_name.setText(folderObj.getName());
             textView_folder_tag.setText(folderObj.getTag());
-            // 화면에 띄운 결과 폴더는 리스트에서 삭제함
-            //searchFolderResult.remove(folderObj);
+
         }
     }
 

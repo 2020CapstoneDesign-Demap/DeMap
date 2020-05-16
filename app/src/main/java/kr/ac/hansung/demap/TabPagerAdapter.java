@@ -19,8 +19,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private String[] tabTitles = new String[]{"내 폴더", "구독 폴더"};
 
     // adapter에 들어갈 folder list
-//    private ArrayList<FolderDTO> myfolderDTOS = new ArrayList<>();
-//    private ArrayList<FolderDTO> subsfolderDTOS = new ArrayList<>();
+
     private ArrayList<FolderObj> myfolderObjs = new ArrayList<>();
     private ArrayList<FolderObj> subsfolderObjS = new ArrayList<>();
 
