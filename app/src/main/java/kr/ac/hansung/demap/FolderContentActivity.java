@@ -73,6 +73,7 @@ public class FolderContentActivity extends AppCompatActivity {
     public static PlaceListAdapter adapter;
 
     private TextView tv_folderCreator;
+    private String ownerId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,8 +111,7 @@ public class FolderContentActivity extends AppCompatActivity {
         tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
 
         tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
-        String ownerId = intent.getExtras().get("folder_owner").toString();
-        setOwnerNickname(ownerId);
+
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
         recyclerView.setHasFixedSize(false);
@@ -129,13 +129,15 @@ public class FolderContentActivity extends AppCompatActivity {
             btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
             btn_subscribe.setEnabled(false);
             btn_subscribe.setVisibility(View.VISIBLE);
+            ownerId = intent.getExtras().get("folder_owner").toString();
+            setNickname(ownerId);
 
             adapter.setMyFolder(true);
             adapter.notifyDataSetChanged();
         } else { // 내 폴더가 아닐 경우
             setFolderData();
             setUserData();
-
+            setOwner(docId);
             adapter.setMyFolder(false);
             adapter.notifyDataSetChanged();
         }
@@ -155,9 +157,30 @@ public class FolderContentActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public void setOwnerNickname(String ownerId) {
+    // 구독 폴더일 경우 폴더 생성자 닉네임 가져오기
+    public void setOwner(String docId) {
 
         // 구독자 count 갱신을 위한 folderDTO
+        firestore.collection("folderOwner").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ownerId = document.get("owner").toString();
+                        setNickname(ownerId);
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            }
+        });
+
+    }
+
+    // 내 폴더일 경우 폴더 생성자 닉네임 가져오는 메서드
+    public void setNickname(String ownerId) {
+
         firestore.collection("users").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -224,36 +247,6 @@ public class FolderContentActivity extends AppCompatActivity {
 
     public void setUserData() {
 
-        // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
-//        firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        userMyfolderDTO = document.toObject(UserMyFolderDTO.class);
-//
-//                        // 폴더가 내 폴더일 경우
-//                        if (userMyfolderDTO.getMyfolders().containsKey(docId)) {
-//                            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
-//                            btn_subscribe.setText("구독하기");
-//                            btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
-//                            btn_subscribe.setEnabled(false);
-//                            btn_subscribe.setVisibility(View.VISIBLE); //버튼 보이기
-//
-//                            adapter.setMyFolder(true);
-//                            adapter.notifyDataSetChanged();
-//                        } else {
-//                            adapter.setMyFolder(false);
-//                            adapter.notifyDataSetChanged();
-//                        }
-//                    }
-//                } else {
-//                    System.out.println("Error getting documents: " + task.getException());
-//                }
-//            }
-//        });
-
         // usersSubsFolder의 현재 로그인한 유저가 구독한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersSubsFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -275,7 +268,7 @@ public class FolderContentActivity extends AppCompatActivity {
 
     public void setPlaceData() {
 
-        // 폴더에 저장된 장소 id 가져오기
+        // 폴더 생성자 닉네임 가져오기
         firestore.collection("folderPlaces").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
