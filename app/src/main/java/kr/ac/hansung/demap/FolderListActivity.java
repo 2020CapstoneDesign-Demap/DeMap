@@ -1,19 +1,17 @@
 package kr.ac.hansung.demap;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,28 +19,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.FolderSubsDTO;
-import kr.ac.hansung.demap.model.User;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
-import kr.ac.hansung.demap.model.UserSubsFolderDTO;
-import kr.ac.hansung.demap.ui.main.MainActivity;
 
 
-public class FolderListActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class FolderListActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, getCount_interface {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
@@ -64,6 +54,8 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     CheckBox tour;
     CheckBox sport;
     CheckBox entertain;
+
+    private TextView tv_search_result;
 
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
@@ -122,11 +114,15 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         sport.setOnCheckedChangeListener(this);
         entertain.setOnCheckedChangeListener(this);
 
+        tv_search_result = findViewById(R.id.tv_search_result);
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_list);
         recyclerView.setHasFixedSize(true);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapterForFolderList();
+        adapter = new MyAdapterForFolderList(this);
         recyclerView.setAdapter(adapter);
 
     }
@@ -201,7 +197,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                                 });
 
                             }
-
 
                         } else {
                         }
@@ -374,6 +369,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
                         }
 
+                        Collections.sort(folderObjs);
                         setFolderTags();
 
                     } else {
@@ -383,8 +379,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             });
 
         }
-
-
 
     }
 
@@ -420,7 +414,10 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
-
+    @Override
+    public void getCount(int count) {
+        tv_search_result.setText(String.valueOf(count));
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -444,6 +441,5 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         super.onStop();
         //adapter.stopListening();
     }
-
 
 }
