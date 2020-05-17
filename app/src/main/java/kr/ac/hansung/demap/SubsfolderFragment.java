@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,8 +51,10 @@ public class SubsfolderFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);
+        DividerItemDecoration decoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
+        recyclerView.addItemDecoration(decoration);
         adapter = new MyFolderViewRecyclerAdapter();
-
         adapter.setItem(folderObjs);
         adapter.setAuthId(authId);
         adapter.setMyFolder(false);

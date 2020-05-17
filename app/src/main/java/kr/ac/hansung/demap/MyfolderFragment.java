@@ -62,6 +62,9 @@ public class MyfolderFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);
+        DividerItemDecoration decoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
+        recyclerView.addItemDecoration(decoration);
         adapter = new MyFolderViewRecyclerAdapter();
         adapter.setItem(folderObjs);
         adapter.setAuthId(authId);

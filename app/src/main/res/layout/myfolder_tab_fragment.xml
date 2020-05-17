@@ -31,7 +31,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:text="전체 "
-                android:textSize="12sp" />
+                android:textColor="@color/colorLineGray7"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textview_total_myfolder_count"
@@ -40,7 +41,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"
                 android:text="0"
-                android:textSize="12sp" />
+                android:textColor="@color/colorTheme"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
