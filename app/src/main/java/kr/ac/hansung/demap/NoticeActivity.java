@@ -69,6 +69,7 @@ public class NoticeActivity extends AppCompatActivity {
                         noticeDTOS.add(noticeDTO);
                     }
                     adapter.setItem(noticeDTOS);
+                    adapter.setId(auth.getCurrentUser().getUid());
                     adapter.notifyDataSetChanged();
                 }
             }

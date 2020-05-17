@@ -75,6 +75,8 @@ public class FolderContentActivity extends AppCompatActivity {
     private TextView tv_folderCreator;
     private String ownerId;
 
+    private String folder_public;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +110,8 @@ public class FolderContentActivity extends AppCompatActivity {
         tv_folder_subsCount.setText(intent.getExtras().get("folder_subs_count").toString());
 
         TextView tv_folderPublic = findViewById(R.id.tv_folder_content_pub_info);
-        tv_folderPublic.setText(intent.getExtras().get("folder_public").toString());
+        folder_public = intent.getStringExtra("folder_public");
+        tv_folderPublic.setText(folder_public);
 
         tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
 
@@ -429,18 +432,21 @@ public class FolderContentActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             String edit = document.getString("edit_auth");
-                            if (edit.equals("불가능")) {
-                                Toast.makeText(FolderContentActivity.this, "폴더 수정이 불가능합니다", Toast.LENGTH_SHORT).show();
+                            if (folder_public.equals("공개")) {
+                                if (edit.equals("불가능")) {
+                                    Toast.makeText(FolderContentActivity.this, "폴더 수정이 불가능합니다", Toast.LENGTH_SHORT).show();
+                                } else if (edit.equals("전체 유저")) {
+                                    Toast.makeText(FolderContentActivity.this, "모든 유저가 수정할 수 있습니다", Toast.LENGTH_SHORT).show();
+                                } else if (edit.equals("초대한 유저")) {
+                                    Intent intent = new Intent(FolderContentActivity.this, FolderContentEditorActivity.class);
+                                    intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                                    intent.putExtra("folder_id", docId);
+                                    intent.putExtra("folder_name", folder_name);
+                                    startActivity(intent);
+                                }
                             }
-                            else if (edit.equals("전체 유저")) {
-                                Toast.makeText(FolderContentActivity.this, "모든 유저가 수정할 수 있습니다", Toast.LENGTH_SHORT).show();
-                            }
-                            else if (edit.equals("초대한 유저")) {
-                                Intent intent = new Intent(FolderContentActivity.this, FolderContentEditorActivity.class);
-                                intent.putExtra("user_id", auth.getCurrentUser().getUid());
-                                intent.putExtra("folder_id", docId);
-                                intent.putExtra("folder_name", folder_name);
-                                startActivity(intent);
+                            else {
+                                Toast.makeText(FolderContentActivity.this, "비공개 폴더입니다", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
