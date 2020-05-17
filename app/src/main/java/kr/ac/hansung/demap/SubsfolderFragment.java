@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,9 +19,9 @@ import kr.ac.hansung.demap.model.FolderObj;
 
 public class SubsfolderFragment extends Fragment {
 
-
-    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private ArrayList<FolderObj> folderObjs = new ArrayList<>();
+
+    private TextView tv_subsfolder_count;
 
     private RecyclerView recyclerView;
     private MyFolderViewRecyclerAdapter adapter;
@@ -44,9 +45,13 @@ public class SubsfolderFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.subsfolder_tab_fragment, null);
 
+        tv_subsfolder_count = view.findViewById(R.id.textview_total_subsfolder_count);
+        tv_subsfolder_count.setText(String.valueOf(folderObjs.size()));
+
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);
         adapter = new MyFolderViewRecyclerAdapter();
+
         adapter.setItem(folderObjs);
         adapter.setAuthId(authId);
         adapter.setMyFolder(false);

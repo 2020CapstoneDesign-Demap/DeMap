@@ -34,12 +34,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/textview_total_folder_count"
+                android:id="@+id/textview_total_myfolder_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:text=" 0"
+                android:layout_marginLeft="2dp"
+                android:text="0"
                 android:textSize="12sp" />
         </LinearLayout>
 
