@@ -18,14 +18,16 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     private Context context;
 
+    private getCount_interface getCountInterface;
+
     // adapter에 들어갈 folder list
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
     private static ArrayList<String> myFolderList = new ArrayList<String>();
     private static String currentUid;
 
-    public MyAdapterForFolderList() {
-//        this.context = context;
+    public MyAdapterForFolderList(getCount_interface getCountInterface) {
+        this.getCountInterface = getCountInterface;
         searchFolderResult.clear();
     }
 
@@ -66,6 +68,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     @Override
     public int getItemCount() {
         // RecyclerView의 총 개수 입니다.
+        getCountInterface.getCount(searchFolderResult.size());
         return searchFolderResult.size();
     }
 
@@ -106,18 +109,20 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
         public TextView textView_folder_name;
         public TextView textView_folder_tag;
+        public TextView textView_folder_subs_count;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             textView_folder_name = itemView.findViewById(R.id.textview_folderlist_name);
             textView_folder_tag = itemView.findViewById(R.id.textview_folderlist_tag);
+            textView_folder_subs_count = itemView.findViewById(R.id.tv_folderlist_subs_count);
         }
 
         void onBind(FolderObj folderObj) {
             textView_folder_name.setText(folderObj.getName());
             textView_folder_tag.setText(folderObj.getTag());
-
+            textView_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
         }
     }
 

@@ -7,6 +7,8 @@
     <LinearLayout
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -32,25 +34,14 @@
             android:orientation="vertical"
             android:layout_width="240dp"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textview_folderlist_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorLineGray7"
-                android:textSize="17sp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
-                />
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
                     android:text="#"
-                    android:textColor="@color/colorLineGray7"
-                    android:textSize="13sp"
-                    android:layout_marginTop="1dp"
+                    android:textColor="#999999"
+                    android:textSize="12sp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="1dp"
                     android:layout_width="wrap_content"
@@ -59,10 +50,43 @@
                     android:id="@+id/textview_folderlist_tag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#999999"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textview_folderlist_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorLineGray7"
+                android:textSize="17sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="2dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="구독자 "
+                    android:textColor="@color/colorLineGray7"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="0"
+                    android:id="@+id/tv_folderlist_subs_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="1dp"
-                    />
+                    android:textColor="@color/colorTheme"
+                    android:textStyle="bold"
+                    android:layout_marginRight="10dp" />
             </LinearLayout>
 
         </LinearLayout>
