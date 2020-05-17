@@ -139,12 +139,12 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.My
                 img_notice_icon.setImageResource(R.drawable.ic_stars_blue_24dp);
             }
             else if (notice.getNoticeType().equals("내폴더장소추가알림")) {
-                img_notice_icon.setImageResource(R.drawable.demap_icon_1);
+                img_notice_icon.setImageResource(R.drawable.icon_place_marker_red);
                 img_notice_icon.setMaxHeight(60);
                 img_notice_icon.setMaxWidth(60);
             }
             else if (notice.getNoticeType().equals("구독폴더장소추가알림")) {
-                img_notice_icon.setImageResource(R.drawable.demap_icon_1);
+                img_notice_icon.setImageResource(R.drawable.icon_place_marker);
                 img_notice_icon.setMaxHeight(60);
                 img_notice_icon.setMaxWidth(60);
             }

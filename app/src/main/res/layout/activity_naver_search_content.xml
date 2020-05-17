@@ -101,7 +101,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/demap_icon_2" />
+                        android:src="@drawable/icon_place_marker_yellow" />
                 </LinearLayout>
 
 
@@ -167,6 +167,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
         android:orientation="vertical">
@@ -175,8 +176,7 @@
             android:id="@+id/tags_RecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/place_tag_list"
-            >
+            tools:listitem="@layout/place_tag_list">
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
@@ -184,6 +184,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
         android:orientation="vertical">
@@ -197,8 +198,7 @@
             android:textSize="16sp"
             android:background="@drawable/background_btn_round_blue_border"
             android:textColor="@color/colorPrimary"
-            android:text="Naver 블로그 후기"
-            />
+            android:text="Naver 블로그 후기" />
     </LinearLayout>
 
 </LinearLayout>
