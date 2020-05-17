@@ -85,6 +85,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                                             String folderOwner = folderObjs.get(position).getOwner();
                                             firestore.collection("folders").document(folderId).delete();
                                             firestore.collection("folderEditors").document(folderId).delete();
+                                            firestore.collection("folderEditorList").document(folderId).delete();
                                             firestore.collection("folderOwner").document(folderId).delete();
                                             firestore.collection("folderPublic").document(folderId).delete();
                                             firestore.collection("folderSubscribers").document(folderId).delete();
