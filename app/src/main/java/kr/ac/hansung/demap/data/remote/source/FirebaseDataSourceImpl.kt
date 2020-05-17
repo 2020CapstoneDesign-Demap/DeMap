@@ -1,6 +1,7 @@
 package kr.ac.hansung.demap.data.remote.source
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -61,16 +62,30 @@ class FirebaseDataSourceImpl : FirebaseDataSource {
             }
     }
 
-    override fun setNickName(nickname: String): Completable = Completable.create { emitter ->
-        var user = User(nickname, firebaseAuth.currentUser?.email)
+    override fun setNickName(nickname: String, context: Context): Completable = Completable.create { emitter ->
 
-        firestore.collection(USERS_COLLECTION).document(firebaseAuth.currentUser?.uid!!).set(user).addOnCompleteListener { task->
-            if(task.isSuccessful) {
-                emitter.onComplete()
-            } else {
-                emitter.onError(Throwable(task.exception))
+        var overlap: Int = 0
+        var user = User(nickname)
+
+        firestore.collection(USERS_COLLECTION).get().addOnSuccessListener {
+            for (document in it) {
+                if (user.nickName!!.equals(document.get("nickName"))) {
+                    overlap = 1;
+                    Toast.makeText(context, "중복 닉네임입니다", Toast.LENGTH_LONG).show()
+                }
+            }
+            if (overlap == 0) {
+                firestore.collection(USERS_COLLECTION).document(firebaseAuth.currentUser?.uid!!)
+                    .set(user).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            emitter.onComplete()
+                        } else {
+                            emitter.onError(Throwable(task.exception))
+                        }
+                    }
             }
         }
+
     }
 
     companion object{

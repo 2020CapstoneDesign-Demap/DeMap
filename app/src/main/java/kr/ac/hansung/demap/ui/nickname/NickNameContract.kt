@@ -1,5 +1,7 @@
 package kr.ac.hansung.demap.ui.nickname
 
+import android.content.Context
+
 interface NickNameContract {
 
     interface View{
@@ -11,7 +13,7 @@ interface NickNameContract {
     }
 
     interface Presenter{
-        fun setNickName(nickname: String)
+        fun setNickName(nickname: String, context: Context)
         fun clearDisposable()
     }
 }

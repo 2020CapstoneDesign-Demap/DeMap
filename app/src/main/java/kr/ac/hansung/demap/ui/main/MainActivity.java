@@ -39,6 +39,7 @@ import kr.ac.hansung.demap.SearchNaverActivity;
 import kr.ac.hansung.demap.SettingsActivity;
 import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
 import kr.ac.hansung.demap.ui.login.LoginActivity;
+import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -90,13 +91,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    nickname = documentSnapshot.get("nickName").toString();
-                    tv_nickname = findViewById(R.id.tv_main_nickname);
-                    tv_nickname.setText(nickname);
-                    tv_email = findViewById(R.id.tv_main_email);
-                    tv_email.setText(auth.getCurrentUser().getEmail());
+                    if (documentSnapshot.exists()) {
+                        nickname = documentSnapshot.get("nickName").toString();
+                        tv_nickname = findViewById(R.id.tv_main_nickname);
+                        tv_nickname.setText(nickname);
+                        tv_email = findViewById(R.id.tv_main_email);
+                        tv_email.setText(auth.getCurrentUser().getEmail());
 
-                    settingsIntent.putExtra("nickname", nickname);
+                        settingsIntent.putExtra("nickname", nickname);
+                    }
+                    else {
+                        Intent intent = new Intent(getApplicationContext(), NickNameActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         }

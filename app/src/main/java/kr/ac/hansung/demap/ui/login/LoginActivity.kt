@@ -61,10 +61,6 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
     }
 
-
-
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

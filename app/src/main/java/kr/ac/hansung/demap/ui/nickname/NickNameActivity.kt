@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import kr.ac.hansung.demap.R
 import kr.ac.hansung.demap.databinding.ActivityNicknameBinding
+import kr.ac.hansung.demap.ui.login.LoginActivity
 import kr.ac.hansung.demap.ui.main.MainActivity
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -29,13 +30,14 @@ class NickNameActivity : AppCompatActivity(), NickNameContract.View {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_nickname)
 
-        binding.btnConfirm.setOnClickListener {
+        binding.btnNicknameConfirm.setOnClickListener {
             setNickName(binding.etNickname.text.toString())
         }
 
-        binding.btnCancel.setOnClickListener {
+        binding.btnNicknameCancel.setOnClickListener {
             Toast.makeText(applicationContext, "다시 로그인 하세요", Toast.LENGTH_SHORT).show()
             FirebaseAuth.getInstance().signOut()
+            goToLogin()
             finish()
 
         }
@@ -43,11 +45,17 @@ class NickNameActivity : AppCompatActivity(), NickNameContract.View {
 
 
     fun setNickName(nickName: String) {
-        presenter.setNickName(nickName)
+        presenter.setNickName(nickName, applicationContext)
     }
 
     override fun goToMain() {
         Intent(this, MainActivity::class.java).also{
+            startActivity(it)
+        }
+    }
+
+    fun goToLogin() {
+        Intent(this, LoginActivity::class.java).also{
             startActivity(it)
         }
     }
