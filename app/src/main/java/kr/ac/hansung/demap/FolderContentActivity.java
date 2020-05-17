@@ -342,22 +342,30 @@ public class FolderContentActivity extends AppCompatActivity {
                                 if (document.exists()) {
                                     String nickname = document.get("nickName").toString();
                                     String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
-                                    firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-                                                noticeDTO.getNotices().put(notice, true);
-                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
-                                            }
-                                            else {
-                                                NoticeDTO noticeDTO = new NoticeDTO();
-                                                noticeDTO.getNotices().put(notice, true);
-                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
-                                            }
-                                        }
-                                    });
+                                    NoticeDTO noticeDTO = new NoticeDTO();
+                                    noticeDTO.setNotice(notice);
+                                    noticeDTO.setFolder_id(docId);
+                                    noticeDTO.setNoticeType("구독알림");
+                                    noticeDTO.setTimestamp(System.currentTimeMillis());
+                                    firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
+//                                    String nickname = document.get("nickName").toString();
+//                                    String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
+//                                    firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            DocumentSnapshot document = task.getResult();
+//                                            if (document.exists()) {
+//                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+//                                                noticeDTO.getNotices().put(notice, true);
+//                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
+//                                            }
+//                                            else {
+//                                                NoticeDTO noticeDTO = new NoticeDTO();
+//                                                noticeDTO.getNotices().put(notice, true);
+//                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
+//                                            }
+//                                        }
+//                                    });
 
                                 }
                             }
@@ -431,6 +439,7 @@ public class FolderContentActivity extends AppCompatActivity {
                                 Intent intent = new Intent(FolderContentActivity.this, FolderContentEditorActivity.class);
                                 intent.putExtra("user_id", auth.getCurrentUser().getUid());
                                 intent.putExtra("folder_id", docId);
+                                intent.putExtra("folder_name", folder_name);
                                 startActivity(intent);
                             }
                         }

@@ -7,9 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -21,9 +20,9 @@
             android:layout_height="60dp">
             <ImageView
                 android:id="@+id/img_notice_icon"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/demap_propic" />
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/demap_icon_1" />
         </LinearLayout>
 
         <LinearLayout
@@ -42,7 +41,8 @@
                     android:id="@+id/tv_notice"
                     android:text="닉네임 님이 회원님의 폴더 이름 폴더에 새로운 장소를 추가했습니다."
                     android:textColor="#666666"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
+                    android:textFontWeight="100"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 

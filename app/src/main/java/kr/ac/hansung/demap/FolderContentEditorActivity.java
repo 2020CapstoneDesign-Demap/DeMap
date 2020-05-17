@@ -27,12 +27,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderEditorListDTO;
+import kr.ac.hansung.demap.model.NoticeDTO;
 
 public class FolderContentEditorActivity extends AppCompatActivity {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private String docId;
+    private String folder_name;
 
     private String nick;
 
@@ -63,6 +65,7 @@ public class FolderContentEditorActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         docId = intent.getStringExtra("folder_id");
+        folder_name = intent.getStringExtra("folder_name");
 
         et_editor_nickname = findViewById(R.id.et_folder_editor_nickname);
         btn_add_editor = findViewById(R.id.btn_add_folder_editor);
@@ -122,9 +125,11 @@ public class FolderContentEditorActivity extends AppCompatActivity {
                                                     ArrayList<String> nicknames = new ArrayList<>();
                                                     for (String nickname: folderEditorListDTO.getEditors().keySet()) {
                                                         nicknames.add(nickname);
+                                                        addNotice(nickname);
                                                     }
                                                     adapter.setItem(nicknames);
                                                     adapter.notifyDataSetChanged();
+
                                                 } else {
                                                     folderEditorListDTO = new FolderEditorListDTO();
                                                     folderEditorListDTO.getEditors().put(nick, true);
@@ -133,9 +138,11 @@ public class FolderContentEditorActivity extends AppCompatActivity {
                                                     ArrayList<String> nicknames = new ArrayList<>();
                                                     for (String nickname: folderEditorListDTO.getEditors().keySet()) {
                                                         nicknames.add(nickname);
+                                                        addNotice(nickname);
                                                     }
                                                     adapter.setItem(nicknames);
                                                     adapter.notifyDataSetChanged();
+
                                                 }
                                             }
                                         });
@@ -153,6 +160,26 @@ public class FolderContentEditorActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addNotice(String nickname) {
+        String notice = "'" + folder_name + "' 폴더에 초대되었습니다. 구독하러 가시겠습니까?";
+        NoticeDTO noticeDTO = new NoticeDTO();
+        noticeDTO.setNotice(notice);
+        noticeDTO.setFolder_id(docId);
+        noticeDTO.setNoticeType("폴더초대알림");
+        noticeDTO.setTimestamp(System.currentTimeMillis());
+        firestore.collection("users").whereEqualTo("nickName", nickname).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document: task.getResult()) {
+                        String noticeId = document.getId();
+                        firestore.collection("notices").document(noticeId).collection("notice").document().set(noticeDTO);
+                    }
+                }
+            }
+        });
     }
 
     @Override

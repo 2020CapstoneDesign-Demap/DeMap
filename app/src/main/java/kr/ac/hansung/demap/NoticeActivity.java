@@ -17,6 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,8 @@ public class NoticeActivity extends AppCompatActivity {
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private NoticeListAdapter adapter;
+
+    private ArrayList<NoticeDTO> noticeDTOS = new ArrayList<NoticeDTO>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,27 +53,43 @@ public class NoticeActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.listView_notice_list);
         recyclerView.setHasFixedSize(false);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        DividerItemDecoration decoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NoticeListAdapter();
         recyclerView.setAdapter(adapter);
 
-        firestore.collection("notices").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firestore.collection("notices").document(auth.getCurrentUser().getUid()).collection("notice").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-
-                    ArrayList<String> notices = new ArrayList<>();
-                    for (String key: noticeDTO.getNotices().keySet()) {
-                        notices.add(key);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document: task.getResult()) {
+                        NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+                        noticeDTOS.add(noticeDTO);
                     }
-                    adapter.setItem(notices);
+                    adapter.setItem(noticeDTOS);
                     adapter.notifyDataSetChanged();
                 }
             }
         });
+
+//        firestore.collection("notices").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()) {
+//                    NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
+//
+//                    ArrayList<String> notices = new ArrayList<>();
+//                    for (String key: noticeDTO.getNotices().keySet()) {
+//                        notices.add(key);
+//                    }
+//                    adapter.setItem(notices);
+//                    adapter.notifyDataSetChanged();
+//                }
+//            }
+//        });
     }
 
     @Override
