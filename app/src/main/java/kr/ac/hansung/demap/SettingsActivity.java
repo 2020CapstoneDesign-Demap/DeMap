@@ -60,8 +60,8 @@ public class SettingsActivity extends AppCompatActivity {
         linearLayout_alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), SettingNoticeActivity.class);
+                startActivity(intent);
             }
         });
     }

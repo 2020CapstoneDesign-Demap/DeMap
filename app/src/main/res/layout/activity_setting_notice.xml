@@ -17,57 +17,40 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linear_setting_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="10"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="닉네임"
+                    android:text="구독 알림"
                     android:textColor="@color/colorLineGray7"
                     android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tv_setting_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:text="닉네임"
-                    android:textColor="@color/colorTheme"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1.5"
                 android:orientation="vertical">
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icons8_forward_96" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_notice_subs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
@@ -80,57 +63,40 @@
             android:background="#EEEEEE" />
 
         <LinearLayout
-            android:id="@+id/linear_setting_alarm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="10"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="알림"
+                    android:text="구독한 폴더 알림"
                     android:textColor="@color/colorLineGray7"
                     android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tv_setting_alarm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:text="켬"
-                    android:textColor="@color/colorTheme"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1.5"
                 android:orientation="vertical">
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icons8_forward_96" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_notice_subs_folder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
@@ -143,53 +109,45 @@
             android:background="#EEEEEE" />
 
         <LinearLayout
-            android:id="@+id/linear_setting_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="15"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="버전정보"
+                    android:text="내폴더 장소 추가 알림"
                     android:textColor="@color/colorLineGray7"
                     android:textSize="16sp" />
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="1.5"
                 android:orientation="vertical">
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icons8_forward_96" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_notice_my_folder_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:background="#EEEEEE" />
 
 
     </LinearLayout>
-
 
 </LinearLayout>

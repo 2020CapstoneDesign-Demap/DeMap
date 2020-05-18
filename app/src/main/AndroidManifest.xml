@@ -17,13 +17,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
-        <service
-            android:name=".java.MyFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".java.MyFirebaseMessagingService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more. -->
@@ -78,7 +78,10 @@
         <activity android:name=".FolderContentEditorActivity" />
         <activity android:name=".NoticeActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".AddPlaceToFolderActivity" /> <!-- 네이버 api -->
+        <activity android:name=".AddPlaceToFolderActivity" />
+        <activity android:name=".SettingNoticeActivity"/>
+
+        <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="3vtiw45s9x" />
