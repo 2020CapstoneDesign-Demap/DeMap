@@ -17,16 +17,22 @@ import org.koin.core.parameter.parametersOf
 
 class NickNameActivity : AppCompatActivity(), NickNameContract.View {
 
+    private var isIntent: Int = 0
+
     private val presenter: NickNameContract.Presenter by inject {
         parametersOf(this)
     }
 
     private lateinit var binding: ActivityNicknameBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.hide()
         window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
+
+        var intent = intent
+        isIntent = intent.getIntExtra("flag", 0)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_nickname)
 
@@ -35,11 +41,15 @@ class NickNameActivity : AppCompatActivity(), NickNameContract.View {
         }
 
         binding.btnNicknameCancel.setOnClickListener {
-            Toast.makeText(applicationContext, "다시 로그인 하세요", Toast.LENGTH_SHORT).show()
-            FirebaseAuth.getInstance().signOut()
-            goToLogin()
-            finish()
-
+            if (isIntent == 0) {
+                Toast.makeText(applicationContext, "다시 로그인 하세요", Toast.LENGTH_SHORT).show()
+                FirebaseAuth.getInstance().signOut()
+                goToLogin()
+                finish()
+            }
+            else if (isIntent == 1) {
+                finish()
+            }
         }
     }
 
@@ -77,9 +87,15 @@ class NickNameActivity : AppCompatActivity(), NickNameContract.View {
         binding.pbLoading.visibility = View.GONE
     }
     override fun onBackPressed() {
-        Toast.makeText(applicationContext, "다시 로그인 하세요", Toast.LENGTH_SHORT).show()
-        FirebaseAuth.getInstance().signOut()
-        finish()
+        if (isIntent == 0) {
+            Toast.makeText(applicationContext, "다시 로그인 하세요", Toast.LENGTH_SHORT).show()
+            FirebaseAuth.getInstance().signOut()
+            goToLogin()
+            finish()
+        }
+        else if (isIntent == 1) {
+            finish()
+        }
         super.onBackPressed()
     }
 

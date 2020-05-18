@@ -3,12 +3,16 @@ package kr.ac.hansung.demap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -16,6 +20,8 @@ public class SettingsActivity extends AppCompatActivity {
     private String nickname;
 
     private TextView tv_setting_nickname;
+
+    private LinearLayout linearLayout_nickname;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +45,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         tv_setting_nickname = findViewById(R.id.tv_setting_nickname);
         tv_setting_nickname.setText(nickname);
+
+        linearLayout_nickname = findViewById(R.id.linear_setting_nickname);
+        linearLayout_nickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NickNameActivity.class);
+                intent.putExtra("flag", 1);
+                startActivity(intent);
+            }
+        });
+
+        LinearLayout linearLayout_alarm = findViewById(R.id.linear_setting_alarm);
+        linearLayout_alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+//                startActivity(intent);
+            }
+        });
     }
 
     @Override
