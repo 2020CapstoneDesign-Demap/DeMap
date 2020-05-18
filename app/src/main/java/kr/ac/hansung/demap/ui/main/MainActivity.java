@@ -17,18 +17,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.CreateFolderActivity;
 import kr.ac.hansung.demap.FolderListActivity;
@@ -85,6 +92,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         settingsIntent = new Intent(this, SettingsActivity.class);
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
+
+        //push 메시지 token
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w("TAG", "getInstanceId failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new Instance ID token
+//                        String token = task.getResult().getToken();
+//
+//                        // Log and toast
+//                        Log.d("TAG", token);
+//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+//
+//                        Map<String, String> pushToken = new HashMap<>();
+//                        pushToken.put("token", token);
+//                        firestore.collection("pushTokens").document(auth.getCurrentUser().getUid()).set(pushToken);
+//                    }
+//                });
 
         // 로그인한 유저 닉네임 받아오기
         if (auth.getCurrentUser() != null) {
