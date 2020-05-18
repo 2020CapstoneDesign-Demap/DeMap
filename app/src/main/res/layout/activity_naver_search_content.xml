@@ -30,10 +30,10 @@
         android:id="@+id/slide_drawer_search_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
         android:clickable="true"
         android:focusable="false"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/handle"
