@@ -38,10 +38,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import java.util.HashMap;
@@ -116,27 +120,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions((Activity)this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     0);
-        } else {
-            // 내위치 검색
-            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            String provider = location.getProvider();
-            double now_longitude = location.getLongitude();
-            double now_latitude = location.getLatitude();
-            double now_altitude = location.getAltitude();
-
-            latitude = now_latitude;
-            altitude = now_altitude;
-            longitude = now_longitude;
-
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    3000,
-                    1,
-                    gpsLocationListener);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    3000,
-                    1,
-                    gpsLocationListener);
         }
 
         // 로그인한 유저 닉네임 받아오기
@@ -242,6 +225,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     3000,
                     1,
                     gpsLocationListener);
+
+            // 카메라 위치 변경
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(now_latitude, now_longitude)).animate(CameraAnimation.Easing);
+            naverMap.moveCamera(cameraUpdate);
+
+            // 현재 위치 오버레이
+            LocationOverlay locationOverlay = naverMap.getLocationOverlay();
+            locationOverlay.setVisible(true);
+
+            locationOverlay.setPosition(new LatLng(now_latitude, now_longitude));
+            locationOverlay.setSubIconWidth(80);
+            locationOverlay.setSubIconHeight(40);
+            locationOverlay.setSubAnchor(new PointF(0.5f, 1));
         }
 
 
@@ -249,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
        // marker.setPosition(new LatLng(37.5666103, 126.9783882));
         marker.setPosition(new LatLng(37.421998333333335, -122.08400000000002));
         System.out.println("내 현재위치 : " + latitude +", " + longitude);
+        marker.setIcon(OverlayImage.fromResource(R.drawable.icon_place_marker));
         marker.setMap(naverMap);
 
         // 지도 아무데나 눌렀을 때
