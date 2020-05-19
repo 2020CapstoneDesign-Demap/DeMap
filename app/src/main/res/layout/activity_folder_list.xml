@@ -84,8 +84,8 @@
                 android:id="@+id/result_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="85dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="80dp"
                 android:text="전체"
                 android:textSize="15sp"
                 />
@@ -95,7 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="10dp"
                 />
         </LinearLayout>
     </LinearLayout>
