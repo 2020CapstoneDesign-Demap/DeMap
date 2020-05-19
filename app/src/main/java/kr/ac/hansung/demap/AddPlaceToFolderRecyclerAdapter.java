@@ -23,11 +23,15 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
@@ -131,6 +135,18 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
     void setItem(ArrayList<FolderObj> folderObj) {
         folderObjs = folderObj;
         notifyDataSetChanged();
+    }
+
+    public void updateNewFolder(@Nullable FolderDTO folderDTO, @Nullable String folderId) {
+        FolderObj fObj = new FolderObj();
+        fObj.setId(folderId);
+        fObj.setName(folderDTO.getName());
+        fObj.setPlaceCount(folderDTO.getPlaceCount());
+        fObj.setSubscribeCount(folderDTO.getSubscribeCount());
+        fObj.setImageUrl(folderDTO.getImageUrl());
+        folderObjs.add(fObj);
+        notifyDataSetChanged();
+
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

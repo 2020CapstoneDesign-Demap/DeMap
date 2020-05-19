@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kr.ac.hansung.demap.FolderContentActivity.adapter
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderTag
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForPublic
+//import sun.jvm.hotspot.utilities.IntArray
+
+
 //import sun.jvm.hotspot.utilities.IntArray
 
 
@@ -216,12 +220,14 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         //folder 데이터
         var folderDTO = FolderDTO()
+        var fID : String? = null
 //        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
         firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
 
             var folderID = it.id //도큐먼트 ID 가져옴
+            fID = folderID
 
             //폴더 생성자 정보 저장
             var owner: MutableMap<String, Object> = HashMap()
@@ -279,9 +285,21 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         if (addPlace == 1) {
 //            ((AddPlaceToFolderActivity)AddPlaceToFolderActivity.addPlaceToFolderContext)
         }
+
+        updateAdapterItem(folderDTO,fID);
+
         finish()
 
     }
+
+    fun updateAdapterItem(
+        folderDTO: FolderDTO?,
+        folderId: String?
+    ) {
+        AddPlaceToFolderActivity.adapter.updateNewFolder(folderDTO, folderId)
+        AddPlaceToFolderActivity.adapter.notifyDataSetChanged()
+    }
+
 
     //어댑터에서 체크한 데이터 위치 넘겨받음
     override fun onCheckbox(index: Int, p: Int) {

@@ -46,7 +46,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
     private PlaceDTO placeDTO = new PlaceDTO();
 
-    private AddPlaceToFolderRecyclerAdapter adapter;
+    public static AddPlaceToFolderRecyclerAdapter adapter;
 
     // 장소에 관한 데이터를 받아올 인텐트
     private Intent intentForAddPlace;
