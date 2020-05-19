@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,8 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
     public void onBindViewHolder(@NonNull MySearchNaverRecyclerAdapter.MyViewHolder holder, int position) {
         if (title[0]!="초기값")
             holder.onBind(title[position], roadaddress[position], category[position], telephone[position]);
+        checkNull(title);
+
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +87,12 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.han
             this.mapy[i] = mapy[i];
         }
 
+    }
+
+    private void checkNull(String[] title) {
+        if(title[0] == null) {
+            Toast.makeText(context,"검색 결과가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
