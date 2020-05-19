@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,6 +105,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                         result_set = "all";
                         tv_result_set.setText("전체");
                         if(search_key != null) {
+                            searchFolderResult.clear();
                             searchForFolderOwner(search_key);
                             searchForFolderName(search_key);
                         }
@@ -112,6 +114,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                         result_set = "folder name";
                         tv_result_set.setText("폴더명");
                         if(search_key != null) {
+                            searchFolderResult.clear();
                             searchForFolderName(search_key);
                         }
                         break;
@@ -119,8 +122,10 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                         result_set = "nick name";
                         tv_result_set.setText("닉네임");
                         if(search_key != null) {
+                            searchFolderResult.clear();
                             searchForFolderOwner(search_key);
                         }
+
                         break;
                 }
             }
@@ -148,6 +153,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                         search_key = keyword;
                         searchForFolderOwner(keyword);
                         searchForFolderName(keyword);
+
+                if(searchFolderResult.isEmpty()) {
+                    Toast.makeText(FolderListActivity.this,"검색 결과가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+
                 //    case "folder name" :
                  //       searchForFolderName(keyword);
                //     case "nick name" :
