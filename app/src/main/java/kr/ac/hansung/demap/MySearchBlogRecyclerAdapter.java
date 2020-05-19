@@ -2,6 +2,7 @@ package kr.ac.hansung.demap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,9 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), NaverSearchContentActivity.class);
-
-                //intent.putExtra("result_name", title[position]);
-                //intent.putExtra("result_addr", roadaddress[position]);
-                //intent.putExtra("result_category", category[position]);
-                //intent.putExtra("result_phone", telephone[position]);
-                //intent.putExtra("result_mapx", mapx[position]);
-                //intent.putExtra("result_mapy", mapy[position]);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(link[position]);
+                intent.setData(uri);
 
                 context.startActivity(intent);
             }
