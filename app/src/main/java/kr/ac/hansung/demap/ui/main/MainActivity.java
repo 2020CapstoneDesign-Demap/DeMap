@@ -1,7 +1,15 @@
 package kr.ac.hansung.demap.ui.main;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PointF;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -74,6 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
 
+    private static double latitude;
+    private static double altitude;
+    private static double longitude;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,28 +108,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
-        //push 메시지 token
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if (!task.isSuccessful()) {
-//                            Log.w("TAG", "getInstanceId failed", task.getException());
-//                            return;
-//                        }
-//
-//                        // Get new Instance ID token
-//                        String token = task.getResult().getToken();
-//
-//                        // Log and toast
-//                        Log.d("TAG", token);
-//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-//
-//                        Map<String, String> pushToken = new HashMap<>();
-//                        pushToken.put("token", token);
-//                        firestore.collection("pushTokens").document(auth.getCurrentUser().getUid()).set(pushToken);
-//                    }
-//                });
+/**  내 위치 리스너 **/
+        // GPS 연동을 위한 권한 체크
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity)this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        } else {
+            // 내위치 검색
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            String provider = location.getProvider();
+            double now_longitude = location.getLongitude();
+            double now_latitude = location.getLatitude();
+            double now_altitude = location.getAltitude();
+
+            latitude = now_latitude;
+            altitude = now_altitude;
+            longitude = now_longitude;
+
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+        }
 
         // 로그인한 유저 닉네임 받아오기
         if (auth.getCurrentUser() != null) {
@@ -191,8 +213,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
 
+        /**  내 위치 리스너 **/
+        // GPS 연동을 위한 권한 체크
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity)this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        } else {
+            // 내위치 검색
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            String provider = location.getProvider();
+            double now_longitude = location.getLongitude();
+            double now_latitude = location.getLatitude();
+            double now_altitude = location.getAltitude();
+
+            latitude = now_latitude;
+            altitude = now_altitude;
+            longitude = now_longitude;
+
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+        }
+
+
         Marker marker = new Marker();
-        marker.setPosition(new LatLng(37.5666103, 126.9783882));
+       // marker.setPosition(new LatLng(37.5666103, 126.9783882));
+        marker.setPosition(new LatLng(37.421998333333335, -122.08400000000002));
+        System.out.println("내 현재위치 : " + latitude +", " + longitude);
         marker.setMap(naverMap);
 
         // 지도 아무데나 눌렀을 때
@@ -333,5 +389,52 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return false;
     }
+
+    /** 위치 정보 리스너 **/
+    final LocationListener gpsLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+
+            String provider = location.getProvider();
+            double now_longitude = location.getLongitude();
+            double now_latitude = location.getLatitude();
+            double now_altitude = location.getAltitude();
+
+            latitude = now_latitude;
+            longitude = now_longitude;
+            altitude = now_altitude;
+
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            // 권한 체크
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
 }
 
