@@ -2,10 +2,14 @@ package kr.ac.hansung.demap;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,6 +64,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     // 구독 리스너 -> 사용할지 안할지 모르겠음
     //private ListenerRegistration followListenerRegistration = null;
     //private ListenerRegistration followingListenerRegistration = null;
+    private Spinner spinner;
+
+    private String result_set = null;
+    private TextView tv_result_set;
+    private String search_key;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +87,44 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
         setContentView(R.layout.activity_folder_list);
 
+        // Spinner 선택 리스트 가져오기
+        final String[] data = getResources().getStringArray(R.array.searchresult); // xml에서 가져올때 get 리소스
+        // Spinner 선언/객체화, 데이터와 화면 연결할 spinner adapter생성, Spinner와 어댑터 연결
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,data);
+        spinner = (Spinner)findViewById(R.id.result_spinner);
+        spinner.setAdapter(arrayAdapter);
+
+        tv_result_set = findViewById(R.id.result_tv);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                switch (position) {
+                    case 0 :
+                        result_set = "all";
+                        tv_result_set.setText("전체");
+                        searchForFolderOwner(search_key);
+                        searchForFolderName(search_key);
+                        break;
+                    case 1 :
+                        result_set = "folder name";
+                        tv_result_set.setText("폴더명");
+                        searchForFolderName(search_key);
+                        break;
+                    case 2 :
+                        result_set = "nick name";
+                        tv_result_set.setText("닉네임");
+                        searchForFolderOwner(search_key);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                result_set = "all";
+            }
+        });
+
 
         //구독 가능한 폴더 리스트
         setSubableIDList();
@@ -90,7 +137,18 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             public boolean onQueryTextSubmit(String keyword) {
                 // 검색 버튼이 눌러졌을 때 이벤트 처리
                 System.out.println("검색 처리됨 : " + keyword);
-                searchForFolderName(keyword);
+                //switch (result_set) {
+                //    case "all" :
+                        search_key = keyword;
+                        searchForFolderOwner(keyword);
+                        searchForFolderName(keyword);
+                //    case "folder name" :
+                 //       searchForFolderName(keyword);
+               //     case "nick name" :
+                 //       searchForFolderOwner(keyword);
+
+              //  }
+                //searchForFolderName(keyword);
                 //searchForFolderOwner(keyword);
                 return true;
             }
@@ -211,7 +269,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         // 검색 결과 리스트 초기화
         searchFolderResult.clear();
 
-        searchForFolderOwner(keyword);
+        //searchForFolderOwner(keyword);
 
     for (FolderObj tempfolder : folderObjs) {
         // 키워드가 들어간 폴더들을 긁어와서
