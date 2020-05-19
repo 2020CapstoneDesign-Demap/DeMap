@@ -40,11 +40,6 @@ import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.HotPlaceDTO;
 
 public class HotPlaceActivity extends AppCompatActivity {
-    //private FirebaseAuth auth = FirebaseAuth.getInstance();
-    //private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-    private HashMap<String, String> myHotPlace  = new HashMap();
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private HotPlacePagerAdapter pagerAdapter;
