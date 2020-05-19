@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,9 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
     public void onBindViewHolder(@NonNull MySearchBlogRecyclerAdapter.MyViewHolder holder, int position) {
         if (title[0]!="초기값")
             holder.onBind(title[position], description[position], postdate[position], link[position]);
+        else {
+            //holder.noBind();
+        }
         checkNull(title);
 
 
@@ -93,6 +97,9 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
         public TextView textView_searchresult_title;
         public TextView textView_searchresult_desc;
         public TextView textView_searchresult_date;
+        public TextView textView_Options_myfolder;
+        public ImageView imageView;
+        public View diviber_view;
 
 
         public MyViewHolder(View itemView) {
@@ -101,6 +108,9 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
             textView_searchresult_title = itemView.findViewById(R.id.textview_blog_title);
             textView_searchresult_desc = itemView.findViewById(R.id.textview_blog_desc);
             textView_searchresult_date = itemView.findViewById(R.id.textview_blog_date);
+            textView_Options_myfolder = itemView.findViewById(R.id.textView_Options_myfolder);
+            imageView = itemView.findViewById(R.id.blog_img);
+            diviber_view = itemView.findViewById(R.id.blog_diviber);
 
         }
 
@@ -108,6 +118,15 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
             textView_searchresult_title.setText(title);
             textView_searchresult_desc.setText(description);
             textView_searchresult_date.setText(postdate);
+            textView_Options_myfolder.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+            diviber_view.setVisibility(View.VISIBLE);
+        }
+
+        void noBind() {
+            textView_Options_myfolder.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+            diviber_view.setVisibility(View.GONE);
         }
     }
 

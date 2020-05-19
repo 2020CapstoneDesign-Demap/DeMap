@@ -42,13 +42,16 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/blog_img"
                 android:background="@drawable/icon_demap_map"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="13dp"
                 android:layout_marginBottom="13dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="80dp"
-                android:layout_height="80dp">
+                android:layout_height="80dp"
+                android:visibility="invisible"
+                >
             </androidx.appcompat.widget.AppCompatImageView>
 
         </LinearLayout>
@@ -89,7 +92,9 @@
                 android:layout_height="wrap_content"
                 android:text="&#8942;"
                 android:textColor="@color/colorLineGray6"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:textAppearance="?android:textAppearanceLarge"
+                android:visibility="invisible"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -118,9 +123,11 @@
         android:layout_height="wrap_content"
         >
         <View
+            android:id="@+id/blog_diviber"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/recycler_divider"
+            android:visibility="invisible"
             />
     </LinearLayout>
 
