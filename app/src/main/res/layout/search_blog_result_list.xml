@@ -39,7 +39,7 @@
             android:layout_weight="10"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/textview_folderview_name"
+                android:id="@+id/textview_blog_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="~블로그 제목~"
@@ -53,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
+                    android:id="@+id/textview_blog_desc"
                     android:text="~블로그 게시글 일부 내용~"
                     android:textSize="14sp"
                     android:layout_marginLeft="5dp"
