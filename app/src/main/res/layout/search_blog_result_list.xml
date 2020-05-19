@@ -6,10 +6,30 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/textview_blog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="1dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <LinearLayout
             android:gravity="center"
@@ -38,23 +58,13 @@
             android:layout_width="0dp"
             android:layout_weight="10"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textview_blog_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="~블로그 제목~"
-                android:textSize="18sp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
-                />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/textview_blog_desc"
-                    android:text="~블로그 게시글 일부 내용~"
                     android:textSize="14sp"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
