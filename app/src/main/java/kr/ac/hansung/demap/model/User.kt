@@ -8,3 +8,5 @@ data class User(
 data class UserMyFolderDTO(var myfolders: MutableMap<String, Boolean> = HashMap())
 
 data class UserSubsFolderDTO(var subscribefolders: MutableMap<String, Boolean> = HashMap())
+
+data class UserMyHotPlaceDTO(var myhotplaces: MutableMap<String, Boolean> = HashMap())

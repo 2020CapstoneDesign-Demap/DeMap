@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.hotPlace.HotPlaceFragment">
+
+    <SearchView
+        android:id="@+id/sv_hotPlace"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_hotPlace"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#EEEEEE"
+        tools:listitem="@layout/hotplace_list" />
+
+</LinearLayout>
