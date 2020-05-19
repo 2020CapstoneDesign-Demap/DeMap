@@ -59,7 +59,7 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
         // return 인자는 ViewHolder 입니다.
         // create a new view
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.naver_search_result_list, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_blog_result_list, parent, false);
         MySearchBlogRecyclerAdapter.MyViewHolder vh = new MySearchBlogRecyclerAdapter.MyViewHolder(view);
         context = parent.getContext();
         return vh;

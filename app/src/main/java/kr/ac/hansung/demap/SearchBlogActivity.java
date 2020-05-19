@@ -2,6 +2,8 @@ package kr.ac.hansung.demap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ public class SearchBlogActivity extends AppCompatActivity {
 
     private Intent intent;
 
+    private MySearchBlogRecyclerAdapter adapter; // BlogList 어댑터
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,12 @@ public class SearchBlogActivity extends AppCompatActivity {
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        RecyclerView recyclerView = findViewById(R.id.search_blog_result_list);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MySearchBlogRecyclerAdapter();
+        recyclerView.setAdapter(adapter);
     }
 
     // 네이버 지역 검색 api 연동 및 데이터 가져오기
@@ -141,8 +151,8 @@ public class SearchBlogActivity extends AppCompatActivity {
                     //System.out.println(array);
                     System.out.println(description[0]+description[1]+description[2]+description[3]+description[4]);
 
-                    //adapter.addItems(title, roadaddress, category, telephone, mapx, mapy);
-                    //adapter.notifyDataSetChanged();
+                    adapter.addItems(title, description, postdate, link);
+                    adapter.notifyDataSetChanged();
                     // title[0], link[0], bloggername[0] 등 인덱스 값에 맞게 검색결과를 변수화하였다.
 
                 } catch (
