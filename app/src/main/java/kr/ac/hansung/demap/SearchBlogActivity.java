@@ -140,6 +140,10 @@ public class SearchBlogActivity extends AppCompatActivity {
                             description[k] = Html.fromHtml(array[i + 2]).toString();
                         if (array[i].equals("postdate")) {
                             postdate[k] = Html.fromHtml(array[i + 2]).toString();
+                            String year = postdate[k].substring(0,4) + "년 ";
+                            String mon = postdate[k].substring(4,6) + "월 ";
+                            String day = postdate[k].substring(6) + "일 ";
+                            postdate[k] = year + mon + day;
                             k++;
                         }
                         /*if (array[i].equals("category")) {

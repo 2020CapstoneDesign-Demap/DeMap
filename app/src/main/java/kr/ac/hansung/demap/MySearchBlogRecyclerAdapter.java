@@ -96,19 +96,22 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
 
         public TextView textView_searchresult_title;
         public TextView textView_searchresult_desc;
+        public TextView textView_searchresult_date;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             textView_searchresult_title = itemView.findViewById(R.id.textview_blog_title);
             textView_searchresult_desc = itemView.findViewById(R.id.textview_blog_desc);
-            //textView_searchresult_category = itemView.findViewById(R.id.textview_searchresult_category);
+            textView_searchresult_date = itemView.findViewById(R.id.textview_blog_date);
 
         }
 
         void onBind(String title, String description, String postdate, String link) {
             textView_searchresult_title.setText(title);
             textView_searchresult_desc.setText(description);
+            textView_searchresult_date.setText(postdate);
         }
     }
 
