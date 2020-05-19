@@ -79,13 +79,23 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="30dp"
                 android:button="@drawable/entertag" />
+
+            <TextView
+                android:id="@+id/result_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="85dp"
+                android:text="전체"
+                android:textSize="15sp"
+                />
             
             <Spinner
                 android:id="@+id/result_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="4dp"
                 />
         </LinearLayout>
     </LinearLayout>
