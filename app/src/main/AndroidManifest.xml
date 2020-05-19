@@ -16,31 +16,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-<!--        <service-->
-<!--            android:name=".java.MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-             See README(https://goo.gl/l4GJaQ) for more. -->
+        <activity android:name=".CustomerCenterActivity"></activity>
+        <!-- <service -->
+        <!-- android:name=".java.MyFirebaseMessagingService" -->
+        <!-- android:exported="false"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/demap_propic" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorTheme" />
-
-<!--        <meta-data-->
-<!--            android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-<!--            android:value="@string/default_notification_channel_id" />-->
-        
-        <activity android:name=".SearchBlogActivity"></activity>
+            android:resource="@color/colorTheme" /> <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_channel_id" -->
+        <!-- android:value="@string/default_notification_channel_id" /> -->
+        <activity android:name=".SearchBlogActivity" />
         <activity android:name=".AddPlaceFormActivity" />
 
         <uses-library
@@ -56,10 +56,10 @@
             android:name=".SearchNaverActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateFolderActivity" />
-        <activity android:name=".ui.login.LoginActivity"></activity>
+        <activity android:name=".ui.login.LoginActivity" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -69,7 +69,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.hotPlace.HotPlaceActivity"></activity>
+        <activity android:name=".ui.hotPlace.HotPlaceActivity" />
         <activity android:name=".ui.nickname.NickNameActivity" />
         <activity android:name=".ui.signup.SignupActivity" />
         <activity android:name=".FolderListActivity" />
@@ -79,9 +79,7 @@
         <activity android:name=".NoticeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AddPlaceToFolderActivity" />
-        <activity android:name=".SettingNoticeActivity"/>
-
-        <!-- 네이버 api -->
+        <activity android:name=".SettingNoticeActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="3vtiw45s9x" />

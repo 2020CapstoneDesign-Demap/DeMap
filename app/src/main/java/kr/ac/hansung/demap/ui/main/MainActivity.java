@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ac.hansung.demap.CreateFolderActivity;
+import kr.ac.hansung.demap.CustomerCenterActivity;
 import kr.ac.hansung.demap.FolderListActivity;
 import kr.ac.hansung.demap.MyfolderViewActivity;
 import kr.ac.hansung.demap.NoticeActivity;
@@ -287,6 +288,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void service() {
+        Intent intent = new Intent(this, CustomerCenterActivity.class);
+        startActivity(intent);
+    }
+
     public void settings() {
         startActivity(settingsIntent);
     }
@@ -316,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.hotplace_menu: viewSearchHotPlace(); break; // 핫플레이스
             case R.id.history_menu: notice(); break;
             case R.id.setting_menu: settings(); break;
-            case R.id.service_menu: Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show(); break;
+            case R.id.service_menu: service(); break;
             case R.id.logout_menu: logout(); break;
 
             //바텀
@@ -329,231 +335,3 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 }
 
-
-/*
-class MainActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
-
-    var auth: FirebaseAuth? = null
-    var firestore: FirebaseFirestore? = null
-
-    var nickname: String? = null
-
-    private var adapter // FolderList 어댑터
-            : MySearchNaverRecyclerAdapter? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        //Initiate
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
-
-        setSupportActionBar(toolbar_main) // 툴바를 액티비티의 앱바로 지정
-        supportActionBar?.let {
-            it.setBackgroundDrawable(getDrawable(R.color.colorWhite))
-            it.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
-            it.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) // 홈버튼 이미지 변경
-            it.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
-        }
-
-        window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
-
-        // 로그인한 유저 닉네임 받아오기
-        firestore?.collection("users")?.document(auth?.currentUser?.uid!!)?.get()?.addOnSuccessListener { documentSnapshot ->
-            nickname = documentSnapshot["nickName"].toString();
-            main_nav_header.tv_nickname.text = nickname
-            main_nav_header.tv_email.text = auth?.currentUser?.email
-        }
-
-        //navigationListener
-        main_nav.setNavigationItemSelectedListener(this)
-
-        // bottom navigation
-        bottom_nav.setOnNavigationItemSelectedListener(this)
-
-        // naver map 객체 가져오기
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
-            ?: MapFragment.newInstance().also {
-                supportFragmentManager.beginTransaction().add(R.id.map_fragment, it).commit()
-            }
-        mapFragment.getMapAsync(this)
-
-        // 검색어 가져오기
-        //status1 = (TextView)findViewById(R.id.textview_searchresult_name); //파싱된 결과를 보자
-//status2 = (TextView)findViewById(R.id.textview_seatchresult_address);
-// 검색어 가져오기
-        val searchView =
-            findViewById<SearchView>(R.id.sv_searchPlace)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(searchword: String): Boolean { // 검색 버튼이 눌러졌을 때 이벤트 처리
-                println("검색 처리됨 : $searchword")
-                //searchForFolderName(keyword);
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean { // 검색어가 변경되었을 때 이벤트 처리
-                return false
-            }
-        })
-        //System.out.println(query);
-
-        //System.out.println(query);
-        val recyclerView : RecyclerView? =
-            findViewById<RecyclerView>(R.id.listView_search_result_list)
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(false)
-        }
-        if (recyclerView != null) {
-            recyclerView.layoutManager = LinearLayoutManager(this)
-        }
-        adapter = MySearchNaverRecyclerAdapter()
-        if (recyclerView != null) {
-            recyclerView.adapter = adapter
-        }
-    }
-
-    fun createFolder() {
-        var intent = Intent(this, CreateFolderActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun viewFolderList() {
-        var intent = Intent(this, FolderListActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun viewMyFolderList() {
-        var intent = Intent(this, MyfolderViewActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun viewSearchHotPlace() {
-        var intent = Intent(this, SearchNaverActivity::class.java)
-        startActivity(intent)
-    }
-
- */
-
-/*
-
-    // searchview
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        sv_searchPlace.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // 검색어가 변경되었을 때 이벤트 처리
-                return false
-            }
-
-            override fun onQueryTextChange(keyword: String): Boolean {
-                Toast.makeText(this@MainActivity, keyword ,Toast.LENGTH_SHORT).show()
-                return true
-            }
-        })
-        return true
-    }
-
-*/
-
-
-/*
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home->{
-                drawerlayout_main.openDrawer(GravityCompat.START) // 네비게이션 드로어 열기
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.search_folder_menu-> viewFolderList() //Toast.makeText(this,"폴더검색 clicked",Toast.LENGTH_SHORT).show()
-            R.id.my_folder_menu-> viewMyFolderList() //Toast.makeText(this,"마이폴더 clicked",Toast.LENGTH_SHORT).show()
-            R.id.hotplace_menu-> viewSearchHotPlace()
-            R.id.history_menu-> Toast.makeText(this,"히스토리 clicked",Toast.LENGTH_SHORT).show()
-            R.id.setting_menu-> Toast.makeText(this,"설정 clicked",Toast.LENGTH_SHORT).show()
-            R.id.service_menu-> Toast.makeText(this,"고객센터 clicked",Toast.LENGTH_SHORT).show()
-            R.id.logout_menu-> Toast.makeText(this,"로그아웃 clicked",Toast.LENGTH_SHORT).show()
-
-            R.id.history_bottom_nav-> Toast.makeText(this,"바텀히스토리 clicked",Toast.LENGTH_SHORT).show()
-            R.id.search_folder_bottom_nav-> viewFolderList()
-            R.id.my_folder_bottom_nav-> createFolder()
-        }
-        return false
-    }
-
-    // 드로어가 나와있을 때 뒤로가기 버튼 누를 경우 드로어 닫기
-    override fun onBackPressed() {
-        if (drawerlayout_main.isDrawerOpen(GravityCompat.START)) {
-            drawerlayout_main.closeDrawers()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-
-    // 좌표 눌렀을 때 커스텀 window adapter
-    private class InfoWindowAdapter(private val context: Context) : InfoWindow.ViewAdapter() {
-        private var rootView: View? = null
-        private var icon: ImageView? = null
-        private var text: TextView? = null
-
-        override fun getView(infoWindow: InfoWindow): View {
-            val view = rootView ?: View.inflate(context, R.layout.view_custom_info_window, null).also { rootView = it }
-            val icon = icon ?: view.findViewById<ImageView>(R.id.icon).also { icon = it }
-            val text = text ?: view.findViewById<TextView>(R.id.text).also { text = it }
-
-            val marker = infoWindow.marker
-            if (marker != null) {
-                icon.setImageResource(R.drawable.ic_place_black_24dp)
-                text.text = marker.tag as String?
-            } else {
-                icon.setImageResource(R.drawable.ic_my_location_black_24dp)
-                text.text = context.getString(
-                    R.string.format_coord, infoWindow.position.latitude, infoWindow.position.longitude)
-            }
-            return view
-        }
-    }
-
-
-
-    // 지도 사용하는 거 다 여기에 쓰면 되는거가타요
-    override fun onMapReady(naverMap: NaverMap) {
-        val infoWindow = InfoWindow().apply {
-            anchor = PointF(0f, 1f)
-            offsetX = resources.getDimensionPixelSize(R.dimen.custom_info_window_offset_x)
-            offsetY = resources.getDimensionPixelSize(R.dimen.custom_info_window_offset_y)
-            adapter = InfoWindowAdapter(this@MainActivity)
-            setOnClickListener {
-                close()
-                true
-            }
-        }
-
-
-        val marker = Marker()
-        marker.position = LatLng(37.5670135, 126.9783740)
-        marker.map = naverMap
-
-        // 지도 아무데나 눌렀을 때
-        naverMap.setOnMapClickListener { _, coord ->
-            Toast.makeText(this, "${coord}", Toast.LENGTH_LONG).show()
-            var now : LatLng? = coord
-
-            if(now != marker.position) {
-
-                marker.map = null
-
-                marker.position = coord
-                marker.map = naverMap
-
-            }
-            //infoWindow.position = coord
-            //infoWindow.open(naverMap)
-        }
-    }
-}
-*/
