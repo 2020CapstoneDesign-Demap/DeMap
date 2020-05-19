@@ -103,18 +103,24 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                     case 0 :
                         result_set = "all";
                         tv_result_set.setText("전체");
-                        searchForFolderOwner(search_key);
-                        searchForFolderName(search_key);
+                        if(search_key != null) {
+                            searchForFolderOwner(search_key);
+                            searchForFolderName(search_key);
+                        }
                         break;
                     case 1 :
                         result_set = "folder name";
                         tv_result_set.setText("폴더명");
-                        searchForFolderName(search_key);
+                        if(search_key != null) {
+                            searchForFolderName(search_key);
+                        }
                         break;
                     case 2 :
                         result_set = "nick name";
                         tv_result_set.setText("닉네임");
-                        searchForFolderOwner(search_key);
+                        if(search_key != null) {
+                            searchForFolderOwner(search_key);
+                        }
                         break;
                 }
             }
