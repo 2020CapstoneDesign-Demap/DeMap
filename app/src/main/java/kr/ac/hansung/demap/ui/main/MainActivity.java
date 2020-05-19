@@ -320,7 +320,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.logout_menu: logout(); break;
 
             //바텀
-            case R.id.history_bottom_nav: Toast.makeText(this,"바텀히스토리 clicked",Toast.LENGTH_SHORT).show(); break;
+            case R.id.home_nav: break;
+            case R.id.history_bottom_nav: notice(); break;
             case R.id.search_folder_bottom_nav: viewFolderList(); break; // 폴더 검색
             case R.id.my_folder_bottom_nav: createFolder(); break; // 폴더 생성
         }
