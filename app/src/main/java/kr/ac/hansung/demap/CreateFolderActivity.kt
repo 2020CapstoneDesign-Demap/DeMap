@@ -60,6 +60,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
     private var old_tag : String?= ""
     private var edit_position : Int? = null
 
+    private var addPlace: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,6 +80,9 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         if(intent.getStringExtra("folder_edit_flag") != null) {
             editflag = intent.getStringExtra("folder_edit_flag")
         }
+
+        // 장소 추가 폴더 리스트 인텐트
+        addPlace = intent.getIntExtra("addPlace", 0);
 
         // ActionBar에 타이틀 변경
         if(editflag.equals("folder_edit")) {
@@ -270,9 +275,10 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             firestore?.collection("folderPlaces")?.document(folderID)?.set(place)
         }
 
-
-
         Toast.makeText(this, "폴더 생성 성공!", Toast.LENGTH_SHORT).show()
+        if (addPlace == 1) {
+//            ((AddPlaceToFolderActivity)AddPlaceToFolderActivity.addPlaceToFolderContext)
+        }
         finish()
 
     }
