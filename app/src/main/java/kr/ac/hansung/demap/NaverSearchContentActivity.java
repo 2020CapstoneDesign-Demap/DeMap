@@ -2,14 +2,27 @@ package kr.ac.hansung.demap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.PointF;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,17 +32,26 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.Tm128;
+import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.FusedLocationSource;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
-public class NaverSearchContentActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NaverSearchContentActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
 
     private Intent intent;
     private Bundle bundle;
@@ -49,6 +71,26 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
     private Button btn_folder_save;
     private Button btn_search_blog;
 
+    // FusedLocationSource (Google)
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    private FusedLocationSource locationSource;
+    private static Geocoder geocoder;
+
+
+    private static double latitude;
+    private static double altitude;
+    private static double longitude;
+
+    private static double latitude_togo;
+    private static double longitude_togo;
+    private static List<Address> location_name;
+    private static String location_name_togo;
+
+    private FloatingActionButton fab_now;
+    private FloatingActionButton fab_navi;
+
+    static NaverMap naverMap_keep;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +98,14 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         intent = getIntent();
         bundle = intent.getExtras();
+
+        // 플로팅 버튼 생성
+        fab_now = (FloatingActionButton) findViewById(R.id.fab_now_point);
+        fab_now.setOnClickListener(this);
+        fab_navi = (FloatingActionButton) findViewById(R.id.fab_navi);
+        fab_navi.setOnClickListener(this);
+
+        geocoder = new Geocoder(this);
 
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle(intent.getStringExtra("result_name"));
@@ -71,7 +121,11 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         tv__name = findViewById(R.id.tv_naver_search_content_name);
         tv__name.setText(intent.getStringExtra("result_name"));
-
+        if(intent.getStringExtra("result_name") != null) {
+            location_name_togo = intent.getStringExtra("result_name");
+        } else {
+            location_name_togo = "도착지";
+        }
         tv_address = findViewById(R.id.tv_naver_search_content_address);
         tv_address.setText(intent.getStringExtra("result_addr"));
 
@@ -138,6 +192,92 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab_now_point:
+                try {
+                    nowMyPoint(naverMap_keep);
+                } catch (IOException e) {
+                    System.out.println("현재 위치 가져오기 에러");
+                }
+                break;
+            case R.id.fab_navi:
+                String sname = "현재위치";
+                String dname = "도착위치";
+
+                try {
+                    sname = URLEncoder.encode(location_name.toString(), "UTF-8");
+                    dname = URLEncoder.encode(String.valueOf(location_name_togo), "UTF-8");
+
+                } catch (UnsupportedEncodingException e) {
+                    System.out.println("현재위치 utf-8 인코딩 에러");
+                }
+
+                String url = "nmap://route/public?slat="+latitude+"&slng="+longitude+
+                        "&sname="+sname+"&dlat="+latitude_togo+"&dlng="+longitude_togo+
+                        "&dname="+dname+"&appname=kr.ac.hansung.demap";
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+                List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                if (list == null || list.isEmpty()) {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap")));
+                } else {
+                    view.getContext().startActivity(intent);
+                }
+                break;
+        }
+    }
+
+    private void nowMyPoint(NaverMap naverMap) throws IOException {
+        /**  내 위치 리스너 **/
+        // GPS 연동을 위한 권한 체크
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity)this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        } else {
+            // 내위치 검색
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            String provider = location.getProvider();
+            double now_longitude = location.getLongitude();
+            double now_latitude = location.getLatitude();
+            double now_altitude = location.getAltitude();
+            location_name = geocoder.getFromLocation(now_latitude,now_longitude,1);
+
+            latitude = now_latitude;
+            altitude = now_altitude;
+            longitude = now_longitude;
+
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+
+            // 카메라 위치 변경
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(now_latitude, now_longitude)).animate(CameraAnimation.Easing);
+            naverMap.moveCamera(cameraUpdate);
+
+            // 현재 위치 오버레이
+            LocationOverlay locationOverlay = naverMap.getLocationOverlay();
+            locationOverlay.setVisible(true);
+
+            locationOverlay.setPosition(new LatLng(now_latitude, now_longitude));
+            locationOverlay.setSubIconWidth(80);
+            locationOverlay.setSubIconHeight(40);
+            locationOverlay.setSubAnchor(new PointF(0.5f, 1));
+        }
+    }
+
 
 
     @Override
@@ -155,6 +295,8 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
 
+        naverMap_keep = naverMap;
+
         Double x = (double)intent.getIntExtra("result_mapx", 0);
         Double y = (double)intent.getIntExtra("result_mapy", 0);
         GeoTransPoint gtp1 = new GeoTransPoint(x, y);
@@ -170,6 +312,9 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         marker = new Marker();
         marker.setPosition(new LatLng(oLatLng.getX(), oLatLng.getY()));
         marker.setMap(naverMap);
+
+        latitude_togo = oLatLng.getX();
+        longitude_togo = oLatLng.getY();
 
         // 지도 아무데나 눌렀을 때
         naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
@@ -230,4 +375,51 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         mapView.onLowMemory();
     }
 
+
+    /** 위치 정보 리스너 **/
+    final LocationListener gpsLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+
+            String provider = location.getProvider();
+            double now_longitude = location.getLongitude();
+            double now_latitude = location.getLatitude();
+            double now_altitude = location.getAltitude();
+
+            latitude = now_latitude;
+            longitude = now_longitude;
+            altitude = now_altitude;
+
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            // 권한 체크
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    1,
+                    gpsLocationListener);
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
 }
