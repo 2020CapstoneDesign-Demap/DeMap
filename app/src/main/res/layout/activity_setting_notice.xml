@@ -35,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="구독 알림"
+                    android:text="내폴더 구독 알림"
                     android:textColor="@color/colorLineGray7"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -81,7 +81,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="구독한 폴더 알림"
+                    android:text="구독한 폴더 장소 추가 알림"
                     android:textColor="@color/colorLineGray7"
                     android:textSize="16sp" />
             </LinearLayout>

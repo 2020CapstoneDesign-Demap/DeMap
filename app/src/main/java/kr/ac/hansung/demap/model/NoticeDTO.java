@@ -1,21 +1,5 @@
 package kr.ac.hansung.demap.model;
 
-import java.util.HashMap;
-
-//public class NoticeDTO {
-//
-//    private HashMap<String, Boolean> notices  = new HashMap();
-//
-//    public HashMap<String, Boolean> getNotices() {
-//        return notices;
-//    }
-//
-//    public void setNotices(HashMap<String, Boolean> notices) {
-//        this.notices = notices;
-//    }
-//
-//}
-
 public class NoticeDTO {
 
     private String notice;

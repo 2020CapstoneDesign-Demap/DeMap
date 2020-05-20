@@ -12,12 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import kr.ac.hansung.demap.model.NoticeSettingDTO;
 import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
 
 
 public class SettingsActivity extends AppCompatActivity {
 
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
     private String nickname;
+    private String uid;
 
     private TextView tv_setting_nickname;
 
@@ -42,6 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         nickname = intent.getStringExtra("nickname");
+        uid = intent.getStringExtra("uid");
 
         tv_setting_nickname = findViewById(R.id.tv_setting_nickname);
         tv_setting_nickname.setText(nickname);
@@ -60,8 +70,22 @@ public class SettingsActivity extends AppCompatActivity {
         linearLayout_alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SettingNoticeActivity.class);
-                startActivity(intent);
+
+                firestore.collection("userSettings").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        Intent intent = new Intent(getApplicationContext(), SettingNoticeActivity.class);
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            NoticeSettingDTO noticeSettingDTO = document.toObject(NoticeSettingDTO.class);
+                            intent.putExtra("myfolderSubs", noticeSettingDTO.isMyfolderSubs());
+                            intent.putExtra("myfolderPlace", noticeSettingDTO.isMyfolderPlace());
+                            intent.putExtra("subsfolderPlace", noticeSettingDTO.isSubsfolderPlace());
+                        }
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
     }
