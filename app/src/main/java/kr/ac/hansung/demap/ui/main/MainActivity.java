@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.PointF;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,7 +54,11 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import kr.ac.hansung.demap.CreateFolderActivity;
@@ -89,10 +97,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // FusedLocationSource (Google)
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
+    private static Geocoder geocoder;
+
 
     private static double latitude;
     private static double altitude;
     private static double longitude;
+
+    private static double latitude_togo;
+    private static double longitude_togo;
+    private static List<Address> location_name;
+    private static List<Address> location_name_togo;
 
     private FloatingActionButton fab_now;
     private FloatingActionButton fab_navi;
@@ -109,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab_now.setOnClickListener(this);
         fab_navi = (FloatingActionButton) findViewById(R.id.fab_navi);
         fab_navi.setOnClickListener(this);
+
+        geocoder = new Geocoder(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -204,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void nowMyPoint(NaverMap naverMap) {
+    private void nowMyPoint(NaverMap naverMap) throws IOException {
         /**  내 위치 리스너 **/
         // GPS 연동을 위한 권한 체크
         if (Build.VERSION.SDK_INT >= 23 &&
@@ -221,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             double now_longitude = location.getLongitude();
             double now_latitude = location.getLatitude();
             double now_altitude = location.getAltitude();
+            location_name = geocoder.getFromLocation(now_latitude,now_longitude,1);
 
             latitude = now_latitude;
             altitude = now_altitude;
@@ -254,7 +272,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
 
         naverMap_keep = naverMap;
-        nowMyPoint(naverMap);
+        try {
+            nowMyPoint(naverMap);
+        } catch (IOException e) {
+            System.out.println("현재 위치 가져오기 에러");
+        }
 
         Marker marker = new Marker();
        // marker.setPosition(new LatLng(37.5666103, 126.9783882));
@@ -274,6 +296,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (now != marker.getPosition()) {
                     marker.setMap(null);
                     marker.setPosition(latLng);
+                    latitude_togo = latLng.latitude;
+                    longitude_togo = latLng.longitude;
+                    try {
+                        location_name_togo = geocoder.getFromLocation(latitude_togo,longitude_togo,1);
+                    } catch (IOException e) {
+                        System.out.println("도착지 주소 가져오기 실패");
+                    }
                     marker.setMap(naverMap);
                 }
 
@@ -286,9 +315,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_now_point:
-                nowMyPoint(naverMap_keep);
+                try {
+                    nowMyPoint(naverMap_keep);
+                } catch (IOException e) {
+                    System.out.println("현재 위치 가져오기 에러");
+                }
                 break;
             case R.id.fab_navi:
+                String sname = "현재위치";
+                String dname = "도착위치";
+
+                try {
+                    sname = URLEncoder.encode(location_name.toString(), "UTF-8");
+                    dname = URLEncoder.encode(String.valueOf(location_name_togo), "UTF-8");
+
+                } catch (UnsupportedEncodingException e) {
+                    System.out.println("현재위치 utf-8 인코딩 에러");
+                }
+
+                String url = "nmap://route/public?slat="+latitude+"&slng="+longitude+
+                        "&sname="+sname+"&dlat="+latitude_togo+"&dlng="+longitude_togo+
+                "&dname="+dname+"&appname=kr.ac.hansung.demap";
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+                List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                if (list == null || list.isEmpty()) {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap")));
+                } else {
+                    view.getContext().startActivity(intent);
+                }
                 break;
         }
     }
