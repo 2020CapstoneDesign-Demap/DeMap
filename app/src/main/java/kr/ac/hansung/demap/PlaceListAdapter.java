@@ -157,6 +157,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     private void removeItem(int position) {
         placeDTOS.remove(position);
         placeIds.remove(position);
+        setItem(placeDTOS, placeIds);
     }
 
     @Override
