@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -63,7 +65,7 @@ import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
 import kr.ac.hansung.demap.ui.login.LoginActivity;
 import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -92,11 +94,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static double altitude;
     private static double longitude;
 
+    private FloatingActionButton fab_now;
+    private FloatingActionButton fab_navi;
+
+    static NaverMap naverMap_keep;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 플로팅 버튼 생성
+        fab_now = (FloatingActionButton) findViewById(R.id.fab_now_point);
+        fab_now.setOnClickListener(this);
+        fab_navi = (FloatingActionButton) findViewById(R.id.fab_navi);
+        fab_navi.setOnClickListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -192,10 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
-    @Override
-    public void onMapReady(@NonNull NaverMap naverMap) {
-
+    private void nowMyPoint(NaverMap naverMap) {
         /**  내 위치 리스너 **/
         // GPS 연동을 위한 권한 체크
         if (Build.VERSION.SDK_INT >= 23 &&
@@ -239,7 +248,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             locationOverlay.setSubIconHeight(40);
             locationOverlay.setSubAnchor(new PointF(0.5f, 1));
         }
+    }
 
+    @Override
+    public void onMapReady(@NonNull NaverMap naverMap) {
+
+        naverMap_keep = naverMap;
+        nowMyPoint(naverMap);
 
         Marker marker = new Marker();
        // marker.setPosition(new LatLng(37.5666103, 126.9783882));
@@ -267,6 +282,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab_now_point:
+                nowMyPoint(naverMap_keep);
+                break;
+            case R.id.fab_navi:
+                break;
+        }
+    }
 
     @Override
     protected void onStart() {
