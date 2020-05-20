@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     marker.setMap(null);
                     marker.setPosition(latLng);
                     marker.setMap(naverMap);
-                    
+
                     latitude_togo = latLng.latitude;
                     longitude_togo = latLng.longitude;
                     try {
