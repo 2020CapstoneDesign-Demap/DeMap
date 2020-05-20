@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
+import kr.ac.hansung.demap.model.NoticeSettingDTO
 import kr.ac.hansung.demap.model.User
 
 class FirebaseDataSourceImpl : FirebaseDataSource {
@@ -33,6 +34,11 @@ class FirebaseDataSourceImpl : FirebaseDataSource {
     ): Completable = Completable.create { emitter ->
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful) {
+                var noticeSettingDTO = NoticeSettingDTO()
+                noticeSettingDTO.isMyfolderPlace = true
+                noticeSettingDTO.isMyfolderSubs = true
+                noticeSettingDTO.isSubsfolderPlace = true
+                firestore.collection("userSettings").document(task.getResult()?.user?.uid!!).set(noticeSettingDTO)
                 emitter.onComplete()
             } else {
                 emitter.onError(Throwable(task.exception))
