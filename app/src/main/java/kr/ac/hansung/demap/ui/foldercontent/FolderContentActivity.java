@@ -1,14 +1,12 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.foldercontent;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,17 +26,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
-import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
 import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.User;
-import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
 

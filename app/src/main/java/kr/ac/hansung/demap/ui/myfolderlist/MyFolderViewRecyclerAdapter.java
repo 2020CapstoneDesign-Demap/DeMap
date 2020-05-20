@@ -1,6 +1,5 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.myfolderlist;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,11 +21,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.CreateFolderActivity;
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
-import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 

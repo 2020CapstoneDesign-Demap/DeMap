@@ -1,8 +1,7 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.notice;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,10 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.protobuf.StringValue;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.NoticeDTO;
 

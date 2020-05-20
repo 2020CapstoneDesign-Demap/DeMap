@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.geo;
 
 public class GeoTransPoint {
 

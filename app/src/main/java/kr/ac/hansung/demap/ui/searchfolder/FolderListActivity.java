@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.searchfolder;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,6 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import kr.ac.hansung.demap.R;
+import kr.ac.hansung.demap.getCount_interface;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;

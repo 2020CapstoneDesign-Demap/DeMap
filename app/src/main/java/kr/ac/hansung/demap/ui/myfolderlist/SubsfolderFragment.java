@@ -1,11 +1,9 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.myfolderlist;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,20 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.PlaceDTO;
 
-public class MyfolderFragment extends Fragment {
+public class SubsfolderFragment extends Fragment {
 
     private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
-    private TextView tv_myfolder_count;
+    private TextView tv_subsfolder_count;
 
     private RecyclerView recyclerView;
     private MyFolderViewRecyclerAdapter adapter;
-
-    private Button btn_folder_edit;
 
     private String authId;
 
@@ -46,19 +41,13 @@ public class MyfolderFragment extends Fragment {
         this.authId = authId;
     }
 
-    public void updateAdapterItem(int position, FolderDTO folderDTO, String folderId) {
-        adapter.updateName(position, folderDTO, folderId);
-        adapter.notifyDataSetChanged();
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.myfolder_tab_fragment, container, false); // SubsFolderFragment와 이 부분만 다름
+        View view = inflater.inflate(R.layout.subsfolder_tab_fragment, null);
 
-        tv_myfolder_count = view.findViewById(R.id.textview_total_myfolder_count);
-        tv_myfolder_count.setText(String.valueOf(folderObjs.size()));
+        tv_subsfolder_count = view.findViewById(R.id.textview_total_subsfolder_count);
+        tv_subsfolder_count.setText(String.valueOf(folderObjs.size()));
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView_folder_view);
         recyclerView.setHasFixedSize(true);
@@ -68,18 +57,9 @@ public class MyfolderFragment extends Fragment {
         adapter = new MyFolderViewRecyclerAdapter();
         adapter.setItem(folderObjs);
         adapter.setAuthId(authId);
-        adapter.setMyFolder(true);
+        adapter.setMyFolder(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
-        btn_folder_edit = view.findViewById(R.id.btn_myfolder_edit);
-
-        btn_folder_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         return view;
     }

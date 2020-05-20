@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.foldercontent;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderEditorListDTO;
 
 public class FolderEditorRecyclerAdapter extends RecyclerView.Adapter<FolderEditorRecyclerAdapter.MyViewHolder> {

@@ -41,20 +41,20 @@
             android:resource="@color/colorTheme" /> <!-- <meta-data -->
         <!-- android:name="com.google.firebase.messaging.default_notification_channel_id" -->
         <!-- android:value="@string/default_notification_channel_id" /> -->
-        <activity android:name=".SearchBlogActivity" />
+        <activity android:name=".ui.placecontent.SearchBlogActivity" />
         <activity android:name=".AddPlaceFormActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".NaverSearchContentActivity">
+        <activity android:name=".ui.placecontent.NaverSearchContentActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".SearchNaverActivity"
+            android:name=".ui.searchplace.SearchNaverActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateFolderActivity" />
         <activity android:name=".ui.login.LoginActivity" />
@@ -62,7 +62,7 @@
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,14 +73,14 @@
         <activity android:name=".ui.hotPlace.HotPlaceActivity" />
         <activity android:name=".ui.nickname.NickNameActivity" />
         <activity android:name=".ui.signup.SignupActivity" />
-        <activity android:name=".FolderListActivity" />
-        <activity android:name=".MyfolderViewActivity" />
-        <activity android:name=".FolderContentActivity" />
-        <activity android:name=".FolderContentEditorActivity" />
-        <activity android:name=".NoticeActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ui.searchfolder.FolderListActivity" />
+        <activity android:name=".ui.myfolderlist.MyfolderViewActivity" />
+        <activity android:name=".ui.foldercontent.FolderContentActivity" />
+        <activity android:name=".ui.foldercontent.FolderContentEditorActivity" />
+        <activity android:name=".ui.notice.NoticeActivity" />
+        <activity android:name=".ui.setting.SettingsActivity" />
         <activity android:name=".AddPlaceToFolderActivity" />
-        <activity android:name=".SettingNoticeActivity" /> <!-- 네이버 api -->
+        <activity android:name=".ui.setting.SettingNoticeActivity" /> <!-- 네이버 api -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="3vtiw45s9x" />

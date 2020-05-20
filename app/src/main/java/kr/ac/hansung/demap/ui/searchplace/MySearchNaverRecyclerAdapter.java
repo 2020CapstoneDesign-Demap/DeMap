@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.searchplace;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +11,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import kr.ac.hansung.demap.ui.placecontent.NaverSearchContentActivity;
+import kr.ac.hansung.demap.R;
 
-import kr.ac.hansung.demap.model.FolderObj;
-
-public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<kr.ac.hansung.demap.MySearchNaverRecyclerAdapter.MyViewHolder> {
+public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<MySearchNaverRecyclerAdapter.MyViewHolder> {
 
 
     private Context context;

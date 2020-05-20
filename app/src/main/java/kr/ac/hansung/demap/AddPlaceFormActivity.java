@@ -5,38 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
 import kr.ac.hansung.demap.model.FolderDTO;
-import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
 import kr.ac.hansung.demap.model.NoticeDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
-import kr.ac.hansung.demap.model.UserMyFolderDTO;
-import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
 public class AddPlaceFormActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
 

@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.placecontent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import kr.ac.hansung.demap.R;
 
 public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBlogRecyclerAdapter.MyViewHolder> {
 

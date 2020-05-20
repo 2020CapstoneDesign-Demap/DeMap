@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import kr.ac.hansung.demap.model.NoticeSettingDTO;
+import kr.ac.hansung.demap.R;
 
 public class SettingNoticeActivity extends AppCompatActivity {
 

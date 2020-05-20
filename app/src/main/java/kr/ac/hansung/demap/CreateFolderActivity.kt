@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
+import kr.ac.hansung.demap.ui.myfolderlist.MyfolderViewActivity
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderIcon
 import kr.ac.hansung.demap.ui.createfolder.MyAdapterForFolderTag

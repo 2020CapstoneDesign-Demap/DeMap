@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.foldercontent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderEditorListDTO;
 import kr.ac.hansung.demap.model.NoticeDTO;
 
