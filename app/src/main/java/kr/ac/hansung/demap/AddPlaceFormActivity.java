@@ -375,43 +375,35 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String ownerId = document.get("owner").toString();
-                                firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                firestore.collection("userSettings").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            String nickname = document.get("nickName").toString();
-                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
-                                            NoticeDTO noticeDTO = new NoticeDTO();
-                                            noticeDTO.setNotice(notice);
-                                            noticeDTO.setFolder_id(folder_id);
-                                            noticeDTO.setNoticeType("내폴더장소추가알림");
-                                            noticeDTO.setTimestamp(System.currentTimeMillis());
-                                            firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
+                                        DocumentSnapshot doc = task.getResult();
+                                        if (doc.exists()) {
+                                            boolean noticeSetting = (Boolean) doc.get("myfolderPlace");
+                                            if (noticeSetting) { // 폴더 소유자가 알림을 켜뒀다면
+                                                firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
+                                                            String nickname = document.get("nickName").toString();
+                                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
+                                                            NoticeDTO noticeDTO = new NoticeDTO();
+                                                            noticeDTO.setNotice(notice);
+                                                            noticeDTO.setFolder_id(folder_id);
+                                                            noticeDTO.setNoticeType("내폴더장소추가알림");
+                                                            noticeDTO.setTimestamp(System.currentTimeMillis());
+                                                            firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
 
-
-//                                            String nickname = document.get("nickName").toString();
-//                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
-//                                            firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                                    DocumentSnapshot document = task.getResult();
-//                                                    if (document.exists()) {
-//                                                        NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//                                                        noticeDTO.getNotices().put(notice, true);
-//                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                                    }
-//                                                    else {
-//                                                        NoticeDTO noticeDTO = new NoticeDTO();
-//                                                        noticeDTO.getNotices().put(notice, true);
-//                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                                    }
-//                                                }
-//                                            });
-
+                                                        }
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 });
+
                             }
                         }
                     });
@@ -427,31 +419,25 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
                                 for (String key: subsDTO.getSubscribers().keySet()) {
 
-                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
-                                    NoticeDTO noticeDTO = new NoticeDTO();
-                                    noticeDTO.setNotice(notice);
-                                    noticeDTO.setFolder_id(folder_id);
-                                    noticeDTO.setNoticeType("구독폴더장소추가알림");
-                                    noticeDTO.setTimestamp(System.currentTimeMillis());
-                                    firestore.collection("notices").document(key).collection("notice").document().set(noticeDTO);
+                                    firestore.collection("userSettings").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc.exists()) {
+                                                boolean noticeSetting = (Boolean) doc.get("subsfolderPlace");
+                                                if (noticeSetting) { // 구독자가 알림을 켜뒀다면
+                                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
+                                                    NoticeDTO noticeDTO = new NoticeDTO();
+                                                    noticeDTO.setNotice(notice);
+                                                    noticeDTO.setFolder_id(folder_id);
+                                                    noticeDTO.setNoticeType("구독폴더장소추가알림");
+                                                    noticeDTO.setTimestamp(System.currentTimeMillis());
+                                                    firestore.collection("notices").document(key).collection("notice").document().set(noticeDTO);
+                                                }
+                                            }
+                                        }
+                                    });
 
-//                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
-//                                    firestore.collection("notices").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            DocumentSnapshot document = task.getResult();
-//                                            if (document.exists()) {
-//                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(key).set(noticeDTO);
-//                                            }
-//                                            else {
-//                                                NoticeDTO noticeDTO = new NoticeDTO();
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(key).set(noticeDTO);
-//                                            }
-//                                        }
-//                                    });
                                 }
                             }
                         }
