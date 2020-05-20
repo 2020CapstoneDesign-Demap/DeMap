@@ -10,12 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import kr.ac.hansung.demap.model.NoticeSettingDTO;
 
 public class SettingNoticeActivity extends AppCompatActivity {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+    private String uid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +43,15 @@ public class SettingNoticeActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        uid = intent.getStringExtra("uid");
+
         SwitchMaterial switch_notice_myfolder_subs = findViewById(R.id.switch_notice_subs);
         SwitchMaterial switch_notice_subs_folder = findViewById(R.id.switch_notice_subs_folder);
         SwitchMaterial switch_notice_my_folder_place = findViewById(R.id.switch_notice_my_folder_place);
 
         switch_notice_myfolder_subs.setChecked(intent.getBooleanExtra("myfolderSubs", false));
-        switch_notice_subs_folder.setChecked(intent.getBooleanExtra("myfolderPlace", false));
-        switch_notice_my_folder_place.setChecked(intent.getBooleanExtra("subsfolderPlace", false));
+        switch_notice_subs_folder.setChecked(intent.getBooleanExtra("subsfolderPlace", false));
+        switch_notice_my_folder_place.setChecked(intent.getBooleanExtra("myfolderPlace", false));
 
         switch_notice_myfolder_subs.setOnCheckedChangeListener(new NoticeSwitchListener(1));
         switch_notice_subs_folder.setOnCheckedChangeListener(new NoticeSwitchListener(2));
@@ -73,23 +82,23 @@ public class SettingNoticeActivity extends AppCompatActivity {
 
             if (flag == 1) { // 내 폴더 구독 알림
                 if (isChecked) {
-
+                    firestore.collection("userSettings").document(uid).update("myfolderSubs", true);
                 } else {
-
+                    firestore.collection("userSettings").document(uid).update("myfolderSubs", false);
                 }
             }
             else if (flag == 2) { // 구독 폴더 장소 추가 알림
                 if (isChecked) {
-
+                    firestore.collection("userSettings").document(uid).update("subsfolderPlace", true);
                 } else {
-
+                    firestore.collection("userSettings").document(uid).update("subsfolderPlace", false);
                 }
             }
             else if (flag == 3) { // 내 폴더 장소 추가 알림
                 if (isChecked) {
-
+                    firestore.collection("userSettings").document(uid).update("myfolderPlace", true);
                 } else {
-
+                    firestore.collection("userSettings").document(uid).update("myfolderPlace", false);
                 }
             }
         }

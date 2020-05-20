@@ -75,6 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         Intent intent = new Intent(getApplicationContext(), SettingNoticeActivity.class);
+                        intent.putExtra("uid", uid);
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             NoticeSettingDTO noticeSettingDTO = document.toObject(NoticeSettingDTO.class);
