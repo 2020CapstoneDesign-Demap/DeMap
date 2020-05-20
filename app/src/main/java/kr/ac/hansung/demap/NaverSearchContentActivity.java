@@ -71,7 +71,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
     private Button btn_folder_save;
     private Button btn_search_blog;
-    private Button btn_
+    private Button btn_navigation;
 
     // FusedLocationSource (Google)
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -173,6 +173,46 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
                 intent1.putExtra("result_phone", intent.getStringExtra("result_phone"));
 
                 startActivity(intent1);
+            }
+        });
+
+        btn_navigation = findViewById(R.id.btn_naver_search_content_navi);
+        btn_navigation.setEnabled(true);
+        btn_navigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sname = "현재위치";
+                String dname = "도착위치";
+
+                if(latitude == 0) {
+                    Toast.makeText(NaverSearchContentActivity.this,"현재 위치를 설정해 주세요",Toast.LENGTH_SHORT).show();
+                } else {
+
+                    try {
+                        String loc_name_str = location_name.toString();
+                        String data[] = loc_name_str.split("\"");
+                        System.out.println("현재위치주소" + data[1]);
+                        sname = URLEncoder.encode(data[1], "UTF-8");
+                        dname = URLEncoder.encode(String.valueOf(location_name_togo), "UTF-8");
+
+                    } catch (UnsupportedEncodingException e) {
+                        System.out.println("현재위치 utf-8 인코딩 에러");
+                    }
+
+                    String url = "nmap://route/public?slat=" + latitude + "&slng=" + longitude +
+                            "&sname=" + sname + "&dlat=" + latitude_togo + "&dlng=" + longitude_togo +
+                            "&dname=" + dname + "&appname=kr.ac.hansung.demap";
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+                    List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                    if (list == null || list.isEmpty()) {
+                        view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap")));
+                    } else {
+                        view.getContext().startActivity(intent);
+                    }
+                }
             }
         });
 
