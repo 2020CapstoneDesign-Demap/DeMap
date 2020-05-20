@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
 
         naverMap_keep = naverMap;
+
         try {
             nowMyPoint(naverMap);
         } catch (IOException e) {
@@ -280,12 +281,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         Marker marker = new Marker();
-       // marker.setPosition(new LatLng(37.5666103, 126.9783882));
-        marker.setPosition(new LatLng(latitude, longitude));
+        marker.setPosition(new LatLng(37.5666103, 126.9783882));
+       // marker.setPosition(new LatLng(latitude, longitude));
         System.out.println("내 현재위치 : " + latitude +", " + longitude);
         marker.setIcon(OverlayImage.fromResource(R.drawable.icon_place_marker_for_map));
 
         marker.setMap(naverMap);
+
+        try {
+            location_name_togo = geocoder.getFromLocation(latitude_togo,longitude_togo,1);
+        } catch (IOException e) {
+            System.out.println("도착지 주소 가져오기 실패");
+        }
 
         // 지도 아무데나 눌렀을 때
         naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
@@ -300,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     marker.setMap(null);
                     marker.setPosition(latLng);
                     marker.setMap(naverMap);
-
+                    
                     latitude_togo = latLng.latitude;
                     longitude_togo = latLng.longitude;
                     try {
@@ -308,7 +315,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } catch (IOException e) {
                         System.out.println("도착지 주소 가져오기 실패");
                     }
+
                 }
+
+
 
             }
         });
