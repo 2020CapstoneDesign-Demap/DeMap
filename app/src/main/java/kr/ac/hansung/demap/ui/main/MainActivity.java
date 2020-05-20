@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static double altitude;
     private static double longitude;
 
-    private static double latitude_togo;
-    private static double longitude_togo;
+    private static double latitude_togo = 37.5666103;
+    private static double longitude_togo = 126.9783882;
     private static List<Address> location_name;
     private static List<Address> location_name_togo;
 
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // 플로팅 버튼 생성
         fab_now = (FloatingActionButton) findViewById(R.id.fab_now_point);
@@ -290,13 +291,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
-                Log.d("log", latLng.toString());
+                //Log.d("log", "마커이동"+latLng.toString());
+
 
                 LatLng now = latLng;
                 if (now != marker.getPosition()) {
+                    System.out.println("마커이동"+latLng.toString());
                     marker.setMap(null);
                     marker.setPosition(latLng);
                     marker.setMap(naverMap);
+
                     latitude_togo = latLng.latitude;
                     longitude_togo = latLng.longitude;
                     try {
