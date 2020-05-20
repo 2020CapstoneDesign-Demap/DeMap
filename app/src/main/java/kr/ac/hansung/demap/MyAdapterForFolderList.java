@@ -48,6 +48,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
                 intent.putExtra("isMyFolder", isMyFolder(position));
                 intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
                 intent.putExtra("folder_public", searchFolderResult.get(position).getIspublic());
+                intent.putExtra("folder_placeCount", searchFolderResult.get(position).getPlaceCount());
 
                 context.startActivity(intent);
             }

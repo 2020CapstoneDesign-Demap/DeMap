@@ -77,6 +77,7 @@ public class FolderContentActivity extends AppCompatActivity {
 
     private String folder_public;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +115,9 @@ public class FolderContentActivity extends AppCompatActivity {
         tv_folderPublic.setText(folder_public);
 
         tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
+
+        TextView textview_total_folder_count = findViewById(R.id.textview_total_folder_count);
+        textview_total_folder_count.setText(String.valueOf(intent.getIntExtra("folder_placeCount", 0)));
 
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
