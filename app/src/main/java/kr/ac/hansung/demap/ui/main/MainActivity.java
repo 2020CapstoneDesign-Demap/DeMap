@@ -296,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (now != marker.getPosition()) {
                     marker.setMap(null);
                     marker.setPosition(latLng);
+                    marker.setMap(naverMap);
                     latitude_togo = latLng.latitude;
                     longitude_togo = latLng.longitude;
                     try {
@@ -303,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } catch (IOException e) {
                         System.out.println("도착지 주소 가져오기 실패");
                     }
-                    marker.setMap(naverMap);
                 }
 
             }
@@ -326,8 +326,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String dname = "도착위치";
 
                 try {
-                    sname = URLEncoder.encode(location_name.toString(), "UTF-8");
-                    dname = URLEncoder.encode(String.valueOf(location_name_togo), "UTF-8");
+                    String loc_name_str = location_name.toString();
+                    String data[] = loc_name_str.split("\"");
+                    System.out.println("현재위치주소"+data[1]);
+                    String loc_name_str2 = location_name_togo.toString();
+                    String data2[] = loc_name_str2.split("\"");
+                    System.out.println("도착위치주소"+data[1]);
+                    sname = URLEncoder.encode(data[1], "UTF-8");
+                    dname = URLEncoder.encode(data2[1], "UTF-8");
 
                 } catch (UnsupportedEncodingException e) {
                     System.out.println("현재위치 utf-8 인코딩 에러");
