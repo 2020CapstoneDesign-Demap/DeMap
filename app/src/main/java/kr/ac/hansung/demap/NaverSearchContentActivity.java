@@ -191,7 +191,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
                     try {
                         String loc_name_str = location_name.toString();
                         String data[] = loc_name_str.split("\"");
-                        System.out.println("현재위치주소" + data[1]);
+//                        System.out.println("현재위치주소" + data[1]);
                         sname = URLEncoder.encode(data[1], "UTF-8");
                         dname = URLEncoder.encode(String.valueOf(location_name_togo), "UTF-8");
 
