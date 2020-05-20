@@ -112,7 +112,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         getSupportActionBar().setTitle(place_name);
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
@@ -144,10 +144,6 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         folder_id = intent.getStringExtra("folder_id");
         folder_owner = intent.getStringExtra("folder_owner");
         folder_name = intent.getStringExtra("folder_name");
-
-        System.out.println("인텐트로 가져온 장소 : " + placeDTO.getName());
-        System.out.println("인텐트로 가져온 폴더 ID : " + folder_id);
-
 
         // 선택된 분위기 태그 가져오기
         study = (CheckBox) findViewById(R.id.study_check);
@@ -258,62 +254,33 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     public void setCheckforEdit() {
         for(String tag : tagForEdit) {
             switch (tag) {
-               case "공부하기 좋은" :
-                   study.setChecked(true);
-                   break;
+               case "공부하기 좋은" : study.setChecked(true); break;
 
-                case "데이트하기 좋은" :
-                    dating.setChecked(true);
-                    break;
+                case "데이트하기 좋은" : dating.setChecked(true); break;
 
-                case "가족모임하기 좋은" :
-                    family.setChecked(true);
-                    break;
+                case "가족모임하기 좋은" : family.setChecked(true); break;
 
-                case "회식하기 좋은" :
-                    office.setChecked(true);
-                    break;
+                case "회식하기 좋은" : office.setChecked(true); break;
 
-                case "사진 찍기 좋은" :
-                    photo.setChecked(true);
-                    break;
+                case "사진 찍기 좋은" : photo.setChecked(true); break;
 
-                case "편안히 쉬기 좋은" :
-                    rest.setChecked(true);
-                    break;
+                case "편안히 쉬기 좋은" : rest.setChecked(true); break;
 
-                case "노키드존" :
-                    nokid.setChecked(true);
-                    break;
+                case "노키드존" : nokid.setChecked(true); break;
 
-                case "웰컴키드존" :
-                    welkid.setChecked(true);
-                    break;
+                case "웰컴키드존" : welkid.setChecked(true); break;
 
-                case "남녀화장실 분리" :
-                    gendertoilet.setChecked(true);
-                    break;
+                case "남녀화장실 분리" : gendertoilet.setChecked(true); break;
 
-                case "공용 화장실" :
-                    publictoilet.setChecked(true);
-                    break;
+                case "공용 화장실" : publictoilet.setChecked(true); break;
 
-                case "계단 있음" :
-                    stairs.setChecked(true);
-                    break;
+                case "계단 있음" : stairs.setChecked(true); break;
 
-                case "계단 없음" :
-                    nostairs.setChecked(true);
-                    break;
+                case "계단 없음" : nostairs.setChecked(true); break;
 
-                case "콘센트 많음" :
-                    manyoulet.setChecked(true);
-                    break;
+                case "콘센트 많음" : manyoulet.setChecked(true); break;
 
-                case "콘센트 적음" :
-                    lessoulet.setChecked(true);
-                    break;
-
+                case "콘센트 적음" : lessoulet.setChecked(true); break;
 
             }
 

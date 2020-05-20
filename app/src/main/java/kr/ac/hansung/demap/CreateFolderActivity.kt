@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kr.ac.hansung.demap.FolderContentActivity.adapter
 import kr.ac.hansung.demap.model.FolderDTO
 import kr.ac.hansung.demap.model.UserMyFolderDTO
 import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface
@@ -77,9 +76,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         // 폴더 수정 시 인텐트
         val intent : Intent = intent
         val edit_name = intent.getStringExtra("folder_name")
-        //val edit_public = intent.getStringExtra("folder_public")
         edit_position = intent.getIntExtra("edit_position",-1)
-        //val edit_img = intent.getStringExtra("folder_img")
         edit_id = intent.getStringExtra("folder_id")
         if(intent.getStringExtra("folder_edit_flag") != null) {
             editflag = intent.getStringExtra("folder_edit_flag")
@@ -98,8 +95,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         }
         // ActionBar의 배경색 변경
         supportActionBar?.setBackgroundDrawable(getDrawable(R.color.colorWhite))
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
-
         window.statusBarColor = resources.getColor(R.color.colorWhite, theme)
 
         // 홈 아이콘 표시

@@ -49,8 +49,6 @@ public class FolderContentActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
 
-//    private Intent intent = getIntent();
-
     private String docId;
     private boolean isMyFolder;
 
@@ -63,7 +61,6 @@ public class FolderContentActivity extends AppCompatActivity {
     private FolderDTO folderDTO;
     private FolderSubsDTO folderSubsDTO;
 
-    private UserMyFolderDTO userMyfolderDTO = new UserMyFolderDTO();
     private UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
 
     private FolderPlacesDTO folderPlacesDTO;

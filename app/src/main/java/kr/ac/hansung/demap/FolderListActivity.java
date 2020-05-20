@@ -363,7 +363,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             // 그 폴더들의 태그에 넘어온 태그가 존재하면
             // 검색결과 리스트에 넣는다
             // 그리고 그걸 화면에 보여줌
-            //System.out.println("함수는 돌아감");
             String str1 = tempfolder.getTag();
             for(String tag : tagsForSearch) {
                 if(str1.equals(tag)) {
@@ -372,8 +371,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                     System.out.println(tempfolder.getName()+" : "+tempfolder.getId()+" , "+tempfolder.getTag());
                 }
             }
-
-
 
         }
 
@@ -401,7 +398,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
                                 System.out.println(document.getId() + " => " + document.getData());
                                 String subId = document.getId();
                                 subFolderIds.add(subId);
@@ -410,7 +406,6 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                             setSubableFolderList();
 
                         } else {
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
                             System.out.println("Error getting documents: " + task.getException());
 
                         }

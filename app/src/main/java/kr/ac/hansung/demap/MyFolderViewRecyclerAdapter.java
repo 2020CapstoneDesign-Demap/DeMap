@@ -36,7 +36,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     public static Context context;
 
-    //    private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private ArrayList<FolderObj> folderObjs = new ArrayList<>();
 
     private UserMyFolderDTO userMyfolderDTO;
@@ -79,8 +78,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int id) {
-//                                        Toast.makeText(getApplicationContext(), "OK Click", Toast.LENGTH_SHORT).show();
-//                                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                                             String folderId = folderObjs.get(position).getId();
                                             String folderOwner = folderObjs.get(position).getOwner();
                                             firestore.collection("folders").document(folderId).delete();
@@ -251,7 +248,6 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                 intent.putExtra("folder_id", folderObjs.get(position).getId());
                 intent.putExtra("folder_owner", folderObjs.get(position).getOwner());
                 intent.putExtra("folder_name", folderObjs.get(position).getName());
-//                intent.putExtra("folder_name", folderObjs.get(position).getName());
                 intent.putExtra("folder_subs_count", folderObjs.get(position).getSubscribeCount());
                 intent.putExtra("folder_public", folderObjs.get(position).getIspublic());
                 intent.putExtra("folder_placeCount", folderObjs.get(position).getPlaceCount());

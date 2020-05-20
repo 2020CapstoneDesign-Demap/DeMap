@@ -9,12 +9,8 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class DeMapApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
-
-
-
         startKoin {
             if (BuildConfig.DEBUG) androidLogger()
             modules(listOf(presenterModule, repositoryModule, datasourceModule))
