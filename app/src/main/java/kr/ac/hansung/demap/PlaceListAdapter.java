@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
                                             String placeId = placeIds.get(position);
                                             firestore.collection("places").document(placeId).delete();
-                                            firestore.collection("folders").document(folderId).update("placeCount", placeCount - 1);
+                                            firestore.collection("folders").document(folderId).update("placeCount", FieldValue.increment(-1));
                                             firestore.collection("folderPlaces").document(folderId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -156,6 +157,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     private void removeItem(int position) {
         placeDTOS.remove(position);
         placeIds.remove(position);
+        setItem(placeDTOS, placeIds);
     }
 
     @Override

@@ -50,7 +50,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("폴더 리스트");
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
@@ -59,7 +58,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_myfolder_view);
         mContext = this;
-
 
         setData();
 
@@ -116,7 +114,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-//                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
                                             folderObj.setOwner(auth.getCurrentUser().getUid());
@@ -161,7 +158,6 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-//                                            FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
                                             subsfolderObjs.add(folderObj);

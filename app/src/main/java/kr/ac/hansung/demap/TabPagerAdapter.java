@@ -19,7 +19,6 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private String[] tabTitles = new String[]{"내 폴더", "구독 폴더"};
 
     // adapter에 들어갈 folder list
-
     private ArrayList<FolderObj> myfolderObjs = new ArrayList<>();
     private ArrayList<FolderObj> subsfolderObjS = new ArrayList<>();
 
@@ -32,16 +31,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         this.tabCount = tabCount;
     }
 
-    void addmyfolderItem(FolderObj folderObj) {
-        myfolderObjs.add(folderObj);
-    }
-
     void setmyfolderItem(ArrayList<FolderObj> myfolderObj) {
         myfolderObjs = myfolderObj;
-    }
-
-    void addsubsfolderItem(FolderObj folderObj) {
-        subsfolderObjS.add(folderObj);
     }
 
     void setsubsfolderItem(ArrayList<FolderObj> subsfolderObj) {
@@ -78,7 +69,6 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                //MyfolderFragment myfolderFragment = new MyfolderFragment();
                 myfolderFragment.setFolderDTOs(myfolderObjs);
                 myfolderFragment.setAuthId(authId);
                 return myfolderFragment;

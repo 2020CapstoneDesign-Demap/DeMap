@@ -75,22 +75,6 @@ public class NoticeActivity extends AppCompatActivity {
             }
         });
 
-//        firestore.collection("notices").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//
-//                    ArrayList<String> notices = new ArrayList<>();
-//                    for (String key: noticeDTO.getNotices().keySet()) {
-//                        notices.add(key);
-//                    }
-//                    adapter.setItem(notices);
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//        });
     }
 
     @Override

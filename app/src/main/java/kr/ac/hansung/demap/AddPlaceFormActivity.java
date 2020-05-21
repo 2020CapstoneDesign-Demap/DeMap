@@ -112,7 +112,7 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         getSupportActionBar().setTitle(place_name);
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
+
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
@@ -144,10 +144,6 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
         folder_id = intent.getStringExtra("folder_id");
         folder_owner = intent.getStringExtra("folder_owner");
         folder_name = intent.getStringExtra("folder_name");
-
-        System.out.println("인텐트로 가져온 장소 : " + placeDTO.getName());
-        System.out.println("인텐트로 가져온 폴더 ID : " + folder_id);
-
 
         // 선택된 분위기 태그 가져오기
         study = (CheckBox) findViewById(R.id.study_check);
@@ -258,62 +254,33 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
     public void setCheckforEdit() {
         for(String tag : tagForEdit) {
             switch (tag) {
-               case "공부하기 좋은" :
-                   study.setChecked(true);
-                   break;
+               case "공부하기 좋은" : study.setChecked(true); break;
 
-                case "데이트하기 좋은" :
-                    dating.setChecked(true);
-                    break;
+                case "데이트하기 좋은" : dating.setChecked(true); break;
 
-                case "가족모임하기 좋은" :
-                    family.setChecked(true);
-                    break;
+                case "가족모임하기 좋은" : family.setChecked(true); break;
 
-                case "회식하기 좋은" :
-                    office.setChecked(true);
-                    break;
+                case "회식하기 좋은" : office.setChecked(true); break;
 
-                case "사진 찍기 좋은" :
-                    photo.setChecked(true);
-                    break;
+                case "사진 찍기 좋은" : photo.setChecked(true); break;
 
-                case "편안히 쉬기 좋은" :
-                    rest.setChecked(true);
-                    break;
+                case "편안히 쉬기 좋은" : rest.setChecked(true); break;
 
-                case "노키드존" :
-                    nokid.setChecked(true);
-                    break;
+                case "노키드존" : nokid.setChecked(true); break;
 
-                case "웰컴키드존" :
-                    welkid.setChecked(true);
-                    break;
+                case "웰컴키드존" : welkid.setChecked(true); break;
 
-                case "남녀화장실 분리" :
-                    gendertoilet.setChecked(true);
-                    break;
+                case "남녀화장실 분리" : gendertoilet.setChecked(true); break;
 
-                case "공용 화장실" :
-                    publictoilet.setChecked(true);
-                    break;
+                case "공용 화장실" : publictoilet.setChecked(true); break;
 
-                case "계단 있음" :
-                    stairs.setChecked(true);
-                    break;
+                case "계단 있음" : stairs.setChecked(true); break;
 
-                case "계단 없음" :
-                    nostairs.setChecked(true);
-                    break;
+                case "계단 없음" : nostairs.setChecked(true); break;
 
-                case "콘센트 많음" :
-                    manyoulet.setChecked(true);
-                    break;
+                case "콘센트 많음" : manyoulet.setChecked(true); break;
 
-                case "콘센트 적음" :
-                    lessoulet.setChecked(true);
-                    break;
-
+                case "콘센트 적음" : lessoulet.setChecked(true); break;
 
             }
 
@@ -375,43 +342,35 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String ownerId = document.get("owner").toString();
-                                firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                firestore.collection("userSettings").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            String nickname = document.get("nickName").toString();
-                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
-                                            NoticeDTO noticeDTO = new NoticeDTO();
-                                            noticeDTO.setNotice(notice);
-                                            noticeDTO.setFolder_id(folder_id);
-                                            noticeDTO.setNoticeType("내폴더장소추가알림");
-                                            noticeDTO.setTimestamp(System.currentTimeMillis());
-                                            firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
+                                        DocumentSnapshot doc = task.getResult();
+                                        if (doc.exists()) {
+                                            boolean noticeSetting = (Boolean) doc.get("myfolderPlace");
+                                            if (noticeSetting) { // 폴더 소유자가 알림을 켜뒀다면
+                                                firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
+                                                            String nickname = document.get("nickName").toString();
+                                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
+                                                            NoticeDTO noticeDTO = new NoticeDTO();
+                                                            noticeDTO.setNotice(notice);
+                                                            noticeDTO.setFolder_id(folder_id);
+                                                            noticeDTO.setNoticeType("내폴더장소추가알림");
+                                                            noticeDTO.setTimestamp(System.currentTimeMillis());
+                                                            firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
 
-
-//                                            String nickname = document.get("nickName").toString();
-//                                            String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더에 새로운 장소 '" + place_name + "'을 추가했습니다.";
-//                                            firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                                    DocumentSnapshot document = task.getResult();
-//                                                    if (document.exists()) {
-//                                                        NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//                                                        noticeDTO.getNotices().put(notice, true);
-//                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                                    }
-//                                                    else {
-//                                                        NoticeDTO noticeDTO = new NoticeDTO();
-//                                                        noticeDTO.getNotices().put(notice, true);
-//                                                        firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                                    }
-//                                                }
-//                                            });
-
+                                                        }
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 });
+
                             }
                         }
                     });
@@ -427,31 +386,25 @@ public class AddPlaceFormActivity extends AppCompatActivity implements CompoundB
 
                                 for (String key: subsDTO.getSubscribers().keySet()) {
 
-                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
-                                    NoticeDTO noticeDTO = new NoticeDTO();
-                                    noticeDTO.setNotice(notice);
-                                    noticeDTO.setFolder_id(folder_id);
-                                    noticeDTO.setNoticeType("구독폴더장소추가알림");
-                                    noticeDTO.setTimestamp(System.currentTimeMillis());
-                                    firestore.collection("notices").document(key).collection("notice").document().set(noticeDTO);
+                                    firestore.collection("userSettings").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc.exists()) {
+                                                boolean noticeSetting = (Boolean) doc.get("subsfolderPlace");
+                                                if (noticeSetting) { // 구독자가 알림을 켜뒀다면
+                                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
+                                                    NoticeDTO noticeDTO = new NoticeDTO();
+                                                    noticeDTO.setNotice(notice);
+                                                    noticeDTO.setFolder_id(folder_id);
+                                                    noticeDTO.setNoticeType("구독폴더장소추가알림");
+                                                    noticeDTO.setTimestamp(System.currentTimeMillis());
+                                                    firestore.collection("notices").document(key).collection("notice").document().set(noticeDTO);
+                                                }
+                                            }
+                                        }
+                                    });
 
-//                                    String notice = "구독 폴더 '" + folder_name + "'에 새로운 장소 '" + place_name + "'가 추가되었습니다.";
-//                                    firestore.collection("notices").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            DocumentSnapshot document = task.getResult();
-//                                            if (document.exists()) {
-//                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(key).set(noticeDTO);
-//                                            }
-//                                            else {
-//                                                NoticeDTO noticeDTO = new NoticeDTO();
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(key).set(noticeDTO);
-//                                            }
-//                                        }
-//                                    });
                                 }
                             }
                         }

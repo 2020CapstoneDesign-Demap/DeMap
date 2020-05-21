@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DeMap</string>
+    <string name="app_name">디맵</string>
     <string name="create_folder">새 폴더 추가</string>
     <string name="folder_name">폴더 이름</string>
     <string name="folder_search">폴더 검색</string>

@@ -49,8 +49,6 @@ public class FolderContentActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance(); // firebase 연동
 
-//    private Intent intent = getIntent();
-
     private String docId;
     private boolean isMyFolder;
 
@@ -63,7 +61,6 @@ public class FolderContentActivity extends AppCompatActivity {
     private FolderDTO folderDTO;
     private FolderSubsDTO folderSubsDTO;
 
-    private UserMyFolderDTO userMyfolderDTO = new UserMyFolderDTO();
     private UserSubsFolderDTO userSubsFolderDTO = new UserSubsFolderDTO();
 
     private FolderPlacesDTO folderPlacesDTO;
@@ -76,6 +73,7 @@ public class FolderContentActivity extends AppCompatActivity {
     private String ownerId;
 
     private String folder_public;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +112,9 @@ public class FolderContentActivity extends AppCompatActivity {
         tv_folderPublic.setText(folder_public);
 
         tv_folderCreator = findViewById(R.id.tv_folder_content_owner_info);
+
+        TextView textview_total_folder_count = findViewById(R.id.textview_total_folder_count);
+        textview_total_folder_count.setText(String.valueOf(intent.getIntExtra("folder_placeCount", 0)));
 
 
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
@@ -332,47 +333,43 @@ public class FolderContentActivity extends AppCompatActivity {
 
             tv_folder_subsCount.setText(String.valueOf(folderDTO.getSubscribeCount()));
 
+            // 폴더 주인에게 알림
             firestore.collection("folderOwner").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String ownerId = document.get("owner").toString();
-                        firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                        firestore.collection("userSettings").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    String nickname = document.get("nickName").toString();
-                                    String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
-                                    NoticeDTO noticeDTO = new NoticeDTO();
-                                    noticeDTO.setNotice(notice);
-                                    noticeDTO.setFolder_id(docId);
-                                    noticeDTO.setNoticeType("구독알림");
-                                    noticeDTO.setTimestamp(System.currentTimeMillis());
-                                    firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
-//                                    String nickname = document.get("nickName").toString();
-//                                    String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
-//                                    firestore.collection("notices").document(ownerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            DocumentSnapshot document = task.getResult();
-//                                            if (document.exists()) {
-//                                                NoticeDTO noticeDTO = document.toObject(NoticeDTO.class);
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                            }
-//                                            else {
-//                                                NoticeDTO noticeDTO = new NoticeDTO();
-//                                                noticeDTO.getNotices().put(notice, true);
-//                                                firestore.collection("notices").document(ownerId).set(noticeDTO);
-//                                            }
-//                                        }
-//                                    });
+                                DocumentSnapshot doc = task.getResult();
+                                if (doc.exists()) {
+                                    boolean noticeSetting = (Boolean) doc.get("myfolderSubs");
+                                    if (noticeSetting) { // 폴더 소유자가 알림을 켜뒀다면
+                                        firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    String nickname = document.get("nickName").toString();
+                                                    String notice = nickname + " 님이 회원님의 '" + folder_name + "' 폴더를 구독했습니다.";
+                                                    NoticeDTO noticeDTO = new NoticeDTO();
+                                                    noticeDTO.setNotice(notice);
+                                                    noticeDTO.setFolder_id(docId);
+                                                    noticeDTO.setNoticeType("구독알림");
+                                                    noticeDTO.setTimestamp(System.currentTimeMillis());
+                                                    firestore.collection("notices").document(ownerId).collection("notice").document().set(noticeDTO);
 
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });
+
                     }
                 }
             });

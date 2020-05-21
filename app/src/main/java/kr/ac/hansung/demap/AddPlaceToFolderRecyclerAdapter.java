@@ -1,41 +1,23 @@
 package kr.ac.hansung.demap;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.PlaceDTO;
-import kr.ac.hansung.demap.model.UserMyFolderDTO;
-import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface;
 
 public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPlaceToFolderRecyclerAdapter.MyViewHolder> {
 

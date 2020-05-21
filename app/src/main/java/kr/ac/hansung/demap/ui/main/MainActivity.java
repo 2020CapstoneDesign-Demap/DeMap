@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Intent settingsIntent;
 
+    private String uid;
     private String nickname = "";
     private TextView tv_nickname;
     private TextView tv_email;
@@ -154,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // 로그인한 유저 닉네임 받아오기
         if (auth.getCurrentUser() != null) {
-            firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            uid = auth.getCurrentUser().getUid();
+            settingsIntent.putExtra("uid", uid);
+            firestore.collection("users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot.exists()) {

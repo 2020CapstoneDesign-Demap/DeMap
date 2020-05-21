@@ -49,7 +49,6 @@ public class SearchBlogActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(intent.getStringExtra("result_name"));
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
-        //getSupportActionBar()?.setBackgroundDrawable(object : ColorDrawable(0xFF339999.toInt())
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
@@ -123,7 +122,6 @@ public class SearchBlogActivity extends AppCompatActivity {
                     link = new String[display];
                     description = new String[display];
                     postdate = new String[display];
-                    //category = new String[display];
 
                     int k = 0;
                     for (int i = 0; i < array.length; i++) {
@@ -146,22 +144,14 @@ public class SearchBlogActivity extends AppCompatActivity {
                             postdate[k] = year + mon + day;
                             k++;
                         }
-                        /*if (array[i].equals("category")) {
-                            category[k] = Html.fromHtml(array[i + 2]).toString();
-                            k++;
-                        }*/
                     }
 
-                    //System.out.println(array);
                     System.out.println(description[0]+description[1]+description[2]+description[3]+description[4]);
 
                     adapter.addItems(title, description, postdate, link);
                     adapter.notifyDataSetChanged();
-                    // title[0], link[0], bloggername[0] 등 인덱스 값에 맞게 검색결과를 변수화하였다.
 
-                } catch (
-                        Exception e) {
-                    //status1.setText("에러가..났습니다...");
+                } catch (Exception e) {
                     System.out.println("에러 발생 : " + e);
                 }
             }
