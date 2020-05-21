@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.foldercontent;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import kr.ac.hansung.demap.R;
 
 public class MyfolderEditActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.NoticeSettingDTO;
 import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
 

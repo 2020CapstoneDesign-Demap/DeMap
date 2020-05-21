@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.notice;
 
 
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.NoticeDTO;
 
 public class NoticeActivity extends AppCompatActivity {

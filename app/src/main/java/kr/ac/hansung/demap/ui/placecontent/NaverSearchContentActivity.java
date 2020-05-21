@@ -1,11 +1,9 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.placecontent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,14 +26,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
-import com.naver.maps.geometry.Tm128;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
@@ -52,6 +48,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import kr.ac.hansung.demap.AddPlaceToFolderActivity;
+import kr.ac.hansung.demap.geo.GeoTrans;
+import kr.ac.hansung.demap.geo.GeoTransPoint;
+import kr.ac.hansung.demap.R;
 
 public class NaverSearchContentActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
 

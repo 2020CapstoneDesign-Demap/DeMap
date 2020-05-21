@@ -1,6 +1,5 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.myfolderlist;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -22,11 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.CreateFolderActivity;
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.FolderSubsDTO;
-import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -47,7 +49,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     @Override
     public void onBindViewHolder(@NonNull MyFolderViewRecyclerAdapter.MyViewHolder holder, int position) {
-        holder.onBind(folderObjs.get(position));
+        holder.onBind(folderObjs.get(position), isMyFolder);
 
         if (isMyFolder) {
             holder.textview_option.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +314,8 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
         public TextView textview_option;
 
+        public ImageView img_folder_public;
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -322,12 +326,30 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
             textview_folderview_subs_count = itemView.findViewById(R.id.tv_folder_subs_count);
 
             textview_option = itemView.findViewById(R.id.textView_Options_myfolder);
+
+            img_folder_public = itemView.findViewById(R.id.img_folder_public_lock);
         }
 
-        void onBind(FolderObj folderObj) {
+        void onBind(FolderObj folderObj, boolean isMyfolder) {
             textview_folderview_name.setText(folderObj.getName());
             textview_folderview_place_count.setText(String.valueOf(folderObj.getPlaceCount()));
             textview_folderview_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
+
+            if (isMyfolder) { // 내 폴더일 경우
+                if (folderObj.getIspublic().equals("비공개")) {
+                    img_folder_public.setVisibility(View.VISIBLE);
+                }
+            }
+            else { // 구독 폴더일 경우
+                if (folderObj.getEditable().equals("불가능")) {
+                    img_folder_public.setVisibility(View.VISIBLE);
+                    img_folder_public.setImageResource(R.drawable.ic_remove_red_eye_gray_24dp);
+                }
+                else if (folderObj.getEditable().equals("가능")) {
+                    img_folder_public.setVisibility(View.VISIBLE);
+                    img_folder_public.setImageResource(R.drawable.ic_edit_gray_24dp);
+                }
+            }
         }
 
     }

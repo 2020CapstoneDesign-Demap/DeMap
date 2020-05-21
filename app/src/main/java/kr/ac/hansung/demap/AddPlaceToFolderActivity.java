@@ -150,6 +150,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
     public void setData() {
 
+
         // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -170,11 +171,31 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                                             folderObj.setId(document.getId());
                                             folderObj.setOwner(auth.getCurrentUser().getUid());
 
-                                            myfolderObjs.add(folderObj);
+                                            firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
+                                                            folderObj.setIspublic(document.getString("public"));
+
+                                                            myfolderObjs.add(folderObj);
+                                                        }
+
+                                                        adapter.setItem(myfolderObjs);
+                                                        adapter.notifyDataSetChanged();
+
+                                                    } else {
+                                                        System.out.println("Error getting documents: " + task.getException());
+                                                    }
+                                                }
+                                            });
+
+//                                            myfolderObjs.add(folderObj);
                                         }
 
-                                        adapter.setItem(myfolderObjs);
-                                        adapter.notifyDataSetChanged();
+//                                        adapter.setItem(myfolderObjs);
+//                                        adapter.notifyDataSetChanged();
 
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
@@ -227,6 +248,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                                                                         FolderObj folderObj = document.toObject(FolderObj.class);
                                                                         folderObj.setId(document.getId());
                                                                         folderObj.setOwner("notMine");
+                                                                        folderObj.setEditable("가능");
                                                                         myfolderObjs.add(folderObj);
                                                                     }
 
@@ -258,6 +280,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                                                                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                                                                             folderObj.setId(document.getId());
                                                                                             folderObj.setOwner("notMine");
+                                                                                            folderObj.setEditable("가능");
                                                                                             myfolderObjs.add(folderObj);
                                                                                         }
 

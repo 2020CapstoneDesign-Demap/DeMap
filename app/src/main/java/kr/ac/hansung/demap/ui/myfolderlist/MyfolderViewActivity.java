@@ -1,6 +1,7 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.myfolderlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -19,9 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
+import kr.ac.hansung.demap.model.FolderEditorListDTO;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
@@ -41,6 +43,8 @@ public class MyfolderViewActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabPagerAdapter pagerAdapter;
 
+    private String nickName;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,10 @@ public class MyfolderViewActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_myfolder_view);
         mContext = this;
+
+        Intent intent = getIntent();
+
+        nickName = intent.getStringExtra("nickname");
 
         setData();
 
@@ -121,12 +129,12 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             myfolderObjs.add(folderObj);
                                         }
 
-                                        getPublic(myfolderObjs);
+                                        getPublic(myfolderObjs, 0);
 
-                                        pagerAdapter.setmyfolderItem(myfolderObjs);
-                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
-                                        viewPager.setAdapter(pagerAdapter);
-                                        pagerAdapter.notifyDataSetChanged();
+//                                        pagerAdapter.setmyfolderItem(myfolderObjs);
+//                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
+//                                        viewPager.setAdapter(pagerAdapter);
+//                                        pagerAdapter.notifyDataSetChanged();
 
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
@@ -163,12 +171,13 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             subsfolderObjs.add(folderObj);
                                         }
 
-                                        getPublic(subsfolderObjs);
+                                        getPublic(subsfolderObjs, 1);
+//                                        getEditable(subsfolderObjs);
 
-                                        pagerAdapter.setsubsfolderItem(subsfolderObjs);
-                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
-                                        viewPager.setAdapter(pagerAdapter);
-                                        pagerAdapter.notifyDataSetChanged();
+//                                        pagerAdapter.setsubsfolderItem(subsfolderObjs);
+//                                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
+//                                        viewPager.setAdapter(pagerAdapter);
+//                                        pagerAdapter.notifyDataSetChanged();
 
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
@@ -185,7 +194,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
 
     }
 
-    public void getPublic(ArrayList<FolderObj> folderObjs) {
+    public void getPublic(ArrayList<FolderObj> folderObjs, int flag) {
         for (FolderObj folderObj: folderObjs) {
             firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -193,12 +202,96 @@ public class MyfolderViewActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         folderObj.setIspublic(document.getString("public"));
+
+                        if (flag == 0) {
+                            pagerAdapter.setmyfolderItem(myfolderObjs);
+                            pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
+                            viewPager.setAdapter(pagerAdapter);
+                            pagerAdapter.notifyDataSetChanged();
+                        }
+                        else if (flag == 1) {
+                            firestore.collection("folderEditors").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        folderObj.setEditable(document.getString("edit_auth"));
+                                        if (folderObj.getEditable().equals("전체 유저")) {
+                                            folderObj.setEditable("가능");
+                                        }
+                                        else if (folderObj.getEditable().equals("초대한 유저")) {
+                                            firestore.collection("folderEditorList").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        FolderEditorListDTO folderEditorListDTO = document.toObject(FolderEditorListDTO.class);
+                                                        for (String nickname: folderEditorListDTO.getEditors().keySet()) {
+                                                            if (nickname.equals(nickName)) { // 수정 권한이 있는 경우
+                                                                folderObj.setEditable("가능");
+                                                            }
+                                                        }
+                                                    }
+                                                    pagerAdapter.setsubsfolderItem(subsfolderObjs);
+                                                    pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
+                                                    viewPager.setAdapter(pagerAdapter);
+                                                    pagerAdapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });
 
         }
     }
+
+//    public void getEditable(ArrayList<FolderObj> folderObjs) {
+//        for (FolderObj folderObj: folderObjs) {
+//            firestore.collection("folderEditors").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        folderObj.setEditable(document.getString("edit_auth"));
+//                        if (folderObj.getEditable().equals("전체 유저")) {
+//                            folderObj.setEditable("가능");
+//                        }
+//                        else if (folderObj.getEditable().equals("초대한 유저")) {
+//                            firestore.collection("folderEditorList").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                    DocumentSnapshot document = task.getResult();
+//                                    if (document.exists()) {
+//                                        FolderEditorListDTO folderEditorListDTO = document.toObject(FolderEditorListDTO.class);
+//
+//                                        for (String nickname: folderEditorListDTO.getEditors().keySet()) {
+//                                            if (nickname.equals(nickName)) { // 수정 권한이 있는 경우
+//                                                folderObj.setEditable("가능");
+//                                            }
+//                                        }
+//
+//                                    }
+//                                }
+//                            });
+//                        }
+//
+//                        pagerAdapter.setsubsfolderItem(subsfolderObjs);
+//                        pagerAdapter.setAuthId(auth.getCurrentUser().getUid());
+//                        viewPager.setAdapter(pagerAdapter);
+//                        pagerAdapter.notifyDataSetChanged();
+//
+//                    }
+//                }
+//            });
+//
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

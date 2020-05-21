@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.myfolderlist;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.PlaceDTO;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
 

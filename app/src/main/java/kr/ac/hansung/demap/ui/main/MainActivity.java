@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,17 +31,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
@@ -57,18 +52,16 @@ import com.naver.maps.map.util.FusedLocationSource;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import kr.ac.hansung.demap.CreateFolderActivity;
 import kr.ac.hansung.demap.CustomerCenterActivity;
-import kr.ac.hansung.demap.FolderListActivity;
-import kr.ac.hansung.demap.MyfolderViewActivity;
-import kr.ac.hansung.demap.NoticeActivity;
+import kr.ac.hansung.demap.ui.searchfolder.FolderListActivity;
+import kr.ac.hansung.demap.ui.myfolderlist.MyfolderViewActivity;
+import kr.ac.hansung.demap.ui.notice.NoticeActivity;
 import kr.ac.hansung.demap.R;
-import kr.ac.hansung.demap.SearchNaverActivity;
-import kr.ac.hansung.demap.SettingsActivity;
+import kr.ac.hansung.demap.ui.searchplace.SearchNaverActivity;
+import kr.ac.hansung.demap.ui.setting.SettingsActivity;
 import kr.ac.hansung.demap.ui.hotPlace.HotPlaceActivity;
 import kr.ac.hansung.demap.ui.login.LoginActivity;
 import kr.ac.hansung.demap.ui.nickname.NickNameActivity;
@@ -79,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private Intent settingsIntent;
+    private Intent myFolderIntent;
 
     private String uid;
     private String nickname = "";
@@ -140,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
         settingsIntent = new Intent(this, SettingsActivity.class);
+        myFolderIntent = new Intent(this, MyfolderViewActivity.class);
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
@@ -168,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         tv_email.setText(auth.getCurrentUser().getEmail());
 
                         settingsIntent.putExtra("nickname", nickname);
+                        myFolderIntent.putExtra("nickname", nickname);
                     }
                     else {
                         Intent intent = new Intent(getApplicationContext(), NickNameActivity.class);
@@ -423,6 +419,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void createFolder() {
         Intent intent = new Intent(this, CreateFolderActivity.class);
+        intent.putExtra("folder_edit_flag", "create");
+        intent.putExtra("fromMain", true);
         startActivity(intent);
     }
 
@@ -432,8 +430,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void viewMyFolderList() {
-        Intent intent = new Intent(this, MyfolderViewActivity.class);
-        startActivity(intent);
+        startActivity(myFolderIntent);
     }
 
     public void viewSearchHotPlace() {

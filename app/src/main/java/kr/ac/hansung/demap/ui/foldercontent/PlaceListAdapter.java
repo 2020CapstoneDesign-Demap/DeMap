@@ -1,11 +1,10 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.foldercontent;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +22,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
+import kr.ac.hansung.demap.AddPlaceFormActivity;
+import kr.ac.hansung.demap.ui.placecontent.NaverSearchContentActivity;
+import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
 import kr.ac.hansung.demap.model.PlaceDTO;
 

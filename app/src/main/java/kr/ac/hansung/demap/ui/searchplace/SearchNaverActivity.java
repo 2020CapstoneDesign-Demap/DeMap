@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.searchplace;
 
 import android.content.Intent;
 import android.text.Html;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,6 +23,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import kr.ac.hansung.demap.R;
 
 public class SearchNaverActivity extends AppCompatActivity {
 

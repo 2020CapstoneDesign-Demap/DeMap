@@ -1,29 +1,19 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.placecontent;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import kr.ac.hansung.demap.model.FolderPlacesDTO;
-import kr.ac.hansung.demap.model.PlaceDTO;
+import kr.ac.hansung.demap.R;
 
 public class PlaceTagListAdapter extends RecyclerView.Adapter<PlaceTagListAdapter.MyViewHolder> {
 

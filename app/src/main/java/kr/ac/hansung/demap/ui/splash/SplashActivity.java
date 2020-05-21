@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.splash;
 
 import android.content.Intent;
 import android.os.Bundle;
