@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private Intent settingsIntent;
+    private Intent myFolderIntent;
 
     private String uid;
     private String nickname = "";
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         window.setStatusBarColor(getResources().getColor(R.color.colorWhite));
 
         settingsIntent = new Intent(this, SettingsActivity.class);
+        myFolderIntent = new Intent(this, MyfolderViewActivity.class);
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         tv_email.setText(auth.getCurrentUser().getEmail());
 
                         settingsIntent.putExtra("nickname", nickname);
+                        myFolderIntent.putExtra("nickname", nickname);
                     }
                     else {
                         Intent intent = new Intent(getApplicationContext(), NickNameActivity.class);
@@ -416,6 +419,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void createFolder() {
         Intent intent = new Intent(this, CreateFolderActivity.class);
+        intent.putExtra("folder_edit_flag", "create");
+        intent.putExtra("fromMain", true);
         startActivity(intent);
     }
 
@@ -425,8 +430,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void viewMyFolderList() {
-        Intent intent = new Intent(this, MyfolderViewActivity.class);
-        startActivity(intent);
+        startActivity(myFolderIntent);
     }
 
     public void viewSearchHotPlace() {

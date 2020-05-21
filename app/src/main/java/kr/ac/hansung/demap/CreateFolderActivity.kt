@@ -66,6 +66,8 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
     private var addPlace: Int = 0
 
+    private var fromMain: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -103,6 +105,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 
         setContentView(R.layout.activity_create_folder)
 
+        fromMain = intent.getBooleanExtra("fromMain", false)
 
         //공개 범위
         viewManager = LinearLayoutManager(this)
@@ -217,7 +220,6 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         //folder 데이터
         var folderDTO = FolderDTO()
         var fID : String? = null
-//        folderDTO.uid = auth?.currentUser?.uid //생성자 uid 일단 여기에 넣음(따로 빼서 저장해야함)
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
         firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
@@ -282,7 +284,9 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
 //            ((AddPlaceToFolderActivity)AddPlaceToFolderActivity.addPlaceToFolderContext)
         }
 
-        updateAdapterItem(folderDTO,fID);
+        if (!fromMain) {
+            updateAdapterItem(folderDTO, fID);
+        }
 
         finish()
 
