@@ -285,7 +285,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         }
 
         if (!fromMain) {
-            updateAdapterItem(folderDTO, fID);
+//            updateAdapterItem(folderDTO, fID);
         }
 
         finish()
