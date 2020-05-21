@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,13 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import kr.ac.hansung.demap.R;
@@ -36,12 +39,13 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private Context context;
-    private HotPlaceDTO hotPlaceDTO = new HotPlaceDTO();
-    private HotPlaceDTO d_hotPlaceDTO;
+    private HotPlaceDTO selectedHotPlaceDTO;
+    private HotPlaceDTO hotPlaceDTO;
     private ArrayList<HotPlaceDTO> hotPlaceList = new ArrayList<>();
+    private ArrayList<String> hotPlaceIds;
     private UserMyHotPlaceDTO userMyHotPlaceDTO = new UserMyHotPlaceDTO();
     private HashMap<String, Boolean> myHotPlace  = new HashMap<>();
-    private String authId;
+    private String authId = auth.getCurrentUser().getUid();
 
     @NonNull
     @Override
@@ -66,7 +70,14 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = input.getText().toString();
+                    readHotPlaceDB();
+                    String hotPlaceId = hotPlaceIds.get(position);
 
+                    firestore.collection("hotPlaces").document(hotPlaceId).update("comment",value);
+                    hotPlaceList.get(position).setComment(value);
+                    notifyDataSetChanged();
+
+                    setHotPlaceList(hotPlaceList, hotPlaceIds);
                     Toast.makeText(context,"수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -88,63 +99,41 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
         });
 
         holder.rmHotPlaceBtn.setOnClickListener(v -> {
-            setAuthId(auth.getCurrentUser().getUid());
-            d_hotPlaceDTO = hotPlaceList.get(position);
+            readHotPlaceDB();
+            String hotPlaceId = hotPlaceIds.get(position);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("핫플레이스 삭제").setMessage("선택한 장소를 삭제하시겠습니까?");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    firestore.collection("usersHotPlace").document(authId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    userMyHotPlaceDTO = document.toObject(UserMyHotPlaceDTO.class);
-                                    myHotPlace = (HashMap<String, Boolean>) userMyHotPlaceDTO.getMyhotplaces();
-                                    for(String key : myHotPlace.keySet()){
-                                        firestore.collection("hotPlaces").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()){
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-                                                        hotPlaceDTO = document.toObject(HotPlaceDTO.class);
-                                                        if(hotPlaceDTO.getTimestamp().equals(d_hotPlaceDTO.getTimestamp())) {
-                                                            hotPlaceList.remove(d_hotPlaceDTO);
-                                                            setHotPlaceList(hotPlaceList);
-                                                            firestore.collection("hotPlaces").document(key).delete();
-                                                            myHotPlace.remove(key);
-                                                            userMyHotPlaceDTO.setMyhotplaces(myHotPlace);
-                                                            DocumentReference dr = firestore.collection("usersHotPlace").document(authId);
-                                                            dr.set(userMyHotPlaceDTO);
+                    firestore.collection("hotPlaces").document(hotPlaceId).delete();
+                    firestore.collection("usersHotPlace").document(authId).get().addOnCompleteListener(task -> {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            userMyHotPlaceDTO = document.toObject(UserMyHotPlaceDTO.class);
+                            userMyHotPlaceDTO.getMyhotplaces().remove(hotPlaceId);
 
-                                                            notifyDataSetChanged();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    System.out.println("Error getting documents: " + task.getException());
-                                }
-                            } else {
-                                System.out.println("Error getting documents: " + task.getException());
-                            }
+                            DocumentReference dr = firestore.collection("usersHotPlace").document(authId);
+                            dr.set(userMyHotPlaceDTO);
+
+                            hotPlaceList.remove(position);
+                            hotPlaceIds.remove(hotPlaceId);
+                            setHotPlaceList(hotPlaceList, hotPlaceIds);
+
+                            notifyDataSetChanged();
                         }
                     });
-
                 }
             });
+
             builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                 }
             });
+
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         });
@@ -159,17 +148,48 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
         hotPlaceList.clear();
     }
 
-    public void addHotPlace(HotPlaceDTO data) {
-        hotPlaceList.add(data);
-        notifyDataSetChanged();
-    }
-
-    void setHotPlaceList(ArrayList<HotPlaceDTO> hotPlaceList) {
+    void setHotPlaceList(ArrayList<HotPlaceDTO> hotPlaceList, ArrayList<String> hotPlaceIds) {
         this.hotPlaceList = hotPlaceList;
+        this.hotPlaceIds = hotPlaceIds;
     }
 
     void setAuthId(String authId) {
         this.authId = authId;
+    }
+
+    public void readHotPlaceDB () {
+        firestore.collection("usersHotPlace").document(authId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    //clearHotPlace();
+                    hotPlaceIds = new ArrayList<>();
+                    userMyHotPlaceDTO = document.toObject(UserMyHotPlaceDTO.class);
+
+                    for(String key : userMyHotPlaceDTO.getMyhotplaces().keySet()){
+                        firestore.collection("hotPlaces").document(key).get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()){
+                                DocumentSnapshot document1 = task1.getResult();
+                                if (document1.exists()) {
+                                    //hotPlaceDTO = document1.toObject(HotPlaceDTO.class);
+                                    //hotPlaceList.add(hotPlaceDTO);
+                                    hotPlaceIds.add(document1.getId());
+
+                                    //Collections.sort(hotPlaceList, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+
+                                    setHotPlaceList(hotPlaceList, hotPlaceIds);
+                                    notifyDataSetChanged();
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            } else {
+                System.out.println("Error getting documents: " + task.getException());
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

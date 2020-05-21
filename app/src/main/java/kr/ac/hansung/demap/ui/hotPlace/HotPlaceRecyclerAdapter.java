@@ -87,6 +87,7 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
                         value = input.getText().toString();
                     }
                     saveHotPlace(position, value);
+                    notifyDataSetChanged();
 
                     Toast.makeText(context,"저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -132,7 +133,7 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
     public void saveHotPlace(int position, String comment) {
         String userUid = auth.getCurrentUser().getUid();
 
-        myHotPlace  = new HashMap();
+        myHotPlace  = new HashMap<>();
         hotPlaceDTO.setImageUrl(hotPlaceList.get(position).getImageUrl());
         hotPlaceDTO.setPostUrl(hotPlaceList.get(position).getPostUrl());
         hotPlaceDTO.setTag(hotPlaceList.get(position).getTag());

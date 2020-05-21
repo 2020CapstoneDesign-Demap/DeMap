@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap.ui.hotPlace;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -11,12 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import org.jsoup.Jsoup;
@@ -29,16 +33,18 @@ import java.util.ArrayList;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.HotPlaceDTO;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 
 public class HotPlaceFragment extends Fragment {
     private ArrayList<HotPlaceDTO> hotPlaceList = new ArrayList<>();
-    private RecyclerView recyclerView;
     private HotPlaceRecyclerAdapter adapter;
     private SearchView searchView;
     private String instagram_url = "https://www.instagram.com";
     private WebView webView;
-    private String source;
     private String authId;
+    private String source;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +67,15 @@ public class HotPlaceFragment extends Fragment {
         this.authId = authId;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.hotplace_search_fragment, container, false);
 
-        recyclerView = view.findViewById(R.id.rv_hotPlace);
+        progressBar = view.findViewById(R.id.pg_hotPlace);
+
+        RecyclerView recyclerView = view.findViewById(R.id.rv_hotPlace);
         recyclerView.setHasFixedSize(true);
 
         adapter = new HotPlaceRecyclerAdapter();
@@ -74,7 +83,32 @@ public class HotPlaceFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(adapter);
 
-        /*
+        searchView = view.findViewById(R.id.sv_hotPlace);
+        searchView.setIconifiedByDefault(false);
+
+        webView = view.findViewById(R.id.wv_hotPlace);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new MyJavascriptInterface(), "Android");
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 자바스크립트 인터페이스로 연결되어 있는 getHTML를 실행
+                // 자바스크립트 기본 메소드로 html 소스를 통째로 지정해서 인자로 넘김
+                super.onPageFinished(view, url);
+                try {
+                    view.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('div')[0].innerHTML);");
+                    Thread.sleep(2000);
+                    adapter.clearHotPlace();
+                    adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+
+                } catch (Exception ignored) {
+
+                }
+            }
+        });
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -84,41 +118,8 @@ public class HotPlaceFragment extends Fragment {
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
 
                 if (lastVisibleItemPosition == itemTotalCount) {
-                    webView.setScrollY(5000);
-                    webView.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);");
-                }
-            }
-        });
-        */
-
-        searchView = view.findViewById(R.id.sv_hotPlace);
-        searchView.setIconifiedByDefault(false);
-        searchView.setQueryHint("공백없이 입력해주세요");
-
-
-        webView = new WebView(this.getActivity());
-        // WebView 자바스크립트 활성화
-        webView.getSettings().setJavaScriptEnabled(true);
-        // 자바스크립트인터페이스 연결
-        // 이걸 통해 자바스크립트 내에서 자바함수에 접근할 수 있음.
-        webView.addJavascriptInterface(new MyJavascriptInterface(), "Android");
-
-        // 클릭 시 새 창 안뜨게
-        webView.setWebViewClient(new WebViewClient() {
-            // WebView에서 처음 한 번만 호출되는 method. 페이지 로딩이 완료된 것을 알림
-            // 페이지가 모두 로드되었을 때, 작업 정의
-            // 로딩이 다 끝난다고 해서 이미지파일이 다 보일때까지는 아님
-            // response를 다 받았다 정도
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // 자바스크립트 인터페이스로 연결되어 있는 getHTML를 실행
-                // 자바스크립트 기본 메소드로 html 소스를 통째로 지정해서 인자로 넘김
-                try {
-                    view.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('body')[0].innerHTML);");
-                    Thread.sleep(2000);
-
-                } catch (Exception e) {
-
+                    webView.pageDown(true);
+                    webView.loadUrl("javascript:window.Android.getHtml(document.getElementsByTagName('div')[0].innerHTML);");
                 }
             }
         });
@@ -127,8 +128,13 @@ public class HotPlaceFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // 검색 버튼을 눌렀을 때
+                progressBar.setVisibility(View.VISIBLE);
+                searchView.clearFocus();
                 clearHotPlace();
-                String tagUrl = "/explore/tags/" + query;
+                adapter.clearHotPlace();
+                adapter.notifyDataSetChanged();
+
+                String tagUrl = "/explore/tags/" + query.replaceAll(" ","");
                 //지정한 URL을 웹 뷰로 접근하기
                 webView.loadUrl(instagram_url + tagUrl);
 
@@ -138,6 +144,7 @@ public class HotPlaceFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 // 검색어가 변경됐을 때
+
                 return false;
             }
         });
@@ -151,13 +158,12 @@ public class HotPlaceFragment extends Fragment {
         @JavascriptInterface
         public void getHtml(String html) {
             source = html;
-
             //위 자바스크립트가 호출되면 여기로 html이 반환됨
             Document doc = Jsoup.parse(source);
             Elements item_list = doc.select("div.v1Nh3 img");
-            int elementSize = item_list.size();
-
             Elements post_list = doc.select("div.v1Nh3 a");
+            Log.i("loded elementsSize", item_list.size()+"");
+
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
@@ -165,21 +171,43 @@ public class HotPlaceFragment extends Fragment {
                 ArrayList<String> listPostUrl = new ArrayList<>();
 
                 for(Element element : item_list) {
-                    listImageUrl.add(element.attr("src"));
+                    boolean isSearched = false;
+                    String imageUrl = element.attr("src");
+                    for (HotPlaceDTO hotPlaceDTO : hotPlaceList) {
+                        if (hotPlaceDTO.getImageUrl().equals(imageUrl)) {
+                            isSearched = true;
+                            break;
+                        }
+                    }
+                    if (!isSearched) {
+                        listImageUrl.add(imageUrl);
+                    }
                 }
 
                 for(Element element : post_list) {
-                    listPostUrl.add("https://www.instagram.com"+element.attr("href"));
+                    boolean isSearched = false;
+                    String postUrl = "https://www.instagram.com"+element.attr("href");
+                    //Log.i("post Url", postUrl);
+                    for (HotPlaceDTO hotPlaceDTO : hotPlaceList) {
+                        if (hotPlaceDTO.getPostUrl().equals(postUrl)) {
+                            isSearched = true;
+                            break;
+                        }
+                    }
+                    if (!isSearched) {
+                        listPostUrl.add(postUrl);
+                    }
                 }
 
-                for (int i = 0; i < elementSize ; i++) {
+                for (int i = 0; i < listPostUrl.size() ; i++) {
                     HotPlaceDTO hotPlaceDTO = new HotPlaceDTO();
                     hotPlaceDTO.setImageUrl(listImageUrl.get(i));
-                    hotPlaceDTO.setTag("#"+searchView.getQuery().toString());
                     hotPlaceDTO.setPostUrl(listPostUrl.get(i));
-                    hotPlaceList.add(hotPlaceDTO);
+                    hotPlaceDTO.setTag("#"+searchView.getQuery().toString());
+                    addHotPlace(hotPlaceDTO);
+                    //adapter.addHotPlace(hotPlaceDTO);
                 }
-                adapter.setHotPlaceList(hotPlaceList);
+                setHotPlaceList(hotPlaceList);
                 adapter.notifyDataSetChanged();
 
             });

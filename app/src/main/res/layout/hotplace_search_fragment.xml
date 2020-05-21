@@ -10,10 +10,14 @@
     <SearchView
         android:id="@+id/sv_hotPlace"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        />
+        android:layout_height="50dp"/>
+
+    <ProgressBar
+        android:id="@+id/pg_hotPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hotPlace"
@@ -21,5 +25,8 @@
         android:layout_height="match_parent"
         android:divider="#EEEEEE"
         tools:listitem="@layout/hotplace_list" />
-
+    <WebView
+        android:id="@+id/wv_hotPlace"
+        android:layout_width="1dp"
+        android:layout_height="1dp"/>
 </LinearLayout>
