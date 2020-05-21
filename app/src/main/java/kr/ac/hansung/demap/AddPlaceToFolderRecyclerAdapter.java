@@ -3,6 +3,7 @@ package kr.ac.hansung.demap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,8 +49,6 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         listOnClickInterface.onCheckbox(mCheckedFolders); //체크한 폴더ID 넘겨주기
 */
-
-
 
         if ((mSelectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
             mSelectedPosition = 0;
@@ -141,6 +140,8 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         public MaterialCheckBox checkBox;
 
+        public ImageView img_folder_icon;
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -151,6 +152,8 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             textview_folder_subs_count = itemView.findViewById(R.id.tv_checkfolder_subs_count);
 
             checkBox = itemView.findViewById(R.id.checkbox_checkfolder);
+
+            img_folder_icon = itemView.findViewById(R.id.img_checkfolder_icon);
         }
 
         void onBind(FolderObj folderObj, int selectedPosition, int position) {
@@ -162,6 +165,19 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
                 checkBox.setChecked(true);
             else
                 checkBox.setChecked(false);
+
+            if (folderObj.getOwner().equals("notMine")) {
+                if (folderObj.getEditable().equals("가능")) {
+                    img_folder_icon.setVisibility(View.VISIBLE);
+                }
+            }
+            else {
+                img_folder_icon.setVisibility(View.INVISIBLE);
+                if (folderObj.getIspublic().equals("비공개")) {
+                    img_folder_icon.setImageResource(R.drawable.ic_lock_gray_24dp);
+                    img_folder_icon.setVisibility(View.VISIBLE);
+                }
+            }
         }
 
     }
