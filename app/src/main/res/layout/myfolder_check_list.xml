@@ -38,48 +38,69 @@
             android:layout_width="0dp"
             android:layout_weight="10"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_checkfolder_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="폴더 이름"
-                android:textSize="18sp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
-                />
+
             <LinearLayout
                 android:orientation="horizontal"
+                android:layout_marginBottom="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_checkfolder_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="폴더 이름"
+                    android:textColor="@color/colorLineGray7"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="3dp" />
+                <ImageView
+                    android:id="@+id/img_checkfolder_icon"
+                    android:src="@drawable/ic_lock_gray_24dp"
+                    android:visibility="invisible"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
                     android:text="개수 "
-                    android:textSize="14sp"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorLineGray6"
                     android:layout_marginLeft="7dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/tv_checkfolder_place_count"
                     android:text="0"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorLineGray6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:text=" | "
-                    android:textSize="15sp"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorLineGray6"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:text="구독 "
-                    android:textSize="14sp"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorLineGray6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/tv_checkfolder_subs_count"
                     android:text="0"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorLineGray6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

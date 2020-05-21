@@ -8,6 +8,7 @@ public class FolderObj implements Comparable<FolderObj> {
     private String owner = null;
     private String name = null;
     private String ispublic = "비공개";
+    private String editable = "불가능";
     private String tag = null;
     private String  imageUrl = null;
     private Long timestamp = null;
@@ -102,6 +103,14 @@ public class FolderObj implements Comparable<FolderObj> {
 
     public void setSubscribers(HashMap<String, Boolean> subscribers) {
         this.subscribers = subscribers;
+    }
+
+    public String getEditable() {
+        return editable;
+    }
+
+    public void setEditable(String editable) {
+        this.editable = editable;
     }
 
     @Override
