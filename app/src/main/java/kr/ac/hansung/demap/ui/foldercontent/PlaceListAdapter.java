@@ -22,6 +22,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ac.hansung.demap.AddPlaceFormActivity;
 import kr.ac.hansung.demap.ui.placecontent.NaverSearchContentActivity;
@@ -42,6 +44,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     private FolderPlacesDTO folderPlacesDTO;
     private boolean isMyFolder;
     private int placeCount;
+
+    private String uid;
 
     @NonNull
     @Override
@@ -136,9 +140,13 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                 ArrayList<String> tmpTags = new ArrayList<String>();
                 tmpTags.addAll(tmpPlace.getTags().keySet());
 
+                ArrayList<String> favorites = new ArrayList<String>();
+                favorites.addAll(tmpPlace.getFavorites().keySet());
+
                 Intent intent1 = new Intent(v.getContext(), NaverSearchContentActivity.class);
                 Bundle bundle = new Bundle(); // 장소 태그를 담을 번들 객체
                 bundle.putStringArrayList("result_tags",tmpTags);
+                bundle.putStringArrayList("favorites",favorites);
 
                 intent1.putExtra("result_name", tmpPlace.getName());
                 intent1.putExtra("result_addr", tmpPlace.getAddress());
@@ -147,6 +155,12 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
                 intent1.putExtra("result_mapx", tmpPlace.getX());
                 intent1.putExtra("result_mapy", tmpPlace.getY());
                 intent1.putExtras(bundle);
+
+                intent1.putExtra("fromFolder", true);
+                intent1.putExtra("favoriteCount", tmpPlace.getFavorite());
+                intent1.putExtra("uid", uid);
+                intent1.putExtra("placeId", placeIds.get(position));
+                intent1.putExtra("position", position);
 
                 context.startActivity(intent1);
             }
@@ -186,6 +200,16 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
     void setPlaceCount(int placeCount) {
         this.placeCount = placeCount;
+    }
+
+    void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void updatePlaceDTO(int position, int favorite, HashMap<String, Boolean> favorites) {
+        placeDTOS.get(position).setFavorite(favorite);
+        placeDTOS.get(position).setFavorites(favorites);
+        notifyDataSetChanged();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

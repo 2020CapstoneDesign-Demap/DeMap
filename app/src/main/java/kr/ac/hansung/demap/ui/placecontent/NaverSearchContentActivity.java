@@ -27,10 +27,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
@@ -47,18 +50,25 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kr.ac.hansung.demap.AddPlaceToFolderActivity;
 import kr.ac.hansung.demap.geo.GeoTrans;
 import kr.ac.hansung.demap.geo.GeoTransPoint;
 import kr.ac.hansung.demap.R;
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
 
 public class NaverSearchContentActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
+
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private Intent intent;
     private Bundle bundle;
     private ArrayList<String> result_tags = new ArrayList<String>();
+    private ArrayList<String> favorites_string = new ArrayList<String>();
+
     private PlaceTagListAdapter adapter;
 
     private MapView mapView;
@@ -74,6 +84,15 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
     private Button btn_folder_save;
     private Button btn_search_blog;
     private Button btn_navigation;
+
+    private boolean fromFolder;
+    private int favoriteCount = 0;
+    private String uid;
+    private String placeId;
+    private int position;
+    private HashMap<String, Boolean> favorites = new HashMap<>();
+    private ImageView img_favorite;
+    private TextView tv_favorite_count;
 
     // FusedLocationSource (Google)
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -121,7 +140,9 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
+
+        fromFolder = intent.getBooleanExtra("fromFolder", false);
+        favoriteCount = intent.getIntExtra("favoriteCount", 0);
 
         tv__name = findViewById(R.id.tv_naver_search_content_name);
         tv__name.setText(intent.getStringExtra("result_name"));
@@ -141,6 +162,7 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
 
         if(bundle.getStringArrayList("result_tags") != null) {
             result_tags.addAll(bundle.getStringArrayList("result_tags"));
+            favorites_string.addAll(bundle.getStringArrayList("favorites"));
         }
         if(result_tags != null) {
             rv_tags = findViewById(R.id.tags_RecyclerView);
@@ -229,6 +251,53 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
                 startActivity(intent2);
             }
         });
+
+        if (fromFolder) {
+            position = intent.getIntExtra("position", -1);
+            uid = intent.getStringExtra("uid");
+            placeId = intent.getStringExtra("placeId");
+
+            img_favorite = findViewById(R.id.img_place_content_favorite);
+            for (String id: favorites_string) {
+                favorites.put(id, true);
+            }
+            if (favorites.containsKey(uid)) {
+                img_favorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+            }
+            else {
+                img_favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            }
+            img_favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favorites.containsKey(uid)) {
+                        favorites.remove(uid);
+                        favoriteCount = favoriteCount - 1;
+                        firestore.collection("places").document(placeId).update("favorites", favorites);
+                        firestore.collection("places").document(placeId).update("favorite", FieldValue.increment(-1));
+                        img_favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                        tv_favorite_count.setText(String.valueOf(favorites.size()));
+
+                        ((FolderContentActivity)FolderContentActivity.mContext).updateAdapterItem(position, favoriteCount, favorites);
+                    }
+                    else {
+                        favorites.put(uid, true);
+                        favoriteCount = favoriteCount + 1;
+                        firestore.collection("places").document(placeId).update("favorites", favorites);
+                        firestore.collection("places").document(placeId).update("favorite", FieldValue.increment(1));
+                        img_favorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+                        tv_favorite_count.setText(String.valueOf(favorites.size()));
+
+                        ((FolderContentActivity)FolderContentActivity.mContext).updateAdapterItem(position, favoriteCount, favorites);
+                    }
+                }
+            });
+            img_favorite.setVisibility(View.VISIBLE);
+
+            tv_favorite_count = findViewById(R.id.tv_place_content_favorite_count);
+            tv_favorite_count.setText(String.valueOf(favoriteCount));
+            tv_favorite_count.setVisibility(View.VISIBLE);
+        }
 
         mapView = findViewById(R.id.navermap_map_view_search_content);
         mapView.onCreate(savedInstanceState);

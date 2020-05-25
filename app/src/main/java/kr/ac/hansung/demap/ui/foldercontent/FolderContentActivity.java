@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
@@ -118,6 +119,7 @@ public class FolderContentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PlaceListAdapter();
         adapter.setFolderId(docId);
+        adapter.setUid(auth.getCurrentUser().getUid());
         recyclerView.setAdapter(adapter);
 
         btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
@@ -153,6 +155,11 @@ public class FolderContentActivity extends AppCompatActivity {
 
     public void setAdapterItem(int position, PlaceDTO placeDTO) {
         adapter.setTag(position, placeDTO);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void updateAdapterItem(int position, int favorite, HashMap<String, Boolean> favorites) {
+        adapter.updatePlaceDTO(position, favorite, favorites);
         adapter.notifyDataSetChanged();
     }
 

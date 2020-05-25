@@ -13,6 +13,9 @@ public class PlaceDTO {
     private Long timestamp = null;
     private HashMap<String, Boolean> tags  = new HashMap();
 
+    private int favorite = 0;
+    private HashMap<String, Boolean> favorites  = new HashMap();
+
     public String getName() {
         return name;
     }
@@ -77,4 +80,19 @@ public class PlaceDTO {
         this.tags = tags;
     }
 
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
+
+    public HashMap<String, Boolean> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(HashMap<String, Boolean> favorites) {
+        this.favorites = favorites;
+    }
 }

@@ -93,6 +93,7 @@
                             android:id="@+id/tv_naver_search_content_name"
                             android:text="장소 이름"
                             android:textSize="18sp"
+                            android:textColor="@color/colorLineGray7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
@@ -183,6 +184,28 @@
                 android:layout_marginBottom="10dp"
                 android:layout_width="80dp"
                 android:layout_height="40dp"/>
+
+            <ImageView
+                android:id="@+id/img_place_content_favorite"
+                android:src="@drawable/ic_favorite_red_24dp"
+                android:visibility="invisible"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"/>
+
+            <TextView
+                android:id="@+id/tv_place_content_favorite_count"
+                android:text="0"
+                android:textSize="15sp"
+                android:textColor="@color/colorLineGray7"
+                android:visibility="invisible"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <!--                <ImageView-->
             <!--                    android:id="@+id/image_search_content"-->
