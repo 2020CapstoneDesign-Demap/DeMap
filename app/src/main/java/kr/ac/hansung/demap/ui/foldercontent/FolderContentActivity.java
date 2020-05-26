@@ -431,7 +431,7 @@ public class FolderContentActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             String edit = document.getString("edit_auth");
-                            if (folder_public.equals("공개")) {
+//                            if (folder_public.equals("공개")) {
                                 if (edit.equals("불가능")) {
                                     Toast.makeText(FolderContentActivity.this, "폴더 수정이 불가능합니다", Toast.LENGTH_SHORT).show();
                                 } else if (edit.equals("전체 유저")) {
@@ -443,10 +443,10 @@ public class FolderContentActivity extends AppCompatActivity {
                                     intent.putExtra("folder_name", folder_name);
                                     startActivity(intent);
                                 }
-                            }
-                            else {
-                                Toast.makeText(FolderContentActivity.this, "비공개 폴더입니다", Toast.LENGTH_SHORT).show();
-                            }
+//                            }
+//                            else {
+//                                Toast.makeText(FolderContentActivity.this, "비공개 폴더입니다", Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     }
                 });
