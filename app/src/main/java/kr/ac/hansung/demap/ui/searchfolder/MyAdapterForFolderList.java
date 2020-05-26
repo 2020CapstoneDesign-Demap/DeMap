@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -112,6 +113,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
         public View view;
 
+        public AppCompatImageView img_folder_icon;
+
         public TextView textView_folder_name;
         public TextView textView_folder_tag;
         public TextView textView_folder_subs_count;
@@ -119,12 +122,33 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         public MyViewHolder(View itemView) {
             super(itemView);
             view = itemView;
+            img_folder_icon = itemView.findViewById(R.id.img_search_folder_list_icon);
             textView_folder_name = itemView.findViewById(R.id.textview_folderlist_name);
             textView_folder_tag = itemView.findViewById(R.id.textview_folderlist_tag);
             textView_folder_subs_count = itemView.findViewById(R.id.tv_folderlist_subs_count);
         }
 
         void onBind(FolderObj folderObj) {
+            switch (folderObj.getImageUrl()) {
+                case "blue":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+                case "violet":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_violet_24dp);
+                    break;
+                case "peach":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_peach_24dp);
+                    break;
+                case "pink":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_pink_24dp);
+                    break;
+                case "green":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_green_24dp);
+                    break;
+                default:
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+            }
             textView_folder_name.setText(folderObj.getName());
             textView_folder_tag.setText(folderObj.getTag());
             textView_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));

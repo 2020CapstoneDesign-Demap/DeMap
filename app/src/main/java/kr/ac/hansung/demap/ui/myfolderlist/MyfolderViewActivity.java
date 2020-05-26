@@ -17,6 +17,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.core.OrderBy;
 
 import java.util.ArrayList;
 
@@ -128,6 +130,8 @@ public class MyfolderViewActivity extends AppCompatActivity {
 
                                             myfolderObjs.add(folderObj);
                                         }
+
+
 
                                         getPublic(myfolderObjs, 0);
 
