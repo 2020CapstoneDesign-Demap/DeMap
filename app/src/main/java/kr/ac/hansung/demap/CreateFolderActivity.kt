@@ -55,6 +55,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         R.drawable.ic_folder_peach_24dp,
         R.drawable.ic_folder_green_24dp
     )
+    val item_folder_icon_string = arrayOf<String>("blue", "violet", "pink", "peach", "green")
 
     // 수정할 폴더 기존 데이터
     private var edit_id : String?= ""
@@ -222,6 +223,7 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
         var fID : String? = null
         folderDTO.name = folder_name_edittext.text.toString()
         folderDTO.timestamp = System.currentTimeMillis()
+        folderDTO.imageUrl = item_folder_icon_string[position[3]!!] // 폴더 아이콘
         firestore?.collection("folders")?.add(folderDTO)?.addOnSuccessListener {
 
             var folderID = it.id //도큐먼트 ID 가져옴
@@ -268,9 +270,9 @@ class CreateFolderActivity : AppCompatActivity(), List_onClick_interface {
             firestore?.collection("folderTags")?.document(folderID)?.set(folderTag)
 
             //폴더 아이콘 저장
-            var folderIcon: MutableMap<String, Object> = HashMap()
-            folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
-//          firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
+//            var folderIcon: MutableMap<String, Object> = HashMap()
+//            folderIcon.put("folderIcon", item_folder_icon[position[3]!!].toString() as Object)
+//            firestore?.collection("folderIcon")?.document(folderCountID.count.toString())?.set(folderIcon)
 
             //폴더 장소 정보 저장
             var place: MutableMap<String, Object> = HashMap()
