@@ -21,6 +21,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.core.OrderBy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
@@ -131,8 +132,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             myfolderObjs.add(folderObj);
                                         }
 
-
-
+                                        Collections.sort(myfolderObjs); // 구독순 정렬
                                         getPublic(myfolderObjs, 0);
 
 //                                        pagerAdapter.setmyfolderItem(myfolderObjs);
@@ -175,6 +175,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             subsfolderObjs.add(folderObj);
                                         }
 
+                                        Collections.sort(subsfolderObjs); // 구독순 정렬
                                         getPublic(subsfolderObjs, 1);
 //                                        getEditable(subsfolderObjs);
 
@@ -227,14 +228,19 @@ public class MyfolderViewActivity extends AppCompatActivity {
                                             firestore.collection("folderEditorList").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    int flag2 = 0;
                                                     DocumentSnapshot document = task.getResult();
                                                     if (document.exists()) {
                                                         FolderEditorListDTO folderEditorListDTO = document.toObject(FolderEditorListDTO.class);
                                                         for (String nickname: folderEditorListDTO.getEditors().keySet()) {
                                                             if (nickname.equals(nickName)) { // 수정 권한이 있는 경우
                                                                 folderObj.setEditable("가능");
+                                                                flag2 = 1;
                                                             }
                                                         }
+                                                    }
+                                                    if (flag2 == 0) {
+                                                        folderObj.setEditable("불가능");
                                                     }
                                                     pagerAdapter.setsubsfolderItem(subsfolderObjs);
                                                     pagerAdapter.setAuthId(auth.getCurrentUser().getUid());

@@ -368,12 +368,12 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
             }
             else { // 구독 폴더일 경우
                 if (folderObj.getEditable().equals("불가능")) {
-                    img_folder_public.setVisibility(View.VISIBLE);
                     img_folder_public.setImageResource(R.drawable.ic_remove_red_eye_gray_24dp);
+                    img_folder_public.setVisibility(View.VISIBLE);
                 }
                 else if (folderObj.getEditable().equals("가능")) {
-                    img_folder_public.setVisibility(View.VISIBLE);
                     img_folder_public.setImageResource(R.drawable.ic_edit_gray_24dp);
+                    img_folder_public.setVisibility(View.VISIBLE);
                 }
             }
         }
