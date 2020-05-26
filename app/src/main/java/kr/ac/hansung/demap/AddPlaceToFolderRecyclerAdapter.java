@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -134,18 +135,22 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         public View view;
 
+        public AppCompatImageView img_folder_icon;
+
         public TextView textview_folder_name;
         public TextView textview_folder_place_count;
         public TextView textview_folder_subs_count;
 
         public MaterialCheckBox checkBox;
 
-        public ImageView img_folder_icon;
+        public ImageView img_folder_mini_icon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             view = itemView;
+
+            img_folder_icon = itemView.findViewById(R.id.img_myfolder_checklist_icon);
 
             textview_folder_name = itemView.findViewById(R.id.tv_checkfolder_name);
             textview_folder_place_count = itemView.findViewById(R.id.tv_checkfolder_place_count);
@@ -153,10 +158,31 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
             checkBox = itemView.findViewById(R.id.checkbox_checkfolder);
 
-            img_folder_icon = itemView.findViewById(R.id.img_checkfolder_icon);
+            img_folder_mini_icon = itemView.findViewById(R.id.img_checkfolder_icon);
         }
 
         void onBind(FolderObj folderObj, int selectedPosition, int position) {
+            switch (folderObj.getImageUrl()) {
+                case "blue":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+                case "violet":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_violet_24dp);
+                    break;
+                case "peach":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_peach_24dp);
+                    break;
+                case "pink":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_pink_24dp);
+                    break;
+                case "green":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_green_24dp);
+                    break;
+                default:
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+            }
+
             textview_folder_name.setText(folderObj.getName());
             textview_folder_place_count.setText(String.valueOf(folderObj.getPlaceCount()));
             textview_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
@@ -167,15 +193,17 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
                 checkBox.setChecked(false);
 
             if (folderObj.getOwner().equals("notMine")) {
+                img_folder_mini_icon.setVisibility(View.INVISIBLE);
                 if (folderObj.getEditable().equals("가능")) {
-                    img_folder_icon.setVisibility(View.VISIBLE);
+                    img_folder_mini_icon.setImageResource(R.drawable.ic_edit_gray_24dp);
+                    img_folder_mini_icon.setVisibility(View.VISIBLE);
                 }
             }
             else {
-                img_folder_icon.setVisibility(View.INVISIBLE);
+                img_folder_mini_icon.setVisibility(View.INVISIBLE);
                 if (folderObj.getIspublic().equals("비공개")) {
-                    img_folder_icon.setImageResource(R.drawable.ic_lock_gray_24dp);
-                    img_folder_icon.setVisibility(View.VISIBLE);
+                    img_folder_mini_icon.setImageResource(R.drawable.ic_lock_gray_24dp);
+                    img_folder_mini_icon.setVisibility(View.VISIBLE);
                 }
             }
         }
