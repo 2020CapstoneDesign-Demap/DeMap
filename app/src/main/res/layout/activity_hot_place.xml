@@ -8,18 +8,20 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     >
-    <SearchView
-        android:id="@+id/sv_hotPlaceTag"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:id="@+id/rv_hotPlace"
-        >
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout_hotPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/colorAccent"
+        app:tabSelectedTextColor="#333333"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager_hotPlace"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
