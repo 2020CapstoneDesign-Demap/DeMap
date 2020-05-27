@@ -438,8 +438,8 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
         marker = new Marker();
         marker.setPosition(new LatLng(oLatLng.getX(), oLatLng.getY()));
         marker.setIcon(OverlayImage.fromResource(R.drawable.icon_place_marker));
-        marker.setWidth(80);
-        marker.setHeight(98);
+        marker.setWidth(100);
+        marker.setHeight(120);
         marker.setMap(naverMap);
 
         latitude_togo = oLatLng.getX();

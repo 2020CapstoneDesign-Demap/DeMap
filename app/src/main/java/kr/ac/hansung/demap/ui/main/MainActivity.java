@@ -290,9 +290,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker.setPosition(new LatLng(37.5666103, 126.9783882));
        // marker.setPosition(new LatLng(latitude, longitude));
         System.out.println("내 현재위치 : " + latitude +", " + longitude);
+//        marker.setIcon(OverlayImage.fromResource(R.drawable.icon_place_marker_for_map));
         marker.setIcon(OverlayImage.fromResource(R.drawable.icon_place_marker));
-        marker.setWidth(80);
-        marker.setHeight(98);
+        marker.setWidth(100);
+        marker.setHeight(120);
         marker.setMap(naverMap);
 
         try {
