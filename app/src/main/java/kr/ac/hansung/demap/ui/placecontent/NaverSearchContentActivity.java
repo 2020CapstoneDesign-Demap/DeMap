@@ -366,6 +366,10 @@ public class NaverSearchContentActivity extends AppCompatActivity implements OnM
             // 내위치 검색
             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location==null){
+                //gps를 이용한 좌표조회 실패시 network로 위치 조회
+                location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
             String provider = location.getProvider();
             double now_longitude = location.getLongitude();
             double now_latitude = location.getLatitude();
