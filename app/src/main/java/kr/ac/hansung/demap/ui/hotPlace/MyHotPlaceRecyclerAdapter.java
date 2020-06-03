@@ -1,11 +1,11 @@
 package kr.ac.hansung.demap.ui.hotPlace;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,32 +19,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.HotPlaceDTO;
 import kr.ac.hansung.demap.model.UserMyHotPlaceDTO;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRecyclerAdapter.ViewHolder> {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private Context context;
-    private HotPlaceDTO selectedHotPlaceDTO;
-    private HotPlaceDTO hotPlaceDTO;
     private ArrayList<HotPlaceDTO> hotPlaceList = new ArrayList<>();
     private ArrayList<String> hotPlaceIds;
     private UserMyHotPlaceDTO userMyHotPlaceDTO = new UserMyHotPlaceDTO();
-    private HashMap<String, Boolean> myHotPlace  = new HashMap<>();
     private String authId = auth.getCurrentUser().getUid();
 
     @NonNull
@@ -63,15 +57,22 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
         holder.editCommentBtn.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("코멘트 수정");
-            final EditText input = new EditText(context);
-            input.setText(holder.tv_myHotPlaceComment.getText().toString());
-            builder.setView(input);
+
+            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            final View view = inflater.inflate(R.layout.hotplace_dialog, v.findViewById(R.id.et_dialog));
+
+            builder.setView(view);
+            ((TextView)view.findViewById(R.id.et_dialog)).setText(holder.tv_myHotPlaceComment.getText().toString());
+
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    String value = input.getText().toString();
                     readHotPlaceDB();
                     String hotPlaceId = hotPlaceIds.get(position);
+
+                    Dialog f = (Dialog) dialog;
+                    EditText input = f.findViewById(R.id.et_dialog);
+                    String value = input.getText().toString();
 
                     firestore.collection("hotPlaces").document(hotPlaceId).update("comment",value);
                     hotPlaceList.get(position).setComment(value);
@@ -81,7 +82,7 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
                     Toast.makeText(context,"수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
-            builder.setNegativeButton("NO", (dialog, which) -> {
+            builder.setNegativeButton("CANCEL", (dialog, which) -> {
 
             });
             AlertDialog alertDialog = builder.create();
@@ -162,7 +163,6 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    //clearHotPlace();
                     hotPlaceIds = new ArrayList<>();
                     userMyHotPlaceDTO = document.toObject(UserMyHotPlaceDTO.class);
 
@@ -171,11 +171,7 @@ public class MyHotPlaceRecyclerAdapter extends RecyclerView.Adapter<MyHotPlaceRe
                             if (task1.isSuccessful()){
                                 DocumentSnapshot document1 = task1.getResult();
                                 if (document1.exists()) {
-                                    //hotPlaceDTO = document1.toObject(HotPlaceDTO.class);
-                                    //hotPlaceList.add(hotPlaceDTO);
                                     hotPlaceIds.add(document1.getId());
-
-                                    //Collections.sort(hotPlaceList, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
 
                                     setHotPlaceList(hotPlaceList, hotPlaceIds);
                                     notifyDataSetChanged();

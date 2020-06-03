@@ -12,19 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
-    <ProgressBar
-        android:id="@+id/pg_hotPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_hotPlace"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#EEEEEE"
-        tools:listitem="@layout/hotplace_list" />
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_hotPlace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#EEEEEE"
+            tools:listitem="@layout/hotplace_list" />
+        <ProgressBar
+            android:id="@+id/pg_hotPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </FrameLayout>
     <WebView
         android:id="@+id/wv_hotPlace"
         android:layout_width="1dp"

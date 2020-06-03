@@ -29,6 +29,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.HotPlaceDTO;
@@ -114,7 +115,7 @@ public class HotPlaceFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                int lastVisibleItemPosition = ((GridLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int lastVisibleItemPosition = ((GridLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
 
                 if (lastVisibleItemPosition == itemTotalCount) {
@@ -135,7 +136,6 @@ public class HotPlaceFragment extends Fragment {
                 adapter.notifyDataSetChanged();
 
                 String tagUrl = "/explore/tags/" + query.replaceAll(" ","");
-                //지정한 URL을 웹 뷰로 접근하기
                 webView.loadUrl(instagram_url + tagUrl);
 
                 return true;
@@ -162,8 +162,6 @@ public class HotPlaceFragment extends Fragment {
             Document doc = Jsoup.parse(source);
             Elements item_list = doc.select("div.v1Nh3 img");
             Elements post_list = doc.select("div.v1Nh3 a");
-            Log.i("loded elementsSize", item_list.size()+"");
-
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
@@ -187,7 +185,6 @@ public class HotPlaceFragment extends Fragment {
                 for(Element element : post_list) {
                     boolean isSearched = false;
                     String postUrl = "https://www.instagram.com"+element.attr("href");
-                    //Log.i("post Url", postUrl);
                     for (HotPlaceDTO hotPlaceDTO : hotPlaceList) {
                         if (hotPlaceDTO.getPostUrl().equals(postUrl)) {
                             isSearched = true;
@@ -205,8 +202,8 @@ public class HotPlaceFragment extends Fragment {
                     hotPlaceDTO.setPostUrl(listPostUrl.get(i));
                     hotPlaceDTO.setTag("#"+searchView.getQuery().toString());
                     addHotPlace(hotPlaceDTO);
-                    //adapter.addHotPlace(hotPlaceDTO);
                 }
+
                 setHotPlaceList(hotPlaceList);
                 adapter.notifyDataSetChanged();
 

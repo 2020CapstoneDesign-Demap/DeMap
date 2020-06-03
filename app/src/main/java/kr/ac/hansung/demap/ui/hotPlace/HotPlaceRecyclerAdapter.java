@@ -1,6 +1,7 @@
 package kr.ac.hansung.demap.ui.hotPlace;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,27 +73,30 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
 
         viewHolder.ib_addBtn.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
             builder.setTitle("핫플레이스 저장");
-            final EditText input = new EditText(context);
-            input.setHint("설명을 추가해주세요.");
-            builder.setView(input);
+            builder.setView(R.layout.hotplace_dialog);
 
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    String value;
-                    if(input.getText().toString().isEmpty()){
+                    Dialog f = (Dialog) dialog;
+                    EditText input = f.findViewById(R.id.et_dialog);
+                    String value = input.getText().toString();
+
+                    if(value.isEmpty()){
                         value = "내용이 없습니다.";
                     } else {
                         value = input.getText().toString();
                     }
+
                     saveHotPlace(position, value);
                     notifyDataSetChanged();
 
                     Toast.makeText(context,"저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
-            builder.setNegativeButton("NO", (dialog, which) -> {
+            builder.setNegativeButton("CANCEL", (dialog, which) -> {
 
             });
             AlertDialog alertDialog = builder.create();
@@ -119,10 +123,6 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
 
     public void clearHotPlace() {
         hotPlaceList.clear();
-    }
-
-    public void addHotPlace(HotPlaceDTO data) {
-        hotPlaceList.add(data);
     }
 
     void setHotPlaceList(ArrayList<HotPlaceDTO> hotPlaceList) {
@@ -183,4 +183,6 @@ public class HotPlaceRecyclerAdapter extends RecyclerView.Adapter<HotPlaceRecycl
         }
 
     }
+
+
 }
