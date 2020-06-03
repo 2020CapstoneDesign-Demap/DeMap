@@ -125,29 +125,59 @@ public class FolderContentActivity extends AppCompatActivity {
         btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
 
         if (isMyFolder) { // 내 폴더일 경우
-            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_gray));
-            btn_subscribe.setText("구독하기");
-            btn_subscribe.setTextColor(getColor(R.color.colorLineGray7));
-            btn_subscribe.setEnabled(false);
+            btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_blue));
+            btn_subscribe.setText("+  친구 초대");
+            btn_subscribe.setTextColor(getColor(R.color.colorWhite));
+            btn_subscribe.setEnabled(true);
             btn_subscribe.setVisibility(View.VISIBLE);
+
             ownerId = intent.getExtras().get("folder_owner").toString();
             setNickname(ownerId);
 
             adapter.setMyFolder(true);
             adapter.notifyDataSetChanged();
+
+            btn_subscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firestore.collection("folderEditors").document(docId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String edit = document.getString("edit_auth");
+                                if (edit.equals("불가능")) {
+                                    Toast.makeText(FolderContentActivity.this, "폴더 수정이 불가능합니다", Toast.LENGTH_SHORT).show();
+                                } else if (edit.equals("전체 유저")) {
+                                    Toast.makeText(FolderContentActivity.this, "모든 유저가 수정할 수 있습니다", Toast.LENGTH_SHORT).show();
+                                } else if (edit.equals("초대한 유저")) {
+                                    Intent intent = new Intent(FolderContentActivity.this, FolderContentEditorActivity.class);
+                                    intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                                    intent.putExtra("folder_id", docId);
+                                    intent.putExtra("folder_name", folder_name);
+                                    startActivity(intent);
+                                }
+                            }
+                        }
+                    });
+
+                }
+            });
         } else { // 내 폴더가 아닐 경우
             setFolderData();
             setUserData();
             setOwner(docId);
             adapter.setMyFolder(false);
             adapter.notifyDataSetChanged();
+
+            btn_subscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    subscribeFolder();
+                }
+            });
         }
-        btn_subscribe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                subscribeFolder();
-            }
-        });
+
 
         setPlaceData();
 
@@ -408,7 +438,8 @@ public class FolderContentActivity extends AppCompatActivity {
 
         // show the button when some condition is true
         if (isMyFolder) {
-            menuItem.setVisible(true);
+//            menuItem.setVisible(true);
+            menuItem.setVisible(false);
         }
 
         return true;
