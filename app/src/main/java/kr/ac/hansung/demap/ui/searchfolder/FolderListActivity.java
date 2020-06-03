@@ -345,9 +345,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     }
 
+    private int tagFlag = 1;
     // 구독 가능한 폴더 리스트에서 태그로 검색
     public void searchForFolderTag(/*ArrayList<String> tagsForSearch*/) {
         ArrayList<FolderObj> searchTagNameResult = new ArrayList<FolderObj>();
+
         // 검색 결과 리스트 초기화
         //searchFolderResult.clear();
         for(FolderObj tempfolder : searchFolderResult) {
@@ -369,8 +371,14 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         // 서치태그 리스트가 비었으면 태그검색을 취소한 것이므로 키워드 검색 결과만 보여줌
         if(tagsForSearch.isEmpty())
             adapter.addItems(searchFolderResult);
-        else
+        else {
             adapter.addItems(searchTagNameResult);
+            if(searchTagNameResult.isEmpty()) {
+                tagFlag = 0;
+            } else {
+                tagFlag = 1;
+            }
+        }
         //searchFolderResult.clear();
         adapter.notifyDataSetChanged();
 
@@ -479,7 +487,10 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     public void getCount(int count) {
         if(searchFolderResult.size() == 0 || searchFolderResult.get(0).getName() == " 검색 결과가 존재하지 않습니다. ") {
             tv_search_result.setText(String.valueOf(0));
-        } else {
+        } else if(!tagsForSearch.isEmpty() && tagFlag == 0) {
+            tv_search_result.setText(String.valueOf(0));
+        }
+        else {
             tv_search_result.setText(String.valueOf(count));
         }
     }
