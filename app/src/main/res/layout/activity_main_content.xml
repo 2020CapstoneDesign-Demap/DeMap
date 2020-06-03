@@ -30,6 +30,35 @@
                 app:layout_constraintTop_toTopOf="parent">
             </com.naver.maps.map.MapView>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_now_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="30dp"
+                android:clickable="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/icon_place_marker_yellow"
+                android:backgroundTint="@color/colorPrimary"
+
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_navi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="100dp"
+                android:clickable="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/icon_demap_map"
+                android:backgroundTint="@color/colorPrimary"
+                />
+
 <!--            <com.naver.maps.map.widget.LocationButtonView-->
 <!--                android:id="@+id/locationbuttonview"-->
 <!--                android:layout_width="50dp"-->

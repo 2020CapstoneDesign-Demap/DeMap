@@ -11,3 +11,5 @@ data class FolderDTO(
 data class FolderSubsDTO(var subscribers: MutableMap<String, Boolean> = HashMap())
 
 data class FolderPlacesDTO(var places: MutableMap<String, Boolean> = HashMap())
+
+data class FolderEditorListDTO(var editors: MutableMap<String, Boolean> = HashMap())

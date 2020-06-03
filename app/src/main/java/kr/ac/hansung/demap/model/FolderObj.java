@@ -2,12 +2,13 @@ package kr.ac.hansung.demap.model;
 
 import java.util.HashMap;
 
-public class FolderObj {
+public class FolderObj implements Comparable<FolderObj> {
 
     private String id = null;
     private String owner = null;
     private String name = null;
     private String ispublic = "비공개";
+    private String editable = "불가능";
     private String tag = null;
     private String  imageUrl = null;
     private Long timestamp = null;
@@ -104,4 +105,20 @@ public class FolderObj {
         this.subscribers = subscribers;
     }
 
+    public String getEditable() {
+        return editable;
+    }
+
+    public void setEditable(String editable) {
+        this.editable = editable;
+    }
+
+    @Override
+    public int compareTo(FolderObj folderObj) {
+        if (this.subscribeCount > folderObj.getSubscribeCount())
+            return -1;
+        else if (this.subscribeCount < folderObj.getSubscribeCount())
+            return 1;
+        return 0;
+    }
 }

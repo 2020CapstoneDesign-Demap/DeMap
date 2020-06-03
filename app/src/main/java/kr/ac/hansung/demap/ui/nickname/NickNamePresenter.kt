@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap.ui.nickname
 
+import android.content.Context
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,8 +13,8 @@ class NickNamePresenter(
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun setNickName(nickname: String) {
-        compositeDisposable.add(firebaseRepository.setNickName(nickname).subscribeOn(Schedulers.io())
+    override fun setNickName(nickname: String, context: Context) {
+        compositeDisposable.add(firebaseRepository.setNickName(nickname, context).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 view.showProgress()

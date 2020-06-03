@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <View
@@ -31,16 +31,18 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:text="전체 "
-                android:textSize="12sp" />
+                android:textColor="@color/colorLineGray7"
+                android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/textview_total_folder_count"
+                android:id="@+id/textview_total_myfolder_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:text=" 0"
-                android:textSize="12sp" />
+                android:layout_marginLeft="2dp"
+                android:text="0"
+                android:textColor="@color/colorTheme"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout

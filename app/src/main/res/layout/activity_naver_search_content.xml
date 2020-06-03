@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NaverSearchContentActivity"
+    tools:context=".ui.placecontent.NaverSearchContentActivity"
     android:gravity="bottom"
     app:umanoDragView="@id/slide_drawer_search_content"
     app:umanoPanelHeight="130dp"
@@ -24,16 +24,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_now_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="30dp"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_place_marker_yellow"
+        android:backgroundTint="@color/colorPrimary"
+
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_navi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="100dp"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_demap_map"
+        android:backgroundTint="@color/colorPrimary"
+        />
+
 </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/slide_drawer_search_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
         android:clickable="true"
         android:focusable="false"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/handle"
@@ -64,13 +93,16 @@
                             android:id="@+id/tv_naver_search_content_name"
                             android:text="장소 이름"
                             android:textSize="18sp"
+                            android:textColor="@color/colorLineGray7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
                             android:id="@+id/tv_naver_search_content_category"
                             android:text="카테고리"
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:textColor="@color/colorLineGray6"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -99,7 +131,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/demap_icon_2" />
+                        android:src="@drawable/icon_place_marker_yellow" />
                 </LinearLayout>
 
 
@@ -153,6 +185,28 @@
                 android:layout_width="80dp"
                 android:layout_height="40dp"/>
 
+            <ImageView
+                android:id="@+id/img_place_content_favorite"
+                android:src="@drawable/ic_favorite_red_24dp"
+                android:visibility="invisible"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"/>
+
+            <TextView
+                android:id="@+id/tv_place_content_favorite_count"
+                android:text="0"
+                android:textSize="15sp"
+                android:textColor="@color/colorLineGray7"
+                android:visibility="invisible"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <!--                <ImageView-->
             <!--                    android:id="@+id/image_search_content"-->
             <!--                    android:src="@drawable/ic_folder_theme_15dp"-->
@@ -162,7 +216,43 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+        <!-- 동적으로 생성될 태그 텍스트뷰 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tags_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/place_tag_list">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/blog_search_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@drawable/background_btn_round_blue_border"
+            android:textColor="@color/colorPrimary"
+            android:text="Naver 블로그 후기" />
+    </LinearLayout>
+
+</LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -1,37 +1,25 @@
 package kr.ac.hansung.demap;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.PopupMenu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderObj;
-import kr.ac.hansung.demap.model.PlaceDTO;
-import kr.ac.hansung.demap.model.UserMyFolderDTO;
-import kr.ac.hansung.demap.ui.createfolder.List_onClick_interface;
 
 public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPlaceToFolderRecyclerAdapter.MyViewHolder> {
 
@@ -52,7 +40,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         holder.onBind(folderObjs.get(position), mSelectedPosition, position);
 
-        /*
+        /* 지우지 말 것
         // 폴더들의 체크 상태
         boolean isChecked = mCheckedFolders.get(folderObjs.get(mSelectedPosition).getId()) == null
                 ? false
@@ -63,12 +51,10 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         listOnClickInterface.onCheckbox(mCheckedFolders); //체크한 폴더ID 넘겨주기
 */
 
-
-
         if ((mSelectedPosition == -1 && position == 0)) { //화면 생성시 첫번째 아이템은 체크상태로
             mSelectedPosition = 0;
             holder.checkBox.setChecked(true);
-            listOnClickInterface.onCheckbox(folderObjs.get(mSelectedPosition).getId()); //체크한 폴더ID 넘겨주기
+            listOnClickInterface.onCheckbox(folderObjs.get(mSelectedPosition).getId(), folderObjs.get(mSelectedPosition).getOwner(), folderObjs.get(mSelectedPosition).getName()); //체크한 폴더ID 넘겨주기
             holder.onBind(folderObjs.get(position), mSelectedPosition, position);
         }
 
@@ -76,7 +62,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
-                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId(), folderObjs.get(position).getOwner(), folderObjs.get(position).getName()); //체크한 폴더ID 넘겨주기
                 holder.onBind(folderObjs.get(position), mSelectedPosition, position);
                 notifyDataSetChanged();
             }
@@ -87,7 +73,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
             @Override
             public void onClick(View v) {
                 mSelectedPosition = position;
-                listOnClickInterface.onCheckbox(folderObjs.get(position).getId()); //체크한 폴더ID 넘겨주기
+                listOnClickInterface.onCheckbox(folderObjs.get(position).getId(), folderObjs.get(position).getOwner(), folderObjs.get(position).getName()); //체크한 폴더ID 넘겨주기
                 holder.onBind(folderObjs.get(position), mSelectedPosition, position);
                 notifyDataSetChanged();
             }
@@ -108,7 +94,7 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myfolder_check_list, parent, false);
         final AddPlaceToFolderRecyclerAdapter.MyViewHolder vh = new AddPlaceToFolderRecyclerAdapter.MyViewHolder(view);
 
-        /*
+        /* 지우지 말 것
         // 리사이클러뷰 체크박스 다중 선택 시 선택한 폴더들의 정보 전달해주기 위한 코드
         vh.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -133,9 +119,23 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
         notifyDataSetChanged();
     }
 
+    public void updateNewFolder(@Nullable FolderDTO folderDTO, @Nullable String folderId) {
+        FolderObj fObj = new FolderObj();
+        fObj.setId(folderId);
+        fObj.setName(folderDTO.getName());
+        fObj.setPlaceCount(folderDTO.getPlaceCount());
+        fObj.setSubscribeCount(folderDTO.getSubscribeCount());
+        fObj.setImageUrl(folderDTO.getImageUrl());
+        folderObjs.add(fObj);
+        notifyDataSetChanged();
+
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public View view;
+
+        public AppCompatImageView img_folder_icon;
 
         public TextView textview_folder_name;
         public TextView textview_folder_place_count;
@@ -143,19 +143,46 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
 
         public MaterialCheckBox checkBox;
 
+        public ImageView img_folder_mini_icon;
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
             view = itemView;
+
+            img_folder_icon = itemView.findViewById(R.id.img_myfolder_checklist_icon);
 
             textview_folder_name = itemView.findViewById(R.id.tv_checkfolder_name);
             textview_folder_place_count = itemView.findViewById(R.id.tv_checkfolder_place_count);
             textview_folder_subs_count = itemView.findViewById(R.id.tv_checkfolder_subs_count);
 
             checkBox = itemView.findViewById(R.id.checkbox_checkfolder);
+
+            img_folder_mini_icon = itemView.findViewById(R.id.img_checkfolder_icon);
         }
 
         void onBind(FolderObj folderObj, int selectedPosition, int position) {
+            switch (folderObj.getImageUrl()) {
+                case "blue":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+                case "violet":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_violet_24dp);
+                    break;
+                case "peach":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_peach_24dp);
+                    break;
+                case "pink":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_pink_24dp);
+                    break;
+                case "green":
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_green_24dp);
+                    break;
+                default:
+                    img_folder_icon.setImageResource(R.drawable.ic_folder_blue_24dp);
+                    break;
+            }
+
             textview_folder_name.setText(folderObj.getName());
             textview_folder_place_count.setText(String.valueOf(folderObj.getPlaceCount()));
             textview_folder_subs_count.setText(String.valueOf(folderObj.getSubscribeCount()));
@@ -164,6 +191,21 @@ public class AddPlaceToFolderRecyclerAdapter extends RecyclerView.Adapter<AddPla
                 checkBox.setChecked(true);
             else
                 checkBox.setChecked(false);
+
+            if (folderObj.getOwner().equals("notMine")) {
+                img_folder_mini_icon.setVisibility(View.INVISIBLE);
+                if (folderObj.getEditable().equals("가능")) {
+                    img_folder_mini_icon.setImageResource(R.drawable.ic_edit_gray_24dp);
+                    img_folder_mini_icon.setVisibility(View.VISIBLE);
+                }
+            }
+            else {
+                img_folder_mini_icon.setVisibility(View.INVISIBLE);
+                if (folderObj.getIspublic().equals("비공개")) {
+                    img_folder_mini_icon.setImageResource(R.drawable.ic_lock_gray_24dp);
+                    img_folder_mini_icon.setVisibility(View.VISIBLE);
+                }
+            }
         }
 
     }

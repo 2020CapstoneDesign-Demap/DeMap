@@ -14,7 +14,7 @@
         />
     <item
         android:id="@+id/history_menu"
-        android:title="히스토리"
+        android:title="알림"
         />
 
     <group>

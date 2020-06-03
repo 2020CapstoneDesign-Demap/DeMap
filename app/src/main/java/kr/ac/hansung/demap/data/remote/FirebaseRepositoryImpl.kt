@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap.data.remote
 
+import android.content.Context
 import com.google.firebase.auth.AuthCredential
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -25,8 +26,9 @@ class FirebaseRepositoryImpl(
 
 
     override fun setNickName(
-        nickname: String
-    ): Completable = firebaseDataSource.setNickName(nickname)
+        nickname: String,
+        context: Context
+    ): Completable = firebaseDataSource.setNickName(nickname, context)
 
     override fun checkNickName(): Single<Boolean> {
         return firebaseDataSource.checkNickName()

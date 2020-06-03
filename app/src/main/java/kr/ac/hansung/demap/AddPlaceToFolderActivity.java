@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,12 +25,15 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.Map;
 
+import kr.ac.hansung.demap.model.FolderEditorListDTO;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.PlaceDTO;
 import kr.ac.hansung.demap.model.UserMyFolderDTO;
 import kr.ac.hansung.demap.model.UserSubsFolderDTO;
 
-public class AddPlaceToFolderActivity extends AppCompatActivity implements FolderList_onClick_interface {
+public class AddPlaceToFolderActivity extends AppCompatActivity implements FolderList_onClick_interface, View.OnClickListener {
+
+    public static Context addPlaceToFolderContext;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -41,17 +46,26 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
     private PlaceDTO placeDTO = new PlaceDTO();
 
-    private AddPlaceToFolderRecyclerAdapter adapter;
+    public static AddPlaceToFolderRecyclerAdapter adapter;
 
     // 장소에 관한 데이터를 받아올 인텐트
     private Intent intentForAddPlace;
     // 장소 추가 버튼
     private Button addButton;
 
-    // 체크한 폴더 ID
+    // 체크한 폴더 ID, 소유자
     private String folderId;
+    private String folderOwner;
+    private String folderName;
+
     private Map<FolderObj, Key> folderIdMap;
     private ArrayList<CheckedFolderId> folderIds;
+
+    private String nickName;
+
+    private FloatingActionButton fab_main;
+
+    private Intent createFolderIntent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +79,17 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        addPlaceToFolderContext = this;
+
+        // 플로팅 버튼 생성
+        fab_main = (FloatingActionButton) findViewById(R.id.fab);
+        fab_main.setOnClickListener(this);
+
+        // 폴더 생성 인텐트
+        createFolderIntent = new Intent(AddPlaceToFolderActivity.this, CreateFolderActivity.class);
+        createFolderIntent.putExtra("addPlace", 1);
+
         // 장소 추가 버튼 생성
         addButton = findViewById(R.id.btn_checkfolder_add);
 
@@ -108,6 +133,8 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                 placeFormIntent.putExtra("result_category", placeDTO.getCategory());
 
                 placeFormIntent.putExtra("folder_id", folderId);
+                placeFormIntent.putExtra("folder_owner", folderOwner);
+                placeFormIntent.putExtra("folder_name", folderName);
 
                 startActivity(placeFormIntent);
                 finish();
@@ -122,6 +149,7 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
     }
 
     public void setData() {
+
 
         // usersMyFolder의 현재 로그인한 유저가 소유한 폴더 도큐먼트 이름 가져오기
         firestore.collection("usersMyFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -139,16 +167,35 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-//                                        FolderDTO folderDTO = document.toObject(FolderDTO.class);
                                             FolderObj folderObj = document.toObject(FolderObj.class);
                                             folderObj.setId(document.getId());
                                             folderObj.setOwner(auth.getCurrentUser().getUid());
 
-                                            myfolderObjs.add(folderObj);
+                                            firestore.collection("folderPublic").document(folderObj.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
+                                                            folderObj.setIspublic(document.getString("public"));
+
+                                                            myfolderObjs.add(folderObj);
+                                                        }
+
+                                                        adapter.setItem(myfolderObjs);
+                                                        adapter.notifyDataSetChanged();
+
+                                                    } else {
+                                                        System.out.println("Error getting documents: " + task.getException());
+                                                    }
+                                                }
+                                            });
+
+//                                            myfolderObjs.add(folderObj);
                                         }
 
-                                        adapter.setItem(myfolderObjs);
-                                        adapter.notifyDataSetChanged();
+//                                        adapter.setItem(myfolderObjs);
+//                                        adapter.notifyDataSetChanged();
 
                                     } else {
                                         System.out.println("Error getting documents: " + task.getException());
@@ -158,6 +205,111 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
                         }
                     }
 
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+                }
+            }
+        });
+
+        // usersSubsFolder의 현재 로그인한 유저가 구독한 폴더 도큐먼트 이름 가져오기
+        firestore.collection("usersSubsFolder").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        userSubsFolderDTO = document.toObject(UserSubsFolderDTO.class);
+
+                        // 현재 로그인한 유저의 닉네임
+                        firestore.collection("users").document(auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    nickName = document.get("nickName").toString();
+
+                                    // 구독한 폴더 중 전체 유저 수정 가능이거나 수정권한이 있는 폴더 데이터 가져오기
+                                    for (String key : userSubsFolderDTO.getSubscribefolders().keySet()) {
+
+                                        firestore.collection("folderEditors").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    String edit = document.get("edit_auth").toString();
+
+                                                    if (edit.equals("전체 유저")) {
+                                                        firestore.collection("folders").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    DocumentSnapshot document = task.getResult();
+                                                                    if (document.exists()) {
+                                                                        FolderObj folderObj = document.toObject(FolderObj.class);
+                                                                        folderObj.setId(document.getId());
+                                                                        folderObj.setOwner("notMine");
+                                                                        folderObj.setEditable("가능");
+                                                                        myfolderObjs.add(folderObj);
+                                                                    }
+
+                                                                    adapter.setItem(myfolderObjs);
+                                                                    adapter.notifyDataSetChanged();
+
+                                                                } else {
+                                                                    System.out.println("Error getting documents: " + task.getException());
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                    else if (edit.equals("초대한 유저")) {
+                                                        firestore.collection("folderEditorList").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                DocumentSnapshot document = task.getResult();
+                                                                if (document.exists()) {
+                                                                    FolderEditorListDTO folderEditorListDTO = document.toObject(FolderEditorListDTO.class);
+
+                                                                    for (String nickname: folderEditorListDTO.getEditors().keySet()) {
+                                                                        if (nickname.equals(nickName)) { // 수정 권한이 있는 경우
+                                                                            firestore.collection("folders").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                    if (task.isSuccessful()) {
+                                                                                        DocumentSnapshot document = task.getResult();
+                                                                                        if (document.exists()) {
+                                                                                            FolderObj folderObj = document.toObject(FolderObj.class);
+                                                                                            folderObj.setId(document.getId());
+                                                                                            folderObj.setOwner("notMine");
+                                                                                            folderObj.setEditable("가능");
+                                                                                            myfolderObjs.add(folderObj);
+                                                                                        }
+
+                                                                                        adapter.setItem(myfolderObjs);
+                                                                                        adapter.notifyDataSetChanged();
+
+                                                                                    } else {
+                                                                                        System.out.println("Error getting documents: " + task.getException());
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                   }
+                                                }
+                                            }
+                                        });
+
+                                    }
+
+                                }
+                            }
+                        });
+
+
+                    }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
                 }
@@ -193,7 +345,24 @@ public class AddPlaceToFolderActivity extends AppCompatActivity implements Folde
     }
 */
     @Override
-    public void onCheckbox(String FolderId) {
+    public void onCheckbox(String FolderId, String FolderOwner, String FolderName) {
         folderId = FolderId;
+        folderOwner = FolderOwner;
+        folderName = FolderName;
+    }
+
+    public void addFolderObj(FolderObj folderObj) {
+        myfolderObjs.add(folderObj);
+        adapter.setItem(myfolderObjs);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab:
+                startActivity(createFolderIntent);
+                break;
+        }
     }
 }

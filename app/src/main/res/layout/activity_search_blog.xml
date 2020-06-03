@@ -3,26 +3,11 @@
     android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout_search_activity"
+    android:id="@+id/linearLayout_search_blog_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SearchNaverActivity">
-
-
-
-    <SearchView
-        android:id="@+id/searchword_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:queryHint="맛집 검색"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:textSize="20sp" />
+    tools:context=".ui.placecontent.SearchBlogActivity">
 
     <View
         android:layout_width="match_parent"
@@ -45,11 +30,11 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView_search_result_list"
+            android:id="@+id/search_blog_result_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="#EEEEEE"
-            tools:listitem="@layout/naver_search_result_list">
+            tools:listitem="@layout/search_blog_result_list">
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>

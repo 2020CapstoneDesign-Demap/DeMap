@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".AddPlaceToFolderActivity"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
     <View
         android:id="@+id/divider1"
@@ -64,7 +71,7 @@
         android:layout_marginRight="2dp"
         android:background="#EEEEEE" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="13.5"
@@ -75,7 +82,22 @@
             android:layout_height="wrap_content"
             android:divider="#EEEEEE"
             tools:listitem="@layout/myfolder_check_list" />
-    </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="30dp"
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/setup"/>
+
+
+    </RelativeLayout>
+
+
 
     <Button
         android:id="@+id/btn_checkfolder_add"
@@ -91,4 +113,5 @@
         android:textStyle="bold"
         android:textColor="@color/colorWhite"/>
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

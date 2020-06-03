@@ -10,14 +10,19 @@
     android:paddingBottom="25dp"
     android:paddingLeft="5dp"
     android:paddingRight="20dp"
-    android:background="@color/colorWhite"
-    >
+    android:background="@color/colorWhite">
 
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="50dp"
+        android:layout_height="50dp">
     <ImageView
         android:layout_marginTop="10dp"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:src="@drawable/ic_account_circle_gray_24dp" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/demap_propic" />
+    </LinearLayout>
 
     <LinearLayout
         android:gravity="center"

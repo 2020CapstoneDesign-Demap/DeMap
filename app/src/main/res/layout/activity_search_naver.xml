@@ -7,21 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SearchNaverActivity">
+    tools:context=".ui.searchplace.SearchNaverActivity">
 
-
-<!--    <SearchView-->
-<!--        android:id="@+id/searchword_edittext"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginRight="20dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:queryHint="맛집 검색"-->
-<!--        android:focusable="true"-->
-<!--        android:focusableInTouchMode="true"-->
-<!--        android:textSize="20sp" />-->
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
