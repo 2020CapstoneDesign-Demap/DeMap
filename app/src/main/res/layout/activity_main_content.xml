@@ -41,7 +41,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/now_point"
                 android:backgroundTint="@color/colorPrimary"
-
+                app:fabSize="normal"
                 />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,6 +57,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/icon_demap_map"
                 android:backgroundTint="@color/colorPrimary"
+                app:fabSize="normal"
                 />
 
 <!--            <com.naver.maps.map.widget.LocationButtonView-->
