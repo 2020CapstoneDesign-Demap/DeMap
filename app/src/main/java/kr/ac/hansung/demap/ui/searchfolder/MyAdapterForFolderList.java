@@ -38,7 +38,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if(searchFolderResult.get(0).getName() == " 검색 결과가 존재하지 않습니다. ") {
+        if(searchFolderResult.get(0).getName() == " 검색 결과가\n 존재하지 않습니다. ") {
             holder.nullBind();
         } else {
             holder.reBind();
@@ -81,7 +81,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     public int getItemCount() {
         if(searchFolderResult.size() == 0) {
             FolderObj nullFolder = new FolderObj();
-            nullFolder.setName(" 검색 결과가 존재하지 않습니다. ");
+            nullFolder.setName(" 검색 결과가\n 존재하지 않습니다. ");
             searchFolderResult.add(nullFolder);
         } else {
             // RecyclerView의 총 개수 입니다.
@@ -148,7 +148,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
         void nullBind() {
             img_folder_icon.setVisibility(View.INVISIBLE);
-            textView_folder_name.setText(" 검색 결과가 존재하지 않습니다. ");
+            textView_folder_name.setText(" 검색 결과가\n 존재하지 않습니다. ");
             textView_folder_tag.setVisibility(View.GONE);
             textView_folder_subs_count.setVisibility(View.GONE);
             tv_folder_tag.setVisibility(View.GONE);

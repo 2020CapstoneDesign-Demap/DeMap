@@ -485,7 +485,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void getCount(int count) {
-        if(searchFolderResult.size() == 0 || searchFolderResult.get(0).getName() == " 검색 결과가 존재하지 않습니다. ") {
+        if(searchFolderResult.size() == 0 || searchFolderResult.get(0).getName() == " 검색 결과가\n 존재하지 않습니다. ") {
             tv_search_result.setText(String.valueOf(0));
         } else if(!tagsForSearch.isEmpty() && tagFlag == 0) {
             tv_search_result.setText(String.valueOf(0));
