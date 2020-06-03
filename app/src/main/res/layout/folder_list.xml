@@ -41,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
+                    android:id="@+id/tv_folder_tag"
                     android:text="#"
                     android:textColor="#999999"
                     android:textSize="12sp"
@@ -73,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
+                    android:id="@+id/tv_folder_sub"
                     android:text="구독자 "
                     android:textColor="@color/colorLineGray7"
                     android:textSize="13sp"

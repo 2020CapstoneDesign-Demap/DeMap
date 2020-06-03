@@ -24,6 +24,7 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     private getCount_interface getCountInterface;
 
+
     // adapter에 들어갈 folder list
     //private ArrayList<FolderDTO> folderDTOS = new ArrayList<>();
     private static ArrayList<FolderObj> searchFolderResult = new ArrayList<FolderObj>(); // 폴더명 검색 결과 리스트를 저장 할 FolderObj ArrayList 생성
@@ -37,7 +38,12 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.onBind(searchFolderResult.get(position));
+        if(searchFolderResult.get(0).getName() == " 검색 결과가 존재하지 않습니다. ") {
+            holder.nullBind();
+        } else {
+            holder.reBind();
+            holder.onBind(searchFolderResult.get(position));
+        }
 
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +79,20 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
 
     @Override
     public int getItemCount() {
-        // RecyclerView의 총 개수 입니다.
-        getCountInterface.getCount(searchFolderResult.size());
+        if(searchFolderResult.size() == 0) {
+            FolderObj nullFolder = new FolderObj();
+            nullFolder.setName(" 검색 결과가 존재하지 않습니다. ");
+            searchFolderResult.add(nullFolder);
+        } else {
+            // RecyclerView의 총 개수 입니다.
+            getCountInterface.getCount(searchFolderResult.size());
+        }
         return searchFolderResult.size();
     }
 
+
     void addItems(ArrayList<FolderObj> searchFolderParam) {
+
         // 외부에서 item을 추가시킬 함수입니다.
         searchFolderResult.clear();
         searchFolderResult.addAll(searchFolderParam);
@@ -118,6 +132,8 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
         public TextView textView_folder_name;
         public TextView textView_folder_tag;
         public TextView textView_folder_subs_count;
+        public TextView tv_folder_tag;
+        public TextView tv_folder_sub;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -126,6 +142,26 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
             textView_folder_name = itemView.findViewById(R.id.textview_folderlist_name);
             textView_folder_tag = itemView.findViewById(R.id.textview_folderlist_tag);
             textView_folder_subs_count = itemView.findViewById(R.id.tv_folderlist_subs_count);
+            tv_folder_tag = itemView.findViewById(R.id.tv_folder_tag);
+            tv_folder_sub = itemView.findViewById(R.id.tv_folder_sub);
+        }
+
+        void nullBind() {
+            img_folder_icon.setVisibility(View.INVISIBLE);
+            textView_folder_name.setText(" 검색 결과가 존재하지 않습니다. ");
+            textView_folder_tag.setVisibility(View.GONE);
+            textView_folder_subs_count.setVisibility(View.GONE);
+            tv_folder_tag.setVisibility(View.GONE);
+            tv_folder_sub.setVisibility(View.GONE);
+        }
+
+        void reBind() {
+            img_folder_icon.setVisibility(View.VISIBLE);
+            textView_folder_name.setVisibility(View.VISIBLE);
+            textView_folder_tag.setVisibility(View.VISIBLE);
+            textView_folder_subs_count.setVisibility(View.VISIBLE);
+            tv_folder_tag.setVisibility(View.VISIBLE);
+            tv_folder_sub.setVisibility(View.VISIBLE);
         }
 
         void onBind(FolderObj folderObj) {

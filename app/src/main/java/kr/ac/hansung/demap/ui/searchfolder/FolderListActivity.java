@@ -73,6 +73,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     private TextView tv_result_set;
     private String search_key;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,24 +150,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
             public boolean onQueryTextSubmit(String keyword) {
                 // 검색 버튼이 눌러졌을 때 이벤트 처리
                 System.out.println("검색 처리됨 : " + keyword);
-                //switch (result_set) {
-                //    case "all" :
+
                         search_key = keyword;
                         searchForFolderOwner(keyword);
                         searchForFolderName(keyword);
 
-                if(searchFolderResult.isEmpty()) {
-                    Toast.makeText(FolderListActivity.this,"검색 결과가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-                //    case "folder name" :
-                 //       searchForFolderName(keyword);
-               //     case "nick name" :
-                 //       searchForFolderOwner(keyword);
-
-              //  }
-                //searchForFolderName(keyword);
-                //searchForFolderOwner(keyword);
                 return true;
             }
             @Override
@@ -201,6 +189,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         recyclerView.setAdapter(adapter);
 
     }
+
 
     public void setMyFolderIdList() {
         // usersSubsFolder의 현재 로그인한 유저가 구독한 폴더 도큐먼트 이름 가져오기
@@ -256,8 +245,10 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
                                                             for(FolderObj tmpFolder2 : searchFolderResult) {
                                                                 System.out.println("닉네임 폴더 검색 최종 결과 : "+tmpFolder2.getName());
                                                             }
+
                                                             adapter.addItems(searchFolderResult);
                                                             adapter.notifyDataSetChanged();
+
                                                         }
                                                     }
 
@@ -486,7 +477,11 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void getCount(int count) {
-        tv_search_result.setText(String.valueOf(count));
+        if(searchFolderResult.size() == 0 || searchFolderResult.get(0).getName() == " 검색 결과가 존재하지 않습니다. ") {
+            tv_search_result.setText(String.valueOf(0));
+        } else {
+            tv_search_result.setText(String.valueOf(count));
+        }
     }
 
     @Override
