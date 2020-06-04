@@ -461,7 +461,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void settings() {
         startActivity(settingsIntent);
     }
-    
+
+    public void myFolder() {
+        Intent intent = new Intent(this, MyfolderViewActivity.class);
+        startActivity(intent);
+    }
 
     public void logout() {
         auth.signOut();
@@ -492,7 +496,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.logout_menu: logout(); break;
 
             //바텀
-            case R.id.home_nav: break;
+            case R.id.home_nav: myFolder(); break;
             case R.id.history_bottom_nav: notice(); break;
             case R.id.search_folder_bottom_nav: viewFolderList(); break; // 폴더 검색
             case R.id.my_folder_bottom_nav: createFolder(); break; // 폴더 생성
