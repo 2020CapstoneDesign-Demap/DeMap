@@ -80,6 +80,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@color/colorWhite"
+            app:itemIconTint="@drawable/bottom_navigation_item_color"
+            app:itemTextColor="@drawable/bottom_navigation_item_color"
             app:menu="@menu/bottom">
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
