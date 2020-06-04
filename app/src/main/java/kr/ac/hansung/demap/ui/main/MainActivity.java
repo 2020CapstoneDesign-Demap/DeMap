@@ -461,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void settings() {
         startActivity(settingsIntent);
     }
+    
 
     public void logout() {
         auth.signOut();
