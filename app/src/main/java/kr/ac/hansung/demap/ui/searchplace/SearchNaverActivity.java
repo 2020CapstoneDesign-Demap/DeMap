@@ -49,6 +49,8 @@ public class SearchNaverActivity extends AppCompatActivity {
     int[] mapy;
     //String[] category;
 
+    RecyclerView recyclerView;
+
 
     @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -106,11 +108,16 @@ public class SearchNaverActivity extends AppCompatActivity {
             searchForNaverAPI(searchword);
 
 
-        RecyclerView recyclerView = findViewById(R.id.place_search_result_list);
+        recyclerView = findViewById(R.id.place_search_result_list);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MySearchNaverRecyclerAdapter();
         recyclerView.setAdapter(adapter);
+
+            this.onResume();
+        //Intent intent2 = new Intent(SearchNaverActivity.this, SearchNaverActivity.class);
+        //intent2.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //startActivity(intent2);
 
     }
 
@@ -118,7 +125,7 @@ public class SearchNaverActivity extends AppCompatActivity {
     public void searchForNaverAPI(String query) {
         final String clientId = "F29Q2vNcHyw0fOQwkzbO";//애플리케이션 클라이언트 아이디값";
         final String clientSecret = "5dNDcpf9qo";//애플리케이션 클라이언트 시크릿값";
-        final int display = 5; // 보여지는 검색결과의 수
+        final int display = 10; // 보여지는 검색결과의 수
 
         // 네트워크 연결은 Thread 생성 필요
         new Thread() {
@@ -207,19 +214,32 @@ public class SearchNaverActivity extends AppCompatActivity {
                     System.out.println("y 좌표 : "+mapy[0]+mapy[1]+mapy[2]+mapy[3]+mapy[4]);
 
                     adapter.addItems(title, roadaddress, category, telephone, mapx, mapy);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
+
+                    runOnUiThread(new Runnable() { // 화면에 반영하기 위하여 runOnUiThread()를 호출하여 실시간 갱신한다.
+                        @Override
+                        public void run() {
+                            // 갱신된 데이터 내역을 어댑터에 알려줌
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
 
                 } catch (Exception e) {
                     System.out.println("에러 발생 : " + e);
                 }
             }
         }.start();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         rootView.requestFocus();
+
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
