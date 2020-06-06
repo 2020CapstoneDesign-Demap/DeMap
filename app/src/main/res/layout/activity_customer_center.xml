@@ -15,24 +15,32 @@
         android:layout_gravity="center"
         android:background="@drawable/icon_demap_map"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="0dp"
         android:layout_marginRight="15dp"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="                   SSAP\n          팀장 : 박 소 연\nMobile : 010 - 8879 - 4921"
+        android:text="  SSAP\n\n박 소 연\n신 수 민\n안 영 진\n\n Github"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="10dp"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ssap_qr_code"
         />
 
 </LinearLayout>
