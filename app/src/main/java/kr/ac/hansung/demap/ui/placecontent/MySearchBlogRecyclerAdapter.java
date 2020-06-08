@@ -21,10 +21,10 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
     private Context context;
 
     // adapter에 들어갈 folder list
-    private String[] title = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] description = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] postdate = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] link = {"초기값","초기값","초기값","초기값","초기값"};
+    private String[] title = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] description = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] postdate = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] link = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
 
 
     public MySearchBlogRecyclerAdapter() {
@@ -33,7 +33,7 @@ public class MySearchBlogRecyclerAdapter extends RecyclerView.Adapter<MySearchBl
 
     @Override
     public void onBindViewHolder(@NonNull MySearchBlogRecyclerAdapter.MyViewHolder holder, int position) {
-        if (title[0]!="초기값")
+        if (title[position]!="초기값")
             holder.onBind(title[position], description[position], postdate[position], link[position]);
         else {
             //holder.noBind();
