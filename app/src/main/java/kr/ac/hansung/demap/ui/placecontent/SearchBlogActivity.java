@@ -68,7 +68,7 @@ public class SearchBlogActivity extends AppCompatActivity {
     public void searchForNaverBlogAPI(String query) {
         final String clientId = "F29Q2vNcHyw0fOQwkzbO";//애플리케이션 클라이언트 아이디값";
         final String clientSecret = "5dNDcpf9qo";//애플리케이션 클라이언트 시크릿값";
-        final int display = 5; // 보여지는 검색결과의 수
+        final int display = 10; // 보여지는 검색결과의 수
 
         // 네트워크 연결은 Thread 생성 필요
         new Thread() {
