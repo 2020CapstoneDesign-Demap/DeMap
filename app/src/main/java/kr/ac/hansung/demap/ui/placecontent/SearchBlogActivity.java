@@ -37,6 +37,8 @@ public class SearchBlogActivity extends AppCompatActivity {
 
     private MySearchBlogRecyclerAdapter adapter; // BlogList 어댑터
 
+    private RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class SearchBlogActivity extends AppCompatActivity {
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        RecyclerView recyclerView = findViewById(R.id.search_blog_result_list);
+        recyclerView = findViewById(R.id.search_blog_result_list);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MySearchBlogRecyclerAdapter();
@@ -151,7 +153,16 @@ public class SearchBlogActivity extends AppCompatActivity {
                     System.out.println(description[0]+description[1]+description[2]+description[3]+description[4]);
 
                     adapter.addItems(title, description, postdate, link);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
+
+                    runOnUiThread(new Runnable() { // 화면에 반영하기 위하여 runOnUiThread()를 호출하여 실시간 갱신한다.
+                        @Override
+                        public void run() {
+                            // 갱신된 데이터 내역을 어댑터에 알려줌
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
 
                 } catch (Exception e) {
                     System.out.println("에러 발생 : " + e);
@@ -182,6 +193,9 @@ public class SearchBlogActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //mapView.onResume();
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+
     }
 
     @Override
