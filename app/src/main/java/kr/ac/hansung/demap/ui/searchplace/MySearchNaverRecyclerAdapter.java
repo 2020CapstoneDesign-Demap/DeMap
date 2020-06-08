@@ -20,12 +20,12 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<MySearchN
     private Context context;
 
     // adapter에 들어갈 folder list
-    private String[] title = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] category = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] telephone = {"초기값","초기값","초기값","초기값","초기값"};
-    private String[] roadaddress = {"초기값","초기값","초기값","초기값","초기값"};
-    private int[] mapx = {0,0,0,0,0};
-    private int[] mapy = {0,0,0,0,0};
+    private String[] title = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] category = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] telephone = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private String[] roadaddress = {"초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값","초기값"};
+    private int[] mapx = {0,0,0,0,0,0,0,0,0,0};
+    private int[] mapy = {0,0,0,0,0,0,0,0,0,0};
 
     public MySearchNaverRecyclerAdapter() {
 
@@ -33,7 +33,7 @@ public class MySearchNaverRecyclerAdapter extends RecyclerView.Adapter<MySearchN
 
     @Override
     public void onBindViewHolder(@NonNull MySearchNaverRecyclerAdapter.MyViewHolder holder, int position) {
-        if (title[0]!="초기값")
+        if (title[position]!="초기값")
             holder.onBind(title[position], roadaddress[position], category[position], telephone[position]);
         checkNull(title);
 
