@@ -55,6 +55,7 @@
             <Button
                 android:id="@+id/btn_myfolder_edit"
                 android:layout_gravity="center_vertical"
+                android:visibility="invisible"
                 android:layout_width="37dp"
                 android:layout_height="27dp"
                 android:layout_marginRight="10dp"
