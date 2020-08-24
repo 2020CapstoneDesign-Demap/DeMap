@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ChattingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/chatList"
+            android:layout_width="match_parent"
+            android:dividerHeight="0px"
+            android:divider="#ffffff"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/chatEditText"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:height="20dp"
+                android:layout_weight="10"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_btn_round_gray_border"
+                android:inputType="text"
+                android:hint="메시지를 입력하세요."
+                />
+            <TextView
+                android:id="@+id/chatSendButton"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_bubble"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:text="전송"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

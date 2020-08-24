@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     static NaverMap naverMap_keep;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
