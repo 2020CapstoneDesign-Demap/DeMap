@@ -111,4 +111,9 @@ dependencies {
     implementation 'com.github.siyamed:android-shape-imageview:0.9.3'
     // html 크롤링
     implementation 'org.jsoup:jsoup:1.12.1'
+
+    //mqtt
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }
