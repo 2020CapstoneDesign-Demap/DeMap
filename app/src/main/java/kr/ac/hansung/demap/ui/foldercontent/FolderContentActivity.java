@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.ac.hansung.demap.ChattingActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;
@@ -51,8 +52,12 @@ public class FolderContentActivity extends AppCompatActivity {
     private String folder_name;
     private String ownerNickName = "생성자";
 
+    // 폴더 구독
     private Button btn_subscribe;
     private TextView tv_folder_subsCount;
+
+    // 폴더 채팅
+    private TextView tv_folder_chatting;
 
     private FolderDTO folderDTO;
     private FolderSubsDTO folderSubsDTO;
@@ -69,6 +74,8 @@ public class FolderContentActivity extends AppCompatActivity {
     private String ownerId;
 
     private String folder_public;
+
+    private String nickName;
 
 
     @Override
@@ -87,6 +94,8 @@ public class FolderContentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
+
+        nickName = intent.getStringExtra("nickname");
 
         setContentView(R.layout.activity_folder_content);
 
@@ -112,7 +121,6 @@ public class FolderContentActivity extends AppCompatActivity {
         TextView textview_total_folder_count = findViewById(R.id.textview_total_folder_count);
         textview_total_folder_count.setText(String.valueOf(intent.getIntExtra("folder_placeCount", 0)));
 
-
         RecyclerView recyclerView = findViewById(R.id.listView_folder_content_place);
         recyclerView.setHasFixedSize(false);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -123,6 +131,8 @@ public class FolderContentActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         btn_subscribe = findViewById(R.id.btn_folder_content_subscribe);
+
+        tv_folder_chatting = findViewById(R.id.tv_folder_chatting);
 
         if (isMyFolder) { // 내 폴더일 경우
             btn_subscribe.setBackground(getDrawable(R.drawable.background_btn_round_blue));
@@ -178,6 +188,17 @@ public class FolderContentActivity extends AppCompatActivity {
             });
         }
 
+        tv_folder_chatting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FolderContentActivity.this, ChattingActivity.class);
+                intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                intent.putExtra("nickname", nickName);
+                intent.putExtra("folder_id", docId);
+                intent.putExtra("folder_name", folder_name);
+                startActivity(intent);
+            }
+        });
 
         setPlaceData();
 
