@@ -14,8 +14,14 @@ import java.util.ArrayList;
 public class ChatAdapter extends BaseAdapter {
     private ArrayList<ChatItem> chatList = new ArrayList<>();
 
+    private String nickname;
+
     public void add(ChatItem chatItem){
         chatList.add(chatItem);
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Override
@@ -47,10 +53,9 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        if(!chatList.get(position).getId().equals(ChattingActivity.currentUserId)) {
+        if(!chatList.get(position).getId().equals(nickname)) {
             viewHolder.chattextContainer.setGravity(Gravity.LEFT);
-//            viewHolder.idTextView.setText(chatList.get(position).getId());
-            viewHolder.idTextView.setText("시루");
+            viewHolder.idTextView.setText(chatList.get(position).getId());
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.char2));
             viewHolder.contentTextView.setText(chatList.get(position).getContent());
         } else {

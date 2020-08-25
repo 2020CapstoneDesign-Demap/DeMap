@@ -78,7 +78,7 @@ public class MyfolderViewActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager_folder_tab);
 
         pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-
+        pagerAdapter.setNickname(nickName);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

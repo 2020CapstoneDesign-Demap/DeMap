@@ -1,7 +1,9 @@
 package kr.ac.hansung.demap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -33,14 +36,22 @@ public class ChattingActivity extends AppCompatActivity {
     EditText chatEditText;
     TextView chatSendButton;
 
+    private String folder_name;
+    private String nickName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+
+        folder_name = intent.getStringExtra("folder_name");
+        nickName = intent.getStringExtra("nickname");
+
         // ActionBar에 타이틀 변경
-        getSupportActionBar().setTitle("제주도 여행");
+        getSupportActionBar().setTitle(folder_name);
         // ActionBar의 배경색 변경
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.colorWhite));
         Window window = getWindow();
@@ -52,6 +63,8 @@ public class ChattingActivity extends AppCompatActivity {
         chatAdapter = new ChatAdapter();
 
         chatListView = findViewById(R.id.chatList);
+
+        chatAdapter.setNickname(nickName);
         chatListView.setAdapter(chatAdapter);
 
         chatEditText = findViewById(R.id.chatEditText);
@@ -60,15 +73,15 @@ public class ChattingActivity extends AppCompatActivity {
         chatSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentUserId = mqttClient1.getClientId();
+//                currentUserId = mqttClient1.getClientId();
 
                 String content = chatEditText.getText().toString();
                 if(content.equals("")){ }
                 else{
                     JSONObject json = new JSONObject();
                     try{
-                        json.put("id",currentUserId);
-                        json.put("content",content);
+                        json.put("id", nickName);
+                        json.put("content", content);
                         mqttClient1.publish(TOPIC1,new MqttMessage(json.toString().getBytes()));
                     }catch (Exception e){
 
@@ -118,5 +131,17 @@ public class ChattingActivity extends AppCompatActivity {
         mqttClient1.subscribe(TOPIC1);
         mqttClient1.setCallback(mqttCallback);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

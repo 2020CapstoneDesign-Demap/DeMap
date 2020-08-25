@@ -46,6 +46,7 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
     private boolean isMyFolder;
 
     private String authId;
+    private String nickname;
 
 
     @Override
@@ -257,6 +258,8 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
                 intent.putExtra("isMyFolder", isMyFolder);
 
+                intent.putExtra("nickname", nickname);
+
                 context.startActivity(intent);
             }
         });
@@ -303,6 +306,10 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
 
     void setAuthId(String authId) {
         this.authId = authId;
+    }
+
+    void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

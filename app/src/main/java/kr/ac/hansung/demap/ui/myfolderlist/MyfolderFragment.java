@@ -32,6 +32,7 @@ public class MyfolderFragment extends Fragment {
     private Button btn_folder_edit;
 
     private String authId;
+    private String nickname;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +44,9 @@ public class MyfolderFragment extends Fragment {
     }
     void setAuthId(String authId) {
         this.authId = authId;
+    }
+    void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void updateAdapterItem(int position, FolderDTO folderDTO, String folderId) {
@@ -67,6 +71,7 @@ public class MyfolderFragment extends Fragment {
         adapter = new MyFolderViewRecyclerAdapter();
         adapter.setItem(folderObjs);
         adapter.setAuthId(authId);
+        adapter.setNickname(nickname);
         adapter.setMyFolder(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);

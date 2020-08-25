@@ -64,7 +64,10 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:theme="@style/SplashTheme">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ui.hotPlace.HotPlaceActivity" />
         <activity android:name=".ui.nickname.NickNameActivity" />
@@ -79,10 +82,6 @@
         <activity android:name=".ui.setting.SettingNoticeActivity" /> <!-- 네이버 api -->
         <activity android:name=".ChattingActivity"
             android:windowSoftInputMode="adjustPan">
-        <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

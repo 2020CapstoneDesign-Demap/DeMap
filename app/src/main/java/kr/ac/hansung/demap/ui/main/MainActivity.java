@@ -284,11 +284,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         naverMap_keep = naverMap;
 
-        try {
-            nowMyPoint(naverMap);
-        } catch (IOException e) {
-            System.out.println("현재 위치 가져오기 에러");
-        }
+//        try {
+//            nowMyPoint(naverMap);
+//        } catch (IOException e) {
+//            System.out.println("현재 위치 가져오기 에러");
+//        }
 
         Marker marker = new Marker();
         marker.setPosition(new LatLng(37.5666103, 126.9783882));
