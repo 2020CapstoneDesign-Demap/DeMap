@@ -3,6 +3,7 @@ package kr.ac.hansung.demap.ui.foldercontent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,6 +97,7 @@ public class FolderContentActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         nickName = intent.getStringExtra("nickname");
+        System.out.println("폴더 컨텐트 내 닉네임 : " + nickName);
 
         setContentView(R.layout.activity_folder_content);
 

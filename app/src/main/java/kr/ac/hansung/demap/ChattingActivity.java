@@ -73,9 +73,9 @@ public class ChattingActivity extends AppCompatActivity {
         chatSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                currentUserId = mqttClient1.getClientId();
 
                 String content = chatEditText.getText().toString();
+
                 if(content.equals("")){ }
                 else{
                     JSONObject json = new JSONObject();
@@ -125,7 +125,7 @@ public class ChattingActivity extends AppCompatActivity {
             }
         };
 
-        mqttClient1 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
+        mqttClient1 = new MqttClient("tcp://172.30.1.57:1883", MqttClient.generateClientId(), null);
         //mqttClient2 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
         mqttClient1.connect();
         mqttClient1.subscribe(TOPIC1);

@@ -284,11 +284,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         naverMap_keep = naverMap;
 
-//        try {
-//            nowMyPoint(naverMap);
-//        } catch (IOException e) {
-//            System.out.println("현재 위치 가져오기 에러");
-//        }
+        try {
+            nowMyPoint(naverMap);
+        } catch (IOException e) {
+            System.out.println("현재 위치 가져오기 에러");
+        }
 
         Marker marker = new Marker();
         marker.setPosition(new LatLng(37.5666103, 126.9783882));
@@ -466,11 +466,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(settingsIntent);
     }
 
-    public void myFolder() {
-        Intent intent = new Intent(this, MyfolderViewActivity.class);
-        startActivity(intent);
-    }
-
     public void logout() {
         auth.signOut();
         Intent intent = new Intent(this, LoginActivity.class);
@@ -500,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.logout_menu: logout(); break;
 
             //바텀
-            case R.id.home_nav: myFolder(); break;
+            case R.id.home_nav: viewMyFolderList(); break; // 마이 폴더
             case R.id.history_bottom_nav: notice(); break;
             case R.id.search_folder_bottom_nav: viewFolderList(); break; // 폴더 검색
             case R.id.my_folder_bottom_nav: createFolder(); break; // 폴더 생성

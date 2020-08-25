@@ -53,12 +53,13 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        if(!chatList.get(position).getId().equals(nickname)) {
+
+        if(!chatList.get(position).getId().equals(nickname)) { // 다른 사람의 채팅일 경우
             viewHolder.chattextContainer.setGravity(Gravity.LEFT);
             viewHolder.idTextView.setText(chatList.get(position).getId());
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.char2));
             viewHolder.contentTextView.setText(chatList.get(position).getContent());
-        } else {
+        } else { // 내 채팅일 경우
             viewHolder.chattextContainer.setGravity(Gravity.RIGHT);
             viewHolder.idTextView.setText("");
             viewHolder.idTextView.setVisibility(View.GONE);
