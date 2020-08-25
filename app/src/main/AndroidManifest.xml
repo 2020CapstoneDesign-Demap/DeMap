@@ -77,8 +77,9 @@
         <activity android:name=".ui.setting.SettingsActivity" />
         <activity android:name=".AddPlaceToFolderActivity" />
         <activity android:name=".ui.setting.SettingNoticeActivity" /> <!-- 네이버 api -->
-        <activity android:name=".ChattingActivity">
-            <intent-filter>
+        <activity android:name=".ChattingActivity"
+            android:windowSoftInputMode="adjustPan">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

@@ -23,8 +23,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        targetCompatibility = "1.8"
-        sourceCompatibility = "1.8"
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -116,4 +117,5 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
 }
