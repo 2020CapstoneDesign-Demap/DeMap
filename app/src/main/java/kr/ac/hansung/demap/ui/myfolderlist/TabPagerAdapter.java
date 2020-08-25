@@ -23,6 +23,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
     private String authId;
 
+    private String nickname;
+
     private int tabCount;
 
     public TabPagerAdapter(@NonNull FragmentManager fm, int tabCount) {
@@ -40,6 +42,10 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
     void setAuthId(String authId) {
         this.authId = authId;
+    }
+
+    void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     void setUpdate(int position, FolderDTO folderDTO, String folderId) {
@@ -70,11 +76,13 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 myfolderFragment.setFolderDTOs(myfolderObjs);
                 myfolderFragment.setAuthId(authId);
+                myfolderFragment.setNickname(nickname);
                 return myfolderFragment;
             case 1:
                 SubsfolderFragment subsfolderFragment = new SubsfolderFragment();
                 subsfolderFragment.setFolderDTOs(subsfolderObjS);
                 subsfolderFragment.setAuthId(authId);
+                subsfolderFragment.setNickname(nickname);
                 return subsfolderFragment;
             default:
                 return null;
