@@ -1,6 +1,7 @@
 package kr.ac.hansung.demap.ui.notice;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -34,6 +35,8 @@ public class NoticeActivity extends AppCompatActivity {
 
     private ArrayList<NoticeDTO> noticeDTOS = new ArrayList<NoticeDTO>();
 
+    private String nickname;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,9 @@ public class NoticeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_notice);
 
+        Intent intent = getIntent();
+        nickname = intent.getStringExtra("nickname");
+
         RecyclerView recyclerView = findViewById(R.id.listView_notice_list);
         recyclerView.setHasFixedSize(false);
         DividerItemDecoration decoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
@@ -58,6 +64,7 @@ public class NoticeActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NoticeListAdapter();
+        adapter.setNickname(nickname);
         recyclerView.setAdapter(adapter);
 
         firestore.collection("notices").document(auth.getCurrentUser().getUid()).collection("notice").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -19,10 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderObj;
 import kr.ac.hansung.demap.model.NoticeDTO;
+import kr.ac.hansung.demap.ui.foldercontent.FolderContentActivity;
 
 public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.MyViewHolder> {
 
@@ -33,6 +33,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.My
     private ArrayList<NoticeDTO> notices = new ArrayList<NoticeDTO>();
 
     private String uid;
+    private String nickname;
 
     private Intent intent;
 
@@ -62,6 +63,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.My
                             intent.putExtra("folder_id", document.getId());
                             intent.putExtra("folder_name",folderObj.getName());
                             intent.putExtra("folder_subs_count", folderObj.getSubscribeCount());
+                            intent.putExtra("nickname", nickname);
 
                             if (notices.get(position).getNoticeType().equals("내폴더장소추가알림")) {
                                 intent.putExtra("isMyFolder", true);
@@ -77,6 +79,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.My
                             }
                             else {
                                 intent.putExtra("isMyFolder", false);
+                                intent.putExtra("editable", "불가능");
                                 firestore.collection("folderOwner").document(notices.get(position).getFolder_id()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -114,6 +117,11 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.My
 
     void setId(String uid) {
         this.uid = uid;
+        notifyDataSetChanged();
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
         notifyDataSetChanged();
     }
 
