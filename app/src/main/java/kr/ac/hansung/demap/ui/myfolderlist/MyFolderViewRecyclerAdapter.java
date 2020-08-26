@@ -256,6 +256,8 @@ public class MyFolderViewRecyclerAdapter extends RecyclerView.Adapter<MyFolderVi
                 intent.putExtra("folder_public", folderObjs.get(position).getIspublic());
                 intent.putExtra("folder_placeCount", folderObjs.get(position).getPlaceCount());
 
+                intent.putExtra("editable", folderObjs.get(position).getEditable());
+
                 intent.putExtra("isMyFolder", isMyFolder);
 
                 intent.putExtra("nickname", nickname);

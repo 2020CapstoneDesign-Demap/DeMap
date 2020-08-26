@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap.ui.searchfolder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +74,8 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
     private TextView tv_result_set;
     private String search_key;
 
+    private String nickname;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +92,10 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_folder_list);
+
+        Intent intent = getIntent();
+
+        nickname = intent.getStringExtra("nickname");
 
         // Spinner 선택 리스트 가져오기
         final String[] data = getResources().getStringArray(R.array.searchresult); // xml에서 가져올때 get 리소스
@@ -186,6 +193,7 @@ public class FolderListActivity extends AppCompatActivity implements CompoundBut
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MyAdapterForFolderList(this);
+        adapter.setNickname(nickname);
         recyclerView.setAdapter(adapter);
 
     }

@@ -75,6 +75,7 @@ public class FolderContentActivity extends AppCompatActivity {
     private String ownerId;
 
     private String folder_public;
+    private String editable;
 
     private String nickName;
 
@@ -97,7 +98,7 @@ public class FolderContentActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         nickName = intent.getStringExtra("nickname");
-        System.out.println("폴더 컨텐트 내 닉네임 : " + nickName);
+        editable = intent.getStringExtra("editable");
 
         setContentView(R.layout.activity_folder_content);
 
@@ -181,23 +182,8 @@ public class FolderContentActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String edit = document.getString("edit_auth");
 
-                    if (edit.equals("초대한 유저")) { // 친구초대 폴더일 경우 채팅 버튼 활성화
-                        tv_folder_chatting.setVisibility(View.VISIBLE);
-                        tv_folder_chatting.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(FolderContentActivity.this, ChattingActivity.class);
-                                intent.putExtra("user_id", auth.getCurrentUser().getUid());
-                                intent.putExtra("nickname", nickName);
-                                intent.putExtra("folder_id", docId);
-                                intent.putExtra("folder_name", folder_name);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-
-                    if (isMyFolder) { // 내 폴더일 경우 친구초대 버튼 클릭 리스너
-                        btn_subscribe.setOnClickListener(new View.OnClickListener() {
+                    if (isMyFolder) { // 내 폴더일 경우
+                        btn_subscribe.setOnClickListener(new View.OnClickListener() { // 친구초대 버튼 클릭 리스너
                             @Override
                             public void onClick(View v) {
                                 if (edit.equals("불가능")) {
@@ -213,6 +199,37 @@ public class FolderContentActivity extends AppCompatActivity {
                                 }
                             }
                         });
+
+                        if (edit.equals("초대한 유저")) { // 내폴더&친구초대 폴더일 경우 채팅 버튼 활성화
+                            tv_folder_chatting.setVisibility(View.VISIBLE);
+                            tv_folder_chatting.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(FolderContentActivity.this, ChattingActivity.class);
+                                    intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                                    intent.putExtra("nickname", nickName);
+                                    intent.putExtra("folder_id", docId);
+                                    intent.putExtra("folder_name", folder_name);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                    else { //구독 폴더일 경우
+                        if (editable.equals("가능") && edit.equals("초대한 유저")) { // 구독폴더 수정가능&친구초대 폴더일 경우 채팅 버튼 활성화
+                            tv_folder_chatting.setVisibility(View.VISIBLE);
+                            tv_folder_chatting.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(FolderContentActivity.this, ChattingActivity.class);
+                                    intent.putExtra("user_id", auth.getCurrentUser().getUid());
+                                    intent.putExtra("nickname", nickName);
+                                    intent.putExtra("folder_id", docId);
+                                    intent.putExtra("folder_name", folder_name);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
                     }
 
                 }

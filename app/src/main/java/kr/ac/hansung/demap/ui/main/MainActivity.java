@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Intent settingsIntent;
     private Intent myFolderIntent;
+    private Intent searchFolderIntent;
 
     private String uid;
     private String nickname = "";
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         settingsIntent = new Intent(this, SettingsActivity.class);
         myFolderIntent = new Intent(this, MyfolderViewActivity.class);
+        searchFolderIntent = new Intent(this, FolderListActivity.class);
 
         drawerLayout = findViewById(R.id.drawerlayout_main);
 
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         settingsIntent.putExtra("nickname", nickname);
                         myFolderIntent.putExtra("nickname", nickname);
+                        searchFolderIntent.putExtra("nickname", nickname);
                     }
                     else {
                         Intent intent = new Intent(getApplicationContext(), NickNameActivity.class);
@@ -438,8 +441,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void viewFolderList() {
-        Intent intent = new Intent(this, FolderListActivity.class);
-        startActivity(intent);
+        startActivity(searchFolderIntent);
     }
 
     public void viewMyFolderList() {

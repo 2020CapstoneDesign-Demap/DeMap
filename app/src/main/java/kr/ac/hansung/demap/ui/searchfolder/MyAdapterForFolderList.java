@@ -31,9 +31,15 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
     private static ArrayList<String> myFolderList = new ArrayList<String>();
     private static String currentUid;
 
+    private String nickname;
+
     public MyAdapterForFolderList(getCount_interface getCountInterface) {
         this.getCountInterface = getCountInterface;
         searchFolderResult.clear();
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Override
@@ -58,6 +64,10 @@ public class MyAdapterForFolderList extends RecyclerView.Adapter<MyAdapterForFol
                 intent.putExtra("folder_subs_count", searchFolderResult.get(position).getSubscribeCount());
                 intent.putExtra("folder_public", searchFolderResult.get(position).getIspublic());
                 intent.putExtra("folder_placeCount", searchFolderResult.get(position).getPlaceCount());
+
+                intent.putExtra("editable", searchFolderResult.get(position).getEditable());
+
+                intent.putExtra("nickname", nickname);
 
                 context.startActivity(intent);
             }
