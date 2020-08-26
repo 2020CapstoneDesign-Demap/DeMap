@@ -26,7 +26,7 @@ import butterknife.OnClick;
 
 public class ChattingActivity extends AppCompatActivity {
     static final String TAG = ChattingActivity.class.getSimpleName();
-    static final String TOPIC1 = "topic";
+    static String TOPIC1 = "";
     static String currentUserId = "";
 
     private ChatAdapter chatAdapter;
@@ -47,6 +47,7 @@ public class ChattingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        TOPIC1 = intent.getStringExtra("folder_id");
         folder_name = intent.getStringExtra("folder_name");
         nickName = intent.getStringExtra("nickname");
 
