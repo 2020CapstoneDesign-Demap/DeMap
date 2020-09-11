@@ -106,12 +106,12 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                        ChatItem chatItem = document.toObject(ChatItem.class); // 이렇게 불러오면 오류
+                        dataCount++;
+                        if (dataCount == 20) break;
                         ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
                         chatAdapter.insert(chatItem); // 상단에 삽입
-                        dataCount++;
                     }
                     chatAdapter.notifyDataSetChanged();
                     chatListView.setSelection(chatAdapter.getCount() - 1);
@@ -120,6 +120,7 @@ public class ChattingActivity extends AppCompatActivity {
                     }
                     else {
                         dataflag = true;
+                        lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 2);
                     }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
@@ -172,20 +173,22 @@ public class ChattingActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                                     dataCount = 0;
                                     for (QueryDocumentSnapshot document : task.getResult()) {
+                                        dataCount++;
+                                        if (dataCount == 20) break;
                                         ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
                                         chatAdapter.insert(chatItem); // 상단에 삽입
-                                        dataCount++;
                                     }
                                     chatAdapter.notifyDataSetChanged();
-                                    chatListView.setSelection(dataCount);
                                     if (dataCount < 20) {
-                                        dataflag = false;
+                                        dataflag = false; // 더 불러올 데이터가 없는 경우
+                                        chatListView.setSelection(dataCount);
                                     }
                                     else {
                                         dataflag = true;
+                                        chatListView.setSelection(dataCount - 1);
+                                        lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 2);
                                     }
                                 } else {
                                     System.out.println("Error getting documents: " + task.getException());
