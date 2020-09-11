@@ -80,7 +80,7 @@
         <activity android:name=".ui.setting.SettingsActivity" />
         <activity android:name=".AddPlaceToFolderActivity" />
         <activity android:name=".ui.setting.SettingNoticeActivity" /> <!-- 네이버 api -->
-        <activity android:name=".ChattingActivity"
+        <activity android:name="kr.ac.hansung.demap.ui.chatting.ChattingActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <meta-data

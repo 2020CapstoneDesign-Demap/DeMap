@@ -3,7 +3,6 @@ package kr.ac.hansung.demap.ui.foldercontent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kr.ac.hansung.demap.ChattingActivity;
+import kr.ac.hansung.demap.ui.chatting.ChattingActivity;
 import kr.ac.hansung.demap.R;
 import kr.ac.hansung.demap.model.FolderDTO;
 import kr.ac.hansung.demap.model.FolderPlacesDTO;

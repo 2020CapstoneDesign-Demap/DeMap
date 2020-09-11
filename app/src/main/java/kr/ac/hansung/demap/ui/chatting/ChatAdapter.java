@@ -1,4 +1,4 @@
-package kr.ac.hansung.demap;
+package kr.ac.hansung.demap.ui.chatting;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -13,6 +13,9 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import kr.ac.hansung.demap.R;
+import kr.ac.hansung.demap.ui.chatting.ChatItem;
 
 public class ChatAdapter extends BaseAdapter {
     private ArrayList<ChatItem> chatList = new ArrayList<>();
