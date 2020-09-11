@@ -176,11 +176,11 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 JSONObject json = new JSONObject(new String(message.getPayload(), "UTF-8"));
-                chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content")));
+                //chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content")));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        chatAdapter.notifyDataSetChanged();
+                        //chatAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -205,7 +205,7 @@ public class ChattingActivity extends AppCompatActivity {
             chat_user = (String) ((DataSnapshot) i.next()).getValue();
             chat_msg = (String) ((DataSnapshot) i.next()).getValue();
 
-            chatAdapter.add(new ChatItem(chat_user, chat_msg));
+            chatAdapter.add(new ChatItem(chat_msg, chat_user));
         }
 
         chatAdapter.notifyDataSetChanged();
