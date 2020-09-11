@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,9 +21,22 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class ChattingActivity extends AppCompatActivity {
     static final String TAG = ChattingActivity.class.getSimpleName();
@@ -38,6 +52,14 @@ public class ChattingActivity extends AppCompatActivity {
 
     private String folder_name;
     private String nickName;
+    private String messageId;
+    private String chat_msg, chat_user;
+
+    private ArrayList<String> list = new ArrayList<>();
+    private ArrayAdapter<String> arrayAdapter;
+
+    // 채팅 저장 realDB
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +72,7 @@ public class ChattingActivity extends AppCompatActivity {
         TOPIC1 = intent.getStringExtra("folder_id");
         folder_name = intent.getStringExtra("folder_name");
         nickName = intent.getStringExtra("nickname");
+        messageId = TOPIC1+"_message"; // 채팅방 아이디
 
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle(folder_name);
@@ -60,6 +83,9 @@ public class ChattingActivity extends AppCompatActivity {
 
         // 홈 아이콘 표시
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // 채팅방DB 생성
+        reference = FirebaseDatabase.getInstance().getReference().child(messageId);
 
         chatAdapter = new ChatAdapter();
 
@@ -84,6 +110,22 @@ public class ChattingActivity extends AppCompatActivity {
                         json.put("id", nickName);
                         json.put("content", content);
                         mqttClient1.publish(TOPIC1,new MqttMessage(json.toString().getBytes()));
+
+                        // 채팅 저장 부분
+                        Map<String, Object> map = new HashMap<String, Object>();
+
+                        String key = reference.push().getKey();
+                        reference.updateChildren(map);
+
+                        DatabaseReference root = reference.child(key);
+
+                        Map<String, Object> objectMap = new HashMap<String, Object>();
+
+                        objectMap.put("id", nickName);
+                        objectMap.put("content", content);
+
+                        root.updateChildren(objectMap);
+
                     }catch (Exception e){
 
                     } finally {
@@ -91,6 +133,28 @@ public class ChattingActivity extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
+
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                chatConversation(dataSnapshot);
+            }
+
+            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                chatConversation(dataSnapshot);
+            }
+
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -132,6 +196,19 @@ public class ChattingActivity extends AppCompatActivity {
         mqttClient1.subscribe(TOPIC1);
         mqttClient1.setCallback(mqttCallback);
 
+    }
+
+    private void chatConversation(DataSnapshot dataSnapshot) {
+        Iterator i = dataSnapshot.getChildren().iterator();
+
+        while (i.hasNext()) {
+            chat_user = (String) ((DataSnapshot) i.next()).getValue();
+            chat_msg = (String) ((DataSnapshot) i.next()).getValue();
+
+            arrayAdapter.add(chat_user + " : " + chat_msg);
+        }
+
+        arrayAdapter.notifyDataSetChanged();
     }
 
     @Override
