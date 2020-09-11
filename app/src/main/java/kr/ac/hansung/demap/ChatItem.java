@@ -3,11 +3,17 @@ package kr.ac.hansung.demap;
 public class ChatItem {
     private String id;
     private String content;
-    private String myId;
+    private String timestamp = null;
 
     public ChatItem(String id, String content) {
         this.id = id;
         this.content = content;
+    }
+
+    public ChatItem(String id, String content, String timestamp) {
+        this.id = id;
+        this.content = content;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -18,12 +24,12 @@ public class ChatItem {
         this.id = id;
     }
 
-    public String getMyId() {
-        return myId;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setMyId(String myId) {
-        this.myId = myId;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getContent() {

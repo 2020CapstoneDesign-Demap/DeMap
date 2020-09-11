@@ -53,7 +53,7 @@ public class ChattingActivity extends AppCompatActivity {
     private String folder_name;
     private String nickName;
     private String messageId;
-    private String chat_msg, chat_user;
+    private String chat_msg, chat_user, chat_time;
 
     private ArrayList<String> list = new ArrayList<>();
     private ArrayAdapter<String> arrayAdapter;
@@ -109,6 +109,7 @@ public class ChattingActivity extends AppCompatActivity {
                     try{
                         json.put("id", nickName);
                         json.put("content", content);
+                        json.put("timestamp", String.valueOf(System.currentTimeMillis()));
                         mqttClient1.publish(TOPIC1,new MqttMessage(json.toString().getBytes()));
 
                         // 채팅 저장 부분
@@ -123,6 +124,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                         objectMap.put("id", nickName);
                         objectMap.put("content", content);
+                        objectMap.put("timestamp", String.valueOf(System.currentTimeMillis()));
 
                         root.updateChildren(objectMap);
 
@@ -176,11 +178,11 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 JSONObject json = new JSONObject(new String(message.getPayload(), "UTF-8"));
-                //chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content")));
+                chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content"), json.getString("timestamp")));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //chatAdapter.notifyDataSetChanged();
+                        chatAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -191,7 +193,7 @@ public class ChattingActivity extends AppCompatActivity {
         };
 
 //        mqttClient1 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
-        mqttClient1 = new MqttClient("tcp://172.30.1.57:1883", MqttClient.generateClientId(), null);
+        mqttClient1 = new MqttClient("tcp://172.30.1.56:1883", MqttClient.generateClientId(), null);
 
         mqttClient1.connect();
         mqttClient1.subscribe(TOPIC1);
@@ -203,10 +205,11 @@ public class ChattingActivity extends AppCompatActivity {
         Iterator i = dataSnapshot.getChildren().iterator();
 
         while (i.hasNext()) {
-            chat_user = (String) ((DataSnapshot) i.next()).getValue();
             chat_msg = (String) ((DataSnapshot) i.next()).getValue();
+            chat_user = (String) ((DataSnapshot) i.next()).getValue();
+            chat_time = (String) ((DataSnapshot) i.next()).getValue();
 
-            chatAdapter.add(new ChatItem(chat_msg, chat_user));
+            chatAdapter.add(new ChatItem(chat_user, chat_msg, chat_time));
         }
 
         chatAdapter.notifyDataSetChanged();

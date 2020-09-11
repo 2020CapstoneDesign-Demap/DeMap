@@ -62,14 +62,14 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.idTextView.setVisibility(View.VISIBLE);
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.char2));
             viewHolder.contentTextView.setTextColor(R.color.colorLineGray7);
-            viewHolder.contentTextView.setText(chatList.get(position).getContent());
+            viewHolder.contentTextView.setText(String.format("%s %s", chatList.get(position).getContent(), chatList.get(position).getTimestamp().toString()));
         } else { // 내 채팅일 경우
             viewHolder.chattextContainer.setGravity(Gravity.RIGHT);
             viewHolder.idTextView.setText("");
             viewHolder.idTextView.setVisibility(View.GONE);
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.chat1));
             viewHolder.contentTextView.setTextColor(Color.WHITE);
-            viewHolder.contentTextView.setText(chatList.get(position).getContent());
+            viewHolder.contentTextView.setText(String.format("%s %s", chatList.get(position).getContent(), chatList.get(position).getTimestamp().toString()));
         }
         return convertView;
     }
