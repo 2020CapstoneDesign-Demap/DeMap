@@ -21,11 +21,13 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,10 +55,13 @@ public class ChattingActivity extends AppCompatActivity {
     private String folder_name;
     private String nickName;
     private String messageId;
-    private String chat_msg, chat_user;
+    private String chat_msg, chat_user, chat_timeH;
 
     private ArrayList<String> list = new ArrayList<>();
     private ArrayAdapter<String> arrayAdapter;
+
+    private SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat dateFormatHour = new SimpleDateFormat("aa hh:mm");
 
     // 채팅 저장 realDB
     private DatabaseReference reference;
@@ -73,6 +78,10 @@ public class ChattingActivity extends AppCompatActivity {
         folder_name = intent.getStringExtra("folder_name");
         nickName = intent.getStringExtra("nickname");
         messageId = TOPIC1+"_message"; // 채팅방 아이디
+
+        // 현재 날짜 시간 받아오기
+        dateFormatDay.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        dateFormatHour.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
         // ActionBar에 타이틀 변경
         getSupportActionBar().setTitle(folder_name);
@@ -109,6 +118,8 @@ public class ChattingActivity extends AppCompatActivity {
                     try{
                         json.put("id", nickName);
                         json.put("content", content);
+                        //json.put("dateFormatDay", dateFormatDay);
+                        json.put("dateFormatHour", dateFormatHour);
                         mqttClient1.publish(TOPIC1,new MqttMessage(json.toString().getBytes()));
 
                         // 채팅 저장 부분
@@ -123,6 +134,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                         objectMap.put("id", nickName);
                         objectMap.put("content", content);
+                        objectMap.put("dateFormatHour", dateFormatHour);
 
                         root.updateChildren(objectMap);
 
@@ -204,8 +216,9 @@ public class ChattingActivity extends AppCompatActivity {
         while (i.hasNext()) {
             chat_user = (String) ((DataSnapshot) i.next()).getValue();
             chat_msg = (String) ((DataSnapshot) i.next()).getValue();
+            chat_timeH = (String) ((DataSnapshot) i.next()).getValue();
 
-            chatAdapter.add(new ChatItem(chat_msg, chat_user));
+            chatAdapter.add(new ChatItem(chat_msg, chat_user, chat_timeH));
         }
 
         chatAdapter.notifyDataSetChanged();
