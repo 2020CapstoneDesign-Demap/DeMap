@@ -190,8 +190,9 @@ public class ChattingActivity extends AppCompatActivity {
             }
         };
 
-        mqttClient1 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
-        //mqttClient2 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
+//        mqttClient1 = new MqttClient("tcp://192.168.168.100:1883", MqttClient.generateClientId(), null);
+        mqttClient1 = new MqttClient("tcp://172.30.1.57:1883", MqttClient.generateClientId(), null);
+
         mqttClient1.connect();
         mqttClient1.subscribe(TOPIC1);
         mqttClient1.setCallback(mqttCallback);
