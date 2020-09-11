@@ -205,10 +205,10 @@ public class ChattingActivity extends AppCompatActivity {
             chat_user = (String) ((DataSnapshot) i.next()).getValue();
             chat_msg = (String) ((DataSnapshot) i.next()).getValue();
 
-            arrayAdapter.add(chat_user + " : " + chat_msg);
+            chatAdapter.add(new ChatItem(chat_user, chat_msg));
         }
 
-        arrayAdapter.notifyDataSetChanged();
+        chatAdapter.notifyDataSetChanged();
     }
 
     @Override
