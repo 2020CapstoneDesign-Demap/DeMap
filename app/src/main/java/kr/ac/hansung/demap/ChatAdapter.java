@@ -59,6 +59,7 @@ public class ChatAdapter extends BaseAdapter {
         if(!chatList.get(position).getId().equals(nickname)) { // 다른 사람의 채팅일 경우
             viewHolder.chattextContainer.setGravity(Gravity.LEFT);
             viewHolder.idTextView.setText(chatList.get(position).getId());
+            viewHolder.idTextView.setVisibility(View.VISIBLE);
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.char2));
             viewHolder.contentTextView.setTextColor(R.color.colorLineGray7);
             viewHolder.contentTextView.setText(chatList.get(position).getContent());
