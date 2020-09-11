@@ -60,8 +60,8 @@ public class ChattingActivity extends AppCompatActivity {
     private String messageId;
 
     private int dataCount = 0;
-    private boolean dataflag = false;
-    private DocumentSnapshot lastVisible;
+    private boolean dataflag = false; // 더 불러올 데이터가 있는지에 대한 플래그
+    private DocumentSnapshot lastVisible; // 마지막으로 불러왔던 데이터 위치
     private int currentScrollState = 0, currentVisibleItemCount = 0, currentFirstVisibleItem = 0, currentTotalItemCount = 0;
 
     // 채팅 저장 realDB
@@ -106,7 +106,6 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    // Get the last visible document
                     lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                        ChatItem chatItem = document.toObject(ChatItem.class); // 이렇게 불러오면 오류
@@ -117,7 +116,7 @@ public class ChattingActivity extends AppCompatActivity {
                     chatAdapter.notifyDataSetChanged();
                     chatListView.setSelection(chatAdapter.getCount() - 1);
                     if (dataCount < 20) {
-                        dataflag = false;
+                        dataflag = false; // 더 불러올 데이터가 없는 경우
                     }
                     else {
                         dataflag = true;
@@ -161,21 +160,18 @@ public class ChattingActivity extends AppCompatActivity {
             }
         });
 
-
+        // 상단 스크롤 시 채팅 내역 불러오기
         chatListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 currentScrollState = scrollState;
                 if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE && dataflag) {
                     if (currentFirstVisibleItem == 0) {
-
-                        //채팅 내역 불러오기
                         firestore.collection("chat").document(TOPIC1).collection("messages")
                                 .orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(20).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    // Get the last visible document
                                     lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                                     dataCount = 0;
                                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -193,6 +189,7 @@ public class ChattingActivity extends AppCompatActivity {
                                     }
                                 } else {
                                     System.out.println("Error getting documents: " + task.getException());
+                                    dataflag = false;
                                 }
                             }
                         });
@@ -232,7 +229,7 @@ public class ChattingActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         chatAdapter.notifyDataSetChanged();
-                        chatListView.setSelection(chatAdapter.getCount() - 1);
+                        chatListView.setSelection(chatAdapter.getCount() - 1); // 채팅 입력시 가장 하단으로 이동
                     }
                 });
             }
