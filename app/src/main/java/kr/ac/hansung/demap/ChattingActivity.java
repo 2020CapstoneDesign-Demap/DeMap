@@ -106,12 +106,15 @@ public class ChattingActivity extends AppCompatActivity {
         chatAdapter.setNickname(nickName);
         chatListView.setAdapter(chatAdapter);
 
-        firestore.collection("chat").document(TOPIC1).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //기존 채팅 내역 불러오기
+        firestore.collection("chat").document(TOPIC1).collection("messages")
+                .orderBy("timestamp").limit(20).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        ChatItem chatItem = document.toObject(ChatItem.class);
+//                        ChatItem chatItem = document.toObject(ChatItem.class); // 이렇게 불러오면 오류
+                        ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
                         chatAdapter.add(chatItem);
                     }
 
