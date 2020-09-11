@@ -22,9 +22,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -106,23 +108,26 @@ public class ChattingActivity extends AppCompatActivity {
         chatAdapter.setNickname(nickName);
         chatListView.setAdapter(chatAdapter);
 
-        //기존 채팅 내역 불러오기
+        //기존 채팅 내역 불러오기 (최근 시간 기준 20개)
         firestore.collection("chat").document(TOPIC1).collection("messages")
-                .orderBy("timestamp").limit(20).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(20).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    ArrayList<ChatItem> chatItems = new ArrayList<ChatItem>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                        ChatItem chatItem = document.toObject(ChatItem.class); // 이렇게 불러오면 오류
                         ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
-                        chatAdapter.add(chatItem);
+                        chatItems.add(chatItem);
                     }
-
+                    Collections.reverse(chatItems); //역순 정렬
+                    for (ChatItem chat: chatItems) {
+                        chatAdapter.add(chat);
+                    }
                     chatAdapter.notifyDataSetChanged();
-
+                    chatListView.setSelection(chatAdapter.getCount() - 1);
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
-
                 }
             }
         });
