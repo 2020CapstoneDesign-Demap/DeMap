@@ -3,14 +3,14 @@ package kr.ac.hansung.demap;
 public class ChatItem {
     private String id;
     private String content;
-    private String timestamp = null;
+    private Long timestamp = null;
 
     public ChatItem(String id, String content) {
         this.id = id;
         this.content = content;
     }
 
-    public ChatItem(String id, String content, String timestamp) {
+    public ChatItem(String id, String content, Long timestamp) {
         this.id = id;
         this.content = content;
         this.timestamp = timestamp;
@@ -24,11 +24,11 @@ public class ChatItem {
         this.id = id;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

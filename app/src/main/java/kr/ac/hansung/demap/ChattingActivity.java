@@ -31,17 +31,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class ChattingActivity extends AppCompatActivity {
+
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
     static final String TAG = ChattingActivity.class.getSimpleName();
     static String TOPIC1 = "";
     static String currentUserId = "";
+
+    private ArrayList<ChatItem> ChatItemList = new ArrayList<ChatItem>();
 
     private ChatAdapter chatAdapter;
     private MqttClient mqttClient1;
@@ -94,6 +106,24 @@ public class ChattingActivity extends AppCompatActivity {
         chatAdapter.setNickname(nickName);
         chatListView.setAdapter(chatAdapter);
 
+        firestore.collection("chat").document(TOPIC1).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        ChatItem chatItem = document.toObject(ChatItem.class);
+                        chatAdapter.add(chatItem);
+                    }
+
+                    chatAdapter.notifyDataSetChanged();
+
+                } else {
+                    System.out.println("Error getting documents: " + task.getException());
+
+                }
+            }
+        });
+
         chatEditText = findViewById(R.id.chatEditText);
 
         chatSendButton = findViewById(R.id.chatSendButton);
@@ -109,24 +139,13 @@ public class ChattingActivity extends AppCompatActivity {
                     try{
                         json.put("id", nickName);
                         json.put("content", content);
-                        json.put("timestamp", String.valueOf(System.currentTimeMillis()));
+                        Long time = System.currentTimeMillis();
+                        json.put("timestamp", String.valueOf(time));
                         mqttClient1.publish(TOPIC1,new MqttMessage(json.toString().getBytes()));
 
                         // 채팅 저장 부분
-                        Map<String, Object> map = new HashMap<String, Object>();
-
-                        String key = reference.push().getKey();
-                        reference.updateChildren(map);
-
-                        DatabaseReference root = reference.child(key);
-
-                        Map<String, Object> objectMap = new HashMap<String, Object>();
-
-                        objectMap.put("id", nickName);
-                        objectMap.put("content", content);
-                        objectMap.put("timestamp", String.valueOf(System.currentTimeMillis()));
-
-                        root.updateChildren(objectMap);
+                        ChatItem chatItem = new ChatItem(nickName, content, time);
+                        firestore.collection("chat").document(TOPIC1).collection("messages").add(chatItem);
 
                     }catch (Exception e){
 
@@ -135,28 +154,6 @@ public class ChattingActivity extends AppCompatActivity {
                     }
 
                 }
-            }
-        });
-
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                chatConversation(dataSnapshot);
-            }
-
-            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                chatConversation(dataSnapshot);
-            }
-
-            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -178,7 +175,7 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 JSONObject json = new JSONObject(new String(message.getPayload(), "UTF-8"));
-                chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content"), json.getString("timestamp")));
+                chatAdapter.add(new ChatItem(json.getString("id"), json.getString("content"), Long.parseLong(json.getString("timestamp"))));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -199,20 +196,6 @@ public class ChattingActivity extends AppCompatActivity {
         mqttClient1.subscribe(TOPIC1);
         mqttClient1.setCallback(mqttCallback);
 
-    }
-
-    private void chatConversation(DataSnapshot dataSnapshot) {
-        Iterator i = dataSnapshot.getChildren().iterator();
-
-        while (i.hasNext()) {
-            chat_msg = (String) ((DataSnapshot) i.next()).getValue();
-            chat_user = (String) ((DataSnapshot) i.next()).getValue();
-            chat_time = (String) ((DataSnapshot) i.next()).getValue();
-
-            chatAdapter.add(new ChatItem(chat_user, chat_msg, chat_time));
-        }
-
-        chatAdapter.notifyDataSetChanged();
     }
 
     @Override
