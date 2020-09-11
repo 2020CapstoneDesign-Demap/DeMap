@@ -26,6 +26,10 @@ public class ChatAdapter extends BaseAdapter {
         chatList.add(chatItem);
     }
 
+    public void insert(ChatItem chatItem) {
+        chatList.add(0, chatItem);
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }

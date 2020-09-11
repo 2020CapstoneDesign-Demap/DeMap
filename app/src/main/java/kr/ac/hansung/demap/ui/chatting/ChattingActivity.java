@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -56,10 +58,11 @@ public class ChattingActivity extends AppCompatActivity {
     private String folder_name;
     private String nickName;
     private String messageId;
-    private String chat_msg, chat_user, chat_time;
 
-    private ArrayList<String> list = new ArrayList<>();
-    private ArrayAdapter<String> arrayAdapter;
+    private int dataCount = 0;
+    private boolean dataflag = false;
+    private DocumentSnapshot lastVisible;
+    private int currentScrollState = 0, currentVisibleItemCount = 0, currentFirstVisibleItem = 0, currentTotalItemCount = 0;
 
     // 채팅 저장 realDB
     private DatabaseReference reference;
@@ -103,18 +106,22 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    ArrayList<ChatItem> chatItems = new ArrayList<ChatItem>();
+                    // Get the last visible document
+                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                        ChatItem chatItem = document.toObject(ChatItem.class); // 이렇게 불러오면 오류
                         ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
-                        chatItems.add(chatItem);
-                    }
-                    Collections.reverse(chatItems); //역순 정렬
-                    for (ChatItem chat: chatItems) {
-                        chatAdapter.add(chat);
+                        chatAdapter.insert(chatItem); // 상단에 삽입
+                        dataCount++;
                     }
                     chatAdapter.notifyDataSetChanged();
                     chatListView.setSelection(chatAdapter.getCount() - 1);
+                    if (dataCount < 20) {
+                        dataflag = false;
+                    }
+                    else {
+                        dataflag = true;
+                    }
                 } else {
                     System.out.println("Error getting documents: " + task.getException());
                 }
@@ -154,6 +161,54 @@ public class ChattingActivity extends AppCompatActivity {
             }
         });
 
+
+        chatListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                currentScrollState = scrollState;
+                if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE && dataflag) {
+                    if (currentFirstVisibleItem == 0) {
+
+                        //채팅 내역 불러오기
+                        firestore.collection("chat").document(TOPIC1).collection("messages")
+                                .orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(20).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    // Get the last visible document
+                                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                                    dataCount = 0;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        ChatItem chatItem = new ChatItem(document.getString("id"), document.getString("content"), document.getLong("timestamp"));
+                                        chatAdapter.insert(chatItem); // 상단에 삽입
+                                        dataCount++;
+                                    }
+                                    chatAdapter.notifyDataSetChanged();
+                                    chatListView.setSelection(dataCount);
+                                    if (dataCount < 20) {
+                                        dataflag = false;
+                                    }
+                                    else {
+                                        dataflag = true;
+                                    }
+                                } else {
+                                    System.out.println("Error getting documents: " + task.getException());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll (AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
+                currentFirstVisibleItem = firstVisibleItem;
+                currentVisibleItemCount = visibleItemCount;
+                currentTotalItemCount = totalItemCount;
+            }
+        });
+
+
         try{
             connectMqtt();
         }catch(Exception e){
@@ -177,6 +232,7 @@ public class ChattingActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         chatAdapter.notifyDataSetChanged();
+                        chatListView.setSelection(chatAdapter.getCount() - 1);
                     }
                 });
             }
