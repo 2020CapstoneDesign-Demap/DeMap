@@ -1,5 +1,6 @@
 package kr.ac.hansung.demap;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class ChatAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
@@ -58,6 +60,7 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.chattextContainer.setGravity(Gravity.LEFT);
             viewHolder.idTextView.setText(chatList.get(position).getId());
             viewHolder.contentTextView.setBackground(parent.getContext().getResources().getDrawable(R.drawable.char2));
+            viewHolder.contentTextView.setTextColor(R.color.colorLineGray7);
             viewHolder.contentTextView.setText(chatList.get(position).getContent());
         } else { // 내 채팅일 경우
             viewHolder.chattextContainer.setGravity(Gravity.RIGHT);
